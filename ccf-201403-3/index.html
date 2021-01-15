@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <title>CCF 201403-3 命令行选项</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CCF 201403-3 命令行选项</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#试题">试题</a></li>
+<li><a href="#分析">分析</a></li>
+<li><a href="#结果">结果</a></li>
+</ul>
+</nav>
+<h1 id="试题">试题</h1>
+<p><strong>问题描述</strong></p>
+<p>请你写一个命令行分析程序，用以分析给定的命令行里包含哪些选项。每个命令行由若干个字符串组成，它们之间恰好由一个空格分隔。这些字符串中的第一个为该命令行工具的名字，由小写字母组成，你的程序不用对它进行处理。在工具名字之后可能会包含若干选项，然后可能会包含一 些不是选项的参数。</p>
+<p>选项有两类：带参数的选项和不带参数的选项。一个合法的无参数选项的形式是一个减号后面跟单个小写字母，如 “-a” 或 “-b”。而带参数选项则由两个由空格分隔的字符串构成，前者的格式要求与无参数选项相同，后者则是该选项的参数，是由小写字母，数字和减号组成的非空字符串。</p>
+<p>该命令行工具的作者提供给你一个格式字符串以指定他的命令行工具需要接受哪些选项。这个字符串由若干小写字母和冒号组成，其中的每个小写字母表示一个该程序接受的选项。如果该小写字母后面紧跟了一个冒号，它就表示一个带参数的选项，否则则为不带参数的选项。例如，<code>ab:m:</code> 表示该程序接受三种选项，即 “-a”（不带参数），“-b”（带参数）， 以及 “-m”（带参数）。</p>
+<p>命令行工具的作者准备了若干条命令行用以测试你的程序。对于每个命令行，你的工具应当一直向后分析。当你的工具遇到某个字符串既不是合法的选项，又不是某个合法选项的参数时，分析就停止。命令行剩余的未分析部分不构成该命令的选项，因此你的程序应当忽略它们。</p>
+<p><strong>输入格式</strong></p>
+<p>输入的第一行是一个格式字符串，它至少包含一个字符，且长度不超过 52。格式字符串只包含小写字母和冒号，保证每个小写字母至多出现一次，不会有两个相邻的冒号，也不会以冒号开头。</p>
+<p>输入的第二行是一个正整数 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20N%20%5Cleft%28%201%20%5Cleq%20N%20%5Cleq%2020%20%5Cright%29" alt="N \left( 1 \leq N \leq 20 \right)" title="N \left( 1 \leq N \leq 20 \right)" class="math inline" />，表示你需要处理的命令行的个数。</p>
+<p>接下来有 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20N" alt="N" title="N" class="math inline" /> 行，每行是一个待处理的命令行，它包括不超过 256 个字符。该命令行一定是若干个由单个空格分隔的字符串构成，每个字符串里只包含小写字母，数字和减号。</p>
+<p><strong>输出格式</strong></p>
+<p>输出有 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20N" alt="N" title="N" class="math inline" /> 行。其中第 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20i" alt="i" title="i" class="math inline" /> 行以 “Case i:” 开始，然后应当有恰好一个空格，然后应当按照字母升序输出该命令行中用到的所有选项的名称，对于带参数的选项，在输出它的名称之后还要输出它的参数。如果一个选项在命令行中出现了多次，只输出一次。如果一个带参数的选项在命令行中出现了多次，只输出最后一次出现时所带的参数。</p>
+<p><strong>样例输入</strong></p>
+<pre><code>albw:x
+4
+ls -a -l -a documents -b
+ls
+ls -w 10 -x -w 15
+ls -a -b -c -d -e -l</code></pre>
+<p><strong>样例输出</strong></p>
+<pre><code>Case 1: -a -l
+Case 2:
+Case 3: -w 15 -x
+Case 4: -a -b</code></pre>
+<h1 id="分析">分析</h1>
+<p>由于题目要求「按照字母升序输出该命令行中用到的所有选项的名称」，所以选择 <code>std::map</code> 存储所有合法的命令行选项。</p>
+<p>使用自定义数据结构保存命令行选项的属性。当输入特定的命令行选项（即 <code>-</code> 后的字母，以 <code>char</code> 类型存储）时，通过 <code>std::map</code> 映射到对应的属性。这种自定义数据结构以 <code>Data</code> 类型表示。因此，<code>std::map</code> 的类型是 <code>std::map&lt;char, Data&gt;</code>。</p>
+<p><code>Data</code> 类型需要提供的信息包括：该命令行选项是否带参数，用户是否输入了这个命令行选项，以及如果带参数且用户输入了这个选项，还需提供用户输入的参数。</p>
+<p>分析这个类型可知，它是两种情况的并：「该命令行选项带参数」和「该命令行选项不带参数」。第一种情况又是两种小情况的并：「用户没有输入这个命令行选项」和「用户输入了这个命令行选项」；第二种情况也是两种小情况的并：「用户没有输入这个命令行选项」和「用户输入了这个命令行选项，它的值是 <code>std::string</code>」。</p>
+<p>为了构造这样的类型，计算这个类型中所含元素的个数。设 <code>std::string</code> 为 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20a" alt="a" title="a" class="math inline" />，则根据以上分析，<code>Data</code> 为 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%281%20%2B%201%29%20%2B%20%281%20%2B%20a%29%20%3D%203%20%2B%20a" alt="(1 + 1) + (1 + a) = 3 + a" title="(1 + 1) + (1 + a) = 3 + a" class="math inline" />。于是，可以将其定义如下：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Data {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span>:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">enum</span> <span class="kw">class</span> Chirality { Left, Right };</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">enum</span> <span class="kw">class</span> State { Nothing, Just };</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span>:</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> Chirality chirality;</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    State state;</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">union</span> Storage {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> Empty { } empty;</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>string arg;</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        Storage() : empty { } { }</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        ~Storage() { }</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    } storage;</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span>:</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    Data(Chirality c) : chirality { c }, state { State::Nothing }, storage { } { }</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    Data(<span class="at">const</span> Data&amp; d) : chirality { d.chirality }, state { d.state } {</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (d.chirality == Chirality::Right &amp;&amp; d.state == State::Just)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            ::<span class="kw">new</span> (&amp;storage.arg) <span class="bu">std::</span>string { d.storage.arg };</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    ~Data() {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (chirality == Chirality::Right &amp;&amp; state == State::Just)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>            storage.arg.~basic_string();</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    Chirality getChirality() <span class="at">const</span> { <span class="cf">return</span> chirality; }</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    State getState() <span class="at">const</span> { <span class="cf">return</span> state; }</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> setStateToJust() { state = State::Just; }</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string getArg() <span class="at">const</span> { <span class="cf">return</span> storage.arg; }</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> setArg(<span class="at">const</span> <span class="bu">std::</span>string&amp; str) { ::<span class="kw">new</span> (&amp;storage.arg) <span class="bu">std::</span>string { str }; }</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
+<p>在上述定义中，<code>Data</code> 可以看作由 <code>chirality</code> 和 <code>state</code> 的笛卡尔积和联合体 <code>storage</code> 组成。计算这个类型中所含元素的个数可知，<code>chirality</code> 中元素个数为 2，<code>state</code> 中元素个数也为 2。由于 <code>storage</code> 中也包括两种情况，需要额外的 2 个元素提供选择信息，所以消耗了 2 个元素。但它可以看作是 <code>empty</code> 和 <code>std::string</code> 的并，<code>empty</code> 只有唯一的可能性，因此元素个数为 1，再设 <code>std::string</code> 为 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20a" alt="a" title="a" class="math inline" />，则根据以上分析，<code>Data</code> 为 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%282%20%5Ctimes%202%29%20-%202%20%2B%20%281%20%2B%20a%29%20%3D%203%20%2B%20a" alt="(2 \times 2) - 2 + (1 + a) = 3 + a" title="(2 \times 2) - 2 + (1 + a) = 3 + a" class="math inline" />，与上述定义相同，因此这样的定义是合理的。</p>
+<p>为 <code>std::map&lt;char, Data&gt;</code> 定义别名 <code>Pattern</code>：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> Pattern = <span class="bu">std::</span>map&lt;<span class="dt">char</span>, Data&gt;;</span></code></pre></div>
+<p>当读入第一行时，程序解析第一行的内容并将其存入一个 <code>Pattern m</code> 中，作为解析用户输入的模板，称为 <code>parseRule</code> 函数，它可以定义如下：</p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20parseRule%20%5Cleft%28%20m%20%2C%20list%20%5Cright%29%20%3D%20%5Cbegin%7Bcases%7D%20m%26%20list%20%3D%20%5B%5D%20%5C%5C%20parseRule%20%5Cleft%28%20insert%20%5Cleft%28%20n%20%2C%20%5Cmathrm%7Binr%7D%20%5C%2C%20Nothing%20%2C%20m%20%5Cright%29%20%2C%20xs%20%5Cright%29%26%20list%20%3D%20n%20%3A%20%5Cmathsf%7B%27%3A%27%7D%20%3A%20xs%20%5C%5C%20parseRule%20%5Cleft%28%20insert%20%5Cleft%28%20n%20%2C%20%5Cmathrm%7Binl%7D%20%5C%2C%20Nothing%20%2C%20m%20%5Cright%29%20%2C%20xs%20%5Cright%29%26%20list%20%3D%20n%20%3A%20xs%20%5Cend%7Bcases%7D" alt="parseRule \left( m , list \right) = \begin{cases} m&amp; list = [] \\ parseRule \left( insert \left( n , \mathrm{inr} \, Nothing , m \right) , xs \right)&amp; list = n : \mathsf{&#39;:&#39;} : xs \\ parseRule \left( insert \left( n , \mathrm{inl} \, Nothing , m \right) , xs \right)&amp; list = n : xs \end{cases}" title="parseRule \left( m , list \right) = \begin{cases} m&amp; list = [] \\ parseRule \left( insert \left( n , \mathrm{inr} \, Nothing , m \right) , xs \right)&amp; list = n : \mathsf{&#39;:&#39;} : xs \\ parseRule \left( insert \left( n , \mathrm{inl} \, Nothing , m \right) , xs \right)&amp; list = n : xs \end{cases}" class="math inline" /></p>
+<p>于是，可以采用以下方式实现 <code>parseRule</code> 函数：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Pattern parseRule(Pattern m, <span class="at">const</span> <span class="dt">char</span> *p) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (!p[<span class="dv">0</span>]) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> m;</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (p[<span class="dv">1</span>] == <span class="ch">&#39;:&#39;</span>) {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        m.emplace(p[<span class="dv">0</span>], Data::Chirality::Right);</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> parseRule(m, p + <span class="dv">2</span>);</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        m.emplace(p[<span class="dv">0</span>], Data::Chirality::Left);</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> parseRule(m, p + <span class="dv">1</span>);</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>接下来读入个数 <code>n</code>，设置循环变量 <code>i</code> 从 1 到 <code>n</code> 循环。对于每次循环，先读入用户的一行输入，再使用 <code>split</code> 函数，按空格把输入分割成 token。由于「这些字符串中的第一个为该命令行工具的名字，由小写字母组成，你的程序不用对它进行处理」，所以丢弃第一个 token，将剩余的 token 和前面已经获得的 <code>Pattern m</code> 一起放入 <code>solve</code> 函数中处理。经过 <code>solve</code> 函数处理后，原来 <code>Pattern m</code> 中「用户没有输入这个命令行选项」的信息，会被「用户输入了这个命令行选项」所取代。</p>
+<p>由于 C++ 语言没有内置的 <code>split</code> 函数，需要自己实现如下：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>forward_list&lt;<span class="bu">std::</span>string&gt; split(<span class="at">const</span> <span class="bu">std::</span>string&amp; str, <span class="at">const</span> <span class="bu">std::</span>regex&amp; delim = <span class="bu">std::</span>regex { <span class="st">R&quot;(\s+)&quot;</span> }) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>sregex_token_iterator begin { str.cbegin(), str.cend(), delim, -<span class="dv">1</span> }, end;</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> { begin, end };</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>solve</code> 函数可以定义如下：</p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20solve%20%5Cleft%28%20m%20%2C%20list%20%5Cright%29%20%3D%20%5Cbegin%7Bcases%7D%20%5Cbegin%7Bcases%7D%20solve%20%5Cleft%28%20insert%20%5Cleft%28%20n%20%2C%20%5Cmathrm%7Binr%7D%20%5C%2C%20Just%20%5C%2C%20x%20%2C%20m%20%29%20%5Cright%29%20%2C%20xs%20%5Cright%29%26%20lookup%20%5Cleft%28%20n%20%2C%20m%20%5Cright%29%20%3D%20Just%20%5Cleft%28%20%5Cmathrm%7Binr%7D%20%5C%2C%20%5C_%20%5Cright%29%20%5C%5C%20solve%20%5Cleft%28%20insert%20%5Cleft%28%20n%20%2C%20%5Cmathrm%7Binl%7D%20%5C%2C%20Just%20%5C%2C%20%5Ctop%20%2C%20m%20%29%20%5Cright%29%20%2C%20x%20%3A%20xs%20%5Cright%29%26%20lookup%20%5Cleft%28%20n%20%2C%20m%20%5Cright%29%20%3D%20Just%20%5Cleft%28%20%5Cmathrm%7Binl%7D%20%5C%2C%20%5C_%20%5Cright%29%20%5C%5C%20m%26%20%5Ctext%7Botherwise%7D%20%5Cend%7Bcases%7D%26%20list%20%3D%20%5B%5Cmathsf%7B%27-%27%7D%2C%20n%5D%20%3A%20x%20%3A%20xs%20%5C%5C%20%5Cbegin%7Bcases%7D%20insert%20%5Cleft%28%20n%20%2C%20%5Cmathrm%7Binl%7D%20%5C%2C%20Just%20%5C%2C%20%5Ctop%20%2C%20m%20%29%20%5Cright%29%26%20lookup%20%5Cleft%28%20n%20%2C%20m%20%5Cright%29%20%3D%20Just%20%5Cleft%28%20%5Cmathrm%7Binl%7D%20%5C%2C%20%5C_%20%5Cright%29%20%5C%5C%20m%26%20%5Ctext%7Botherwise%7D%20%5Cend%7Bcases%7D%26%20list%20%3D%20%5B%5B%5Cmathsf%7B%27-%27%7D%2C%20n%5D%5D%20%5C%5C%20m%26%20%5Ctext%7Botherwise%7D%20%5Cend%7Bcases%7D" alt="solve \left( m , list \right) = \begin{cases} \begin{cases} solve \left( insert \left( n , \mathrm{inr} \, Just \, x , m ) \right) , xs \right)&amp; lookup \left( n , m \right) = Just \left( \mathrm{inr} \, \_ \right) \\ solve \left( insert \left( n , \mathrm{inl} \, Just \, \top , m ) \right) , x : xs \right)&amp; lookup \left( n , m \right) = Just \left( \mathrm{inl} \, \_ \right) \\ m&amp; \text{otherwise} \end{cases}&amp; list = [\mathsf{&#39;-&#39;}, n] : x : xs \\ \begin{cases} insert \left( n , \mathrm{inl} \, Just \, \top , m ) \right)&amp; lookup \left( n , m \right) = Just \left( \mathrm{inl} \, \_ \right) \\ m&amp; \text{otherwise} \end{cases}&amp; list = [[\mathsf{&#39;-&#39;}, n]] \\ m&amp; \text{otherwise} \end{cases}" title="solve \left( m , list \right) = \begin{cases} \begin{cases} solve \left( insert \left( n , \mathrm{inr} \, Just \, x , m ) \right) , xs \right)&amp; lookup \left( n , m \right) = Just \left( \mathrm{inr} \, \_ \right) \\ solve \left( insert \left( n , \mathrm{inl} \, Just \, \top , m ) \right) , x : xs \right)&amp; lookup \left( n , m \right) = Just \left( \mathrm{inl} \, \_ \right) \\ m&amp; \text{otherwise} \end{cases}&amp; list = [\mathsf{&#39;-&#39;}, n] : x : xs \\ \begin{cases} insert \left( n , \mathrm{inl} \, Just \, \top , m ) \right)&amp; lookup \left( n , m \right) = Just \left( \mathrm{inl} \, \_ \right) \\ m&amp; \text{otherwise} \end{cases}&amp; list = [[\mathsf{&#39;-&#39;}, n]] \\ m&amp; \text{otherwise} \end{cases}" class="math inline" /></p>
+<p>由此，可以将 <code>solve</code> 函数实现如下：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Pattern solve(Pattern m, <span class="bu">std::</span>forward_list&lt;<span class="bu">std::</span>string&gt; xs) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (xs.cbegin() != xs.cend() &amp;&amp; <span class="bu">std::</span>next(xs.cbegin()) != xs.cend() &amp;&amp; xs.front().length() == <span class="dv">2</span> &amp;&amp; xs.front()[<span class="dv">0</span>] == <span class="ch">&#39;-&#39;</span>) {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="kw">auto</span> pos = m.find(xs.front()[<span class="dv">1</span>]);</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (pos != m.end() &amp;&amp; pos-&gt;second.getChirality() == Data::Chirality::Right) {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            pos-&gt;second.setStateToJust();</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            pos-&gt;second.setArg(*<span class="bu">std::</span>next(xs.cbegin()));</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            xs.pop_front();</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            xs.pop_front();</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> solve(m, xs);</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> <span class="cf">if</span> (pos != m.end() &amp;&amp; pos-&gt;second.getChirality() == Data::Chirality::Left) {</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            pos-&gt;second.setStateToJust();</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>            xs.pop_front();</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> solve(m, xs);</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (xs.cbegin() != xs.cend() &amp;&amp; xs.front().length() == <span class="dv">2</span> &amp;&amp; xs.front()[<span class="dv">0</span>] == <span class="ch">&#39;-&#39;</span>) {</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="kw">auto</span> pos = m.find(xs.front()[<span class="dv">1</span>]);</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (pos != m.end() &amp;&amp; pos-&gt;second.getChirality() == Data::Chirality::Left)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>            pos-&gt;second.setStateToJust();</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m;</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>经过 <code>solve</code> 函数处理后，得到了新的 <code>Pattern</code>，为此再定义一个 <code>getResult</code> 函数，将 <code>Pattern</code> 转换为题目规定的输出格式。在函数中，只需检测 <code>state</code> 的值是否为 <code>Just</code> 即可：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>string getResult(Pattern m) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>ostringstream oss;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="at">const</span> <span class="kw">auto</span>&amp; it : m)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (it.second.getChirality() == Data::Chirality::Left &amp;&amp; it.second.getState() == Data::State::Just)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            oss &lt;&lt; <span class="ch">&#39; &#39;</span> &lt;&lt; <span class="ch">&#39;-&#39;</span> &lt;&lt; it.first;</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="cf">if</span> (it.second.getChirality() == Data::Chirality::Right &amp;&amp; it.second.getState() == Data::State::Just)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            oss &lt;&lt; <span class="ch">&#39; &#39;</span> &lt;&lt; <span class="ch">&#39;-&#39;</span> &lt;&lt; it.first &lt;&lt; <span class="ch">&#39; &#39;</span> &lt;&lt; it.second.getArg();</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> oss.str();</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>解题所需的函数已经定义好，<code>main</code> 函数可以表示如下：</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string line;</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>getline(<span class="bu">std::</span>cin, line);</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> Pattern m = parseRule({ }, line.c_str());</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> n;</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>getline(<span class="bu">std::</span>cin, line);</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>istringstream iss { line };</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    iss &gt;&gt; n;</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= n; i++) {</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>getline(<span class="bu">std::</span>cin, line);</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>forward_list&lt;<span class="bu">std::</span>string&gt; tokens { split(line) };</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        tokens.pop_front();</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Case &quot;</span> &lt;&lt; i &lt;&lt; <span class="ch">&#39;:&#39;</span> &lt;&lt; getResult(solve(m, tokens)) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h1 id="结果">结果</h1>
+<div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>include &lt;iostream&gt;</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>include &lt;sstream&gt;</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>include &lt;forward_list&gt;</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>include &lt;map&gt;</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>include &lt;regex&gt;</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>include &lt;<span class="kw">new</span>&gt;</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Data {</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span>:</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">enum</span> <span class="kw">class</span> Chirality { Left, Right };</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">enum</span> <span class="kw">class</span> State { Nothing, Just };</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span>:</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> Chirality chirality;</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    State state;</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">union</span> Storage {</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> Empty { } empty;</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>string arg;</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        Storage() : empty { } { }</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        ~Storage() { }</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    } storage;</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span>:</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    Data(Chirality c) : chirality { c }, state { State::Nothing }, storage { } { }</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    Data(<span class="at">const</span> Data&amp; d) : chirality { d.chirality }, state { d.state } {</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (d.chirality == Chirality::Right &amp;&amp; d.state == State::Just)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>            ::<span class="kw">new</span> (&amp;storage.arg) <span class="bu">std::</span>string { d.storage.arg };</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    ~Data() {</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (chirality == Chirality::Right &amp;&amp; state == State::Just)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>            storage.arg.~basic_string();</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    Chirality getChirality() <span class="at">const</span> { <span class="cf">return</span> chirality; }</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    State getState() <span class="at">const</span> { <span class="cf">return</span> state; }</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> setStateToJust() { state = State::Just; }</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string getArg() <span class="at">const</span> { <span class="cf">return</span> storage.arg; }</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> setArg(<span class="at">const</span> <span class="bu">std::</span>string&amp; str) { ::<span class="kw">new</span> (&amp;storage.arg) <span class="bu">std::</span>string { str }; }</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> Pattern = <span class="bu">std::</span>map&lt;<span class="dt">char</span>, Data&gt;;</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>Pattern parseRule(Pattern m, <span class="at">const</span> <span class="dt">char</span> *p) {</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (!p[<span class="dv">0</span>]) {</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> m;</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (p[<span class="dv">1</span>] == <span class="ch">&#39;:&#39;</span>) {</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>        m.emplace(p[<span class="dv">0</span>], Data::Chirality::Right);</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> parseRule(m, p + <span class="dv">2</span>);</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>        m.emplace(p[<span class="dv">0</span>], Data::Chirality::Left);</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> parseRule(m, p + <span class="dv">1</span>);</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>Pattern solve(Pattern m, <span class="bu">std::</span>forward_list&lt;<span class="bu">std::</span>string&gt; xs) {</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (xs.cbegin() != xs.cend() &amp;&amp; <span class="bu">std::</span>next(xs.cbegin()) != xs.cend() &amp;&amp; xs.front().length() == <span class="dv">2</span> &amp;&amp; xs.front()[<span class="dv">0</span>] == <span class="ch">&#39;-&#39;</span>) {</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="kw">auto</span> pos = m.find(xs.front()[<span class="dv">1</span>]);</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (pos != m.end() &amp;&amp; pos-&gt;second.getChirality() == Data::Chirality::Right) {</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>            pos-&gt;second.setStateToJust();</span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>            pos-&gt;second.setArg(*<span class="bu">std::</span>next(xs.cbegin()));</span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>            xs.pop_front();</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>            xs.pop_front();</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> solve(m, xs);</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> <span class="cf">if</span> (pos != m.end() &amp;&amp; pos-&gt;second.getChirality() == Data::Chirality::Left) {</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>            pos-&gt;second.setStateToJust();</span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>            xs.pop_front();</span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> solve(m, xs);</span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (xs.cbegin() != xs.cend() &amp;&amp; xs.front().length() == <span class="dv">2</span> &amp;&amp; xs.front()[<span class="dv">0</span>] == <span class="ch">&#39;-&#39;</span>) {</span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="kw">auto</span> pos = m.find(xs.front()[<span class="dv">1</span>]);</span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (pos != m.end() &amp;&amp; pos-&gt;second.getChirality() == Data::Chirality::Left)</span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>            pos-&gt;second.setStateToJust();</span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m;</span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>string getResult(Pattern m) {</span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>ostringstream oss;</span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="at">const</span> <span class="kw">auto</span>&amp; it : m)</span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (it.second.getChirality() == Data::Chirality::Left &amp;&amp; it.second.getState() == Data::State::Just)</span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>            oss &lt;&lt; <span class="ch">&#39; &#39;</span> &lt;&lt; <span class="ch">&#39;-&#39;</span> &lt;&lt; it.first;</span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="cf">if</span> (it.second.getChirality() == Data::Chirality::Right &amp;&amp; it.second.getState() == Data::State::Just)</span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>            oss &lt;&lt; <span class="ch">&#39; &#39;</span> &lt;&lt; <span class="ch">&#39;-&#39;</span> &lt;&lt; it.first &lt;&lt; <span class="ch">&#39; &#39;</span> &lt;&lt; it.second.getArg();</span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> oss.str();</span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>forward_list&lt;<span class="bu">std::</span>string&gt; split(<span class="at">const</span> <span class="bu">std::</span>string&amp; str, <span class="at">const</span> <span class="bu">std::</span>regex&amp; delim = <span class="bu">std::</span>regex { <span class="st">R&quot;(\s+)&quot;</span> }) {</span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>sregex_token_iterator begin { str.cbegin(), str.cend(), delim, -<span class="dv">1</span> }, end;</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> { begin, end };</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string line;</span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>getline(<span class="bu">std::</span>cin, line);</span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> Pattern m = parseRule({ }, line.c_str());</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> n;</span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>getline(<span class="bu">std::</span>cin, line);</span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>istringstream iss { line };</span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>    iss &gt;&gt; n;</span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= n; i++) {</span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>getline(<span class="bu">std::</span>cin, line);</span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>forward_list&lt;<span class="bu">std::</span>string&gt; tokens { split(line) };</span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>        tokens.pop_front();</span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Case &quot;</span> &lt;&lt; i &lt;&lt; <span class="ch">&#39;:&#39;</span> &lt;&lt; getResult(solve(m, tokens)) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>评测结果：正确<br/>得分：100<br/>时间使用：15ms<br/>空间使用：544.0KB</p>
+<div style="display: none;">
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Control.Applicative</span> (empty)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Foldable</span> (fold, for_)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Map.Strict</span> (<span class="dt">Map</span>, (!?))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Map.Strict</span> <span class="kw">as</span> <span class="dt">M</span> (insert, toAscList)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Pattern</span> <span class="ot">=</span> <span class="dt">Map</span> <span class="dt">Char</span> (<span class="dt">Either</span> (<span class="dt">Maybe</span> ()) (<span class="dt">Maybe</span> <span class="dt">String</span>))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ot">parseRule ::</span> <span class="dt">Pattern</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Pattern</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>parseRule m [] <span class="ot">=</span> m</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>parseRule m (n <span class="op">:</span> <span class="ch">&#39;:&#39;</span> <span class="op">:</span> xs) <span class="ot">=</span> parseRule (M.insert n (<span class="dt">Right</span> <span class="dt">Nothing</span>) m) xs</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>parseRule m (n <span class="op">:</span> xs) <span class="ot">=</span> parseRule (M.insert n (<span class="dt">Left</span> <span class="dt">Nothing</span>) m) xs</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="ot">solve ::</span> <span class="dt">Pattern</span> <span class="ot">-&gt;</span> [<span class="dt">String</span>] <span class="ot">-&gt;</span> <span class="dt">Pattern</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>solve m ([<span class="ch">&#39;-&#39;</span>, n] <span class="op">:</span> xa<span class="op">@</span>(x <span class="op">:</span> xs)) <span class="ot">=</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> m <span class="op">!?</span> n <span class="kw">of</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Just</span> (<span class="dt">Right</span> _) <span class="ot">-&gt;</span> solve (M.insert n (<span class="dt">Right</span> (<span class="dt">Just</span> x)) m) xs</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Just</span> (<span class="dt">Left</span> _) <span class="ot">-&gt;</span> solve (M.insert n (<span class="dt">Left</span> (<span class="dt">Just</span> ())) m) xa</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Nothing</span> <span class="ot">-&gt;</span> m</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>solve m [[<span class="ch">&#39;-&#39;</span>, n]] <span class="ot">=</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> m <span class="op">!?</span> n <span class="kw">of</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Just</span> (<span class="dt">Left</span> _) <span class="ot">-&gt;</span> M.insert n (<span class="dt">Left</span> (<span class="dt">Just</span> ())) m</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    _ <span class="ot">-&gt;</span> m</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>solve m _ <span class="ot">=</span> m</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="ot">getResult ::</span> <span class="dt">Pattern</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>getResult m <span class="ot">=</span> fold <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  (k, a) <span class="ot">&lt;-</span> M.toAscList m</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> a <span class="kw">of</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Right</span> (<span class="dt">Just</span> s) <span class="ot">-&gt;</span> <span class="fu">pure</span> (<span class="ch">&#39; &#39;</span> <span class="op">:</span> <span class="ch">&#39;-&#39;</span> <span class="op">:</span> k <span class="op">:</span> <span class="ch">&#39; &#39;</span> <span class="op">:</span> s)</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Left</span> (<span class="dt">Just</span> _) <span class="ot">-&gt;</span> <span class="fu">pure</span> (<span class="ch">&#39; &#39;</span> <span class="op">:</span> <span class="ch">&#39;-&#39;</span> <span class="op">:</span> k <span class="op">:</span> [])</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    _ <span class="ot">-&gt;</span> empty</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> parseRule <span class="fu">mempty</span> <span class="op">&lt;$&gt;</span> <span class="fu">getLine</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">read</span> <span class="op">&lt;$&gt;</span><span class="ot"> getLine ::</span> <span class="dt">IO</span> <span class="dt">Int</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  for_ [<span class="dv">1</span><span class="op">..</span>n] <span class="op">$</span> \i <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    command <span class="ot">&lt;-</span> <span class="fu">getLine</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> tokens <span class="ot">=</span> <span class="fu">tail</span> <span class="op">$</span> <span class="fu">words</span> command</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">putStrLn</span> <span class="op">$</span> <span class="st">&quot;Case &quot;</span> <span class="op">&lt;&gt;</span> <span class="fu">show</span> i <span class="op">&lt;&gt;</span> (<span class="ch">&#39;:&#39;</span> <span class="op">:</span> getResult (solve m tokens))</span></code></pre></div>
+</div>
+<p>（2019 年 3 月 10 日）</p>
+</body>
+</html>

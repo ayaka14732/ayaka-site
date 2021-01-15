@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="直播服务器, Nginx, Haskell, 直播, 轮播" />
+  <title>直播服务器搭建记录</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">直播服务器搭建记录</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#使用-nginx-搭建直播服务器">使用 Nginx 搭建直播服务器</a>
+<ul>
+<li><a href="#实验设计">实验设计</a></li>
+<li><a href="#实验步骤">实验步骤</a></li>
+<li><a href="#实验结果">实验结果</a></li>
+</ul></li>
+<li><a href="#使用-haskell-实现直播服务器">使用 Haskell 实现直播服务器</a>
+<ul>
+<li><a href="#实验设计-1">实验设计</a></li>
+<li><a href="#实验步骤-1">实验步骤</a></li>
+<li><a href="#实验结果-1">实验结果</a></li>
+</ul></li>
+</ul>
+</nav>
+<p>2018 年秋，我选修了《Linux 原理与应用》这门课程。在课程中，老师布置了几项作业，让我们从中选择一项完成。我选择了搭建直播服务器这项作业。在完成作业的过程中，我通过查找资料，学习到了 Linux、直播技术、服务器等方面的许多知识，并使用两种方法分别完成了任务。</p>
+<h1 id="使用-nginx-搭建直播服务器">使用 Nginx 搭建直播服务器</h1>
+<h2 id="实验设计">实验设计</h2>
+<p>我使用的是配置了 <a href="http://www.msys2.org/">MSYS2</a> 环境的 Windows 10 操作系统，并使用 <a href="https://www.virtualbox.org/">Oracle VM VirtualBox</a> 虚拟机安装了 Linux openSUSE 操作系统。</p>
+<p>我计划完成的具体内容如下：</p>
+<ul>
+<li>在 Linux 上使用 Nginx 搭建直播服务器</li>
+<li>使用 Windows 系统模拟主播和观众进行推流和拉流</li>
+<li>主播使用 FFmpeg 将视频流推送到服务器指定端口</li>
+<li>观众从服务器指定端口获取直播视频数据，在浏览器中播放视频</li>
+</ul>
+<p>经过查找资料，我发现：直播协议可以选择 RTMP 或 HLS，但 RTMP 是 Adobe 的私有协议，无法直接在很多设备上播放<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。经过考虑，我选择了 HLS 协议。但实际上，在配置 Nginx 服务器时，仍要在 RTMP 协议的基础上进行配置<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。</p>
+<h2 id="实验步骤">实验步骤</h2>
+<h3 id="软件要求">软件要求</h3>
+<p><strong>主机：</strong><a href="http://www.ffmpeg.org/download.html">FFmpeg</a>, Mozilla Firefox（或其他浏览器）</p>
+<p><strong>虚拟机：</strong>libpcre, OpenSSL, zlib</p>
+<p>由于我已经在虚拟机中安装过 libpcre 和 zlib，因此这两个程序不需要额外安装；另外，在 openSUSE 系统中，<code>OpenSSL</code> 可以使用 <code>zypper install libopenssl-devel</code> 安装<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。</p>
+<h3 id="配置-ip-地址">配置 IP 地址</h3>
+<p>在 Windows 操作系统上，使用 <code>ipconfig</code> 命令查看网络信息，得到与虚拟机相关的网卡 <code>Ethernet adapter VirtualBox Host-Only Network #3</code> 的 IP 地址为 192.168.56.1，子网掩码为 255.255.255.0。</p>
+<p>根据以上信息，可以在 Oracle VM VirtualBox 中对虚拟机进行如下配置<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>：</p>
+<figure>
+<img src="network.png" alt="Configure network in VirtualBox" /><figcaption aria-hidden="true">Configure network in VirtualBox</figcaption>
+</figure>
+<p>同时，需要在 Linux 中手动配置网络。我将 IP 地址设置为 192.168.56.9，子网掩码设置为 255.255.255.0，这是为了与主机在同一子网中；另外，将网络设备设置开机时即启用，避免手动开启设备。</p>
+<h3 id="编译安装-nginx">编译安装 Nginx</h3>
+<p>使用如下命令编译和安装 Nginx<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> http://nginx.org/download/nginx-1.15.5.tar.gz</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://github.com/sergey-dryabzhinsky/nginx-rtmp-module/archive/dev.zip</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-zxvf</span> nginx-1.15.5.tar.gz</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> dev.zip</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> nginx-1.15.1</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="va">CC=</span>clang <span class="ex">./configure</span> <span class="at">--with-http_ssl_module</span> <span class="at">--add-module</span><span class="op">=</span>../nginx-rtmp-module-dev</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> <span class="at">-j8</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> make install</span></code></pre></div>
+<p>最初在使用 <code>configure</code> 命令时，没有指定 <code>CC=clang</code>，系统默认的编译器为 GCC 8.2.1，出现了一些编译错误，使得编译失败。我还没有能力通过解决修改源代码的方式解决这些错误，但是想到该错误可能与编译器有关，于是指定 <code>CC=clang</code>，将编译器改为 Clang 6.0.1，成功编译。</p>
+<p><code>make</code> 命令的 <code>-j8</code> 参数是使用 8 线程编译，以加快编译速度。</p>
+<h3 id="修改配置文件">修改配置文件</h3>
+<p>打开 <code>/usr/local/nginx/conf/nginx.conf</code>。</p>
+<p><strong>修改 <code>http</code> -&gt; <code>server</code> 块中的 <code>server_name</code></strong><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>修改前：</p>
+<pre class="conf"><code>server_name  localhost;</code></pre>
+<p>修改后：</p>
+<pre class="conf"><code>server_name  localhost 192.168.56.9 192.168.56.1;</code></pre>
+<p><strong>在 <code>http</code> -&gt; <code>server</code> 块中加入如下内容</strong><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<pre class="conf"><code>location /hls {
+    # Disable cache
+    add_header Cache-Control no-cache;
+ 
+    # CORS setup
+    add_header &#39;Access-Control-Allow-Origin&#39; &#39;*&#39; always;
+    add_header &#39;Access-Control-Expose-Headers&#39; &#39;Content-Length&#39;;
+ 
+    # allow CORS preflight requests
+    if ($request_method = &#39;OPTIONS&#39;) {
+        add_header &#39;Access-Control-Allow-Origin&#39; &#39;*&#39;;
+        add_header &#39;Access-Control-Max-Age&#39; 1728000;
+        add_header &#39;Content-Type&#39; &#39;text/plain charset=UTF-8&#39;;
+        add_header &#39;Content-Length&#39; 0;
+        return 204;
+    }
+ 
+    types {
+        application/vnd.apple.mpegurl m3u8;
+        video/mp2t ts;
+    }
+ 
+    root /tmp/;
+    add_header Cache-Control no-cache;
+}</code></pre>
+<p><strong>在 <code>http</code> 块后加入如下内容</strong><a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a><a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<pre class="conf"><code>rtmp {
+    server {
+        listen 1935;
+        chunk_size 4096;
+
+        application live {
+            live on;
+            record off;
+
+            hls on;
+            hls_path /tmp/hls;
+            hls_fragment 3;
+            hls_playlist_length 20;
+        }
+    }
+}</code></pre>
+<h3 id="在-linux-上运行服务器">在 Linux 上运行服务器</h3>
+<p><strong>使用如下命令运行 Nginx 服务器</strong><a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> /usr/local/nginx/sbin/nginx</span></code></pre></div>
+<p>备注：修改了 Nginx 的配置文件后，重新加载配置文件的命令是 <code>sudo /usr/local/nginx/sbin/nginx -s reload</code>。</p>
+<p><strong>关闭防火墙</strong><a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> iptables <span class="at">-F</span></span></code></pre></div>
+<p>起初没有在 Linux 中关闭防火墙，结果使用主机可以 ping 通虚拟机，但程序无法正常通信。</p>
+<h3 id="在-windows-上推流">在 Windows 上推流</h3>
+<p>设视频文件的存储位置是 <code>/g/share/streams/24599937/1/24599937_1_0.flv</code>。</p>
+<p>在 Bash 环境中输入如下命令：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ffmpeg</span> <span class="at">-re</span> <span class="at">-i</span> <span class="st">&#39;/g/share/streams/24599937/1/24599937_1_0.flv&#39;</span> <span class="at">-vcodec</span> libx264 <span class="at">-vprofile</span> baseline <span class="at">-acodec</span> aac <span class="at">-strict</span> <span class="at">-2</span> <span class="at">-f</span> flv rtmp://192.168.56.9:1935/live/live</span></code></pre></div>
+<h3 id="在-windows-上拉流">在 Windows 上拉流</h3>
+<p>新建文件 <code>video.html</code>，输入如下内容：</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;meta</span><span class="ot"> charset=</span><span class="st">&quot;utf-8&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;title&gt;</span>直播实验室<span class="kw">&lt;/title&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;https://unpkg.com/video.js/dist/video.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;link</span><span class="ot"> href=</span><span class="st">&quot;https://unpkg.com/video.js/dist/video-js.min.css&quot;</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/head&gt;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;body&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1&gt;</span>直播实验室<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;video</span><span class="ot"> class=</span><span class="st">&quot;video-js&quot;</span><span class="ot"> controls autoplay=</span><span class="st">&quot;true&quot;</span><span class="ot"> width=</span><span class="st">&quot;640&quot;</span><span class="ot"> data-setup=</span><span class="st">&quot;{}&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;source</span><span class="ot"> src=</span><span class="st">&quot;http://192.168.56.9:8080/hls/live.m3u8&quot;</span><span class="ot"> type=</span><span class="st">&quot;application/vnd.apple.mpegurl&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/video&gt;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/body&gt;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
+<p>使用 Mozilla Firefox 浏览器中打开该文件，即可查看视频。</p>
+<p>其中，视频的播放由 <a href="https://videojs.com/">Video.js</a> 完成。</p>
+<h2 id="实验结果">实验结果</h2>
+<p>视频成功播放。</p>
+<figure>
+<img src="symx.png" alt="直播实验室" /><figcaption aria-hidden="true">直播实验室</figcaption>
+</figure>
+<h1 id="使用-haskell-实现直播服务器">使用 Haskell 实现直播服务器</h1>
+<h2 id="实验设计-1">实验设计</h2>
+<p>在成功搭建上述直播服务器后，我经过思考，认为轮播服务器对我更加实用。</p>
+<p>在原来的直播服务器中，有三种角色：主播、服务器端和观众；而轮播服务器中，只有服务器端和观众两种角色，服务器端预先存储固定的几个视频并循环播放，用户观看视频时如同直播一样，不能在视频流上移动。这样做使用的是直播协议，可以模拟直播间的效果，而且可以精心挑选想要播放的视频，使用服务器持续播放。</p>
+<p>为了实现这样的轮播服务器，我参考了直播协议 RFC 8216<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>。直播时，客户端会不断请求 <code>*.m3u8</code> 文件，检查列表中是否有新的 <code>*.ts</code> 视频切片。经过学习后<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a><a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a><a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a><a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a><a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a>，我决定使用 Haskell 实现轮播服务器。</p>
+<p>我计划完成的具体内容如下：</p>
+<ul>
+<li>预先使用 FFmpeg 将 <code>*.flv</code> 格式的视频切片，转换为 <code>*.ts</code> 格式的视频和播放列表文件 <code>playlist.m3u8</code></li>
+<li>将多个已经切片的视频放置在服务器指定的文件夹中</li>
+<li>运行服务器后，用户使用指定的 URI 向服务器请求动态生成的 <code>playlist.m3u8</code> 文件，并通过文件中提供的 URI 向服务器请求视频片段</li>
+<li>观众在浏览器中播放视频</li>
+<li>部署在个人服务器上测试</li>
+</ul>
+<h2 id="实验步骤-1">实验步骤</h2>
+<h3 id="软件要求-1">软件要求</h3>
+<p><strong>本地：</strong><a href="http://www.ffmpeg.org/download.html">FFmpeg</a></p>
+<p><strong>个人服务器：</strong><a href="https://www.haskellstack.org">Stack</a></p>
+<h3 id="视频切片">视频切片</h3>
+<p>设有两个视频文件，存储的位置分别是 <code>/g/share/streams/30088402/1/30088402_1_0.flv</code> 和 <code>/g/share/streams/24599937/1/24599937_1_0.flv</code>。</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> 30088402</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ffmpeg</span> <span class="at">-i</span> /g/share/streams/30088402/1/30088402_1_0.flv <span class="at">-c</span> copy <span class="at">-map</span> 0 <span class="at">-f</span> segment <span class="at">-segment_list</span> 30088402/playlist.m3u8 <span class="at">-segment_time</span> 10 30088402/output%03d.ts</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> 24599937</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ffmpeg</span> <span class="at">-i</span> /g/share/streams/24599937/1/24599937_1_0.flv <span class="at">-c</span> copy <span class="at">-map</span> 0 <span class="at">-f</span> segment <span class="at">-segment_list</span> 24599937/playlist.m3u8 <span class="at">-segment_time</span> 10 24599937/output%03d.ts</span></code></pre></div>
+<p>执行上述命令后<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a>，会在当前文件夹下产生如下文件：</p>
+<pre class="tree"><code>.
+├───24599937
+│       output000.ts
+│       output001.ts
+|       ...
+│       output024.ts
+│       playlist.m3u8
+│
+└───30088402
+        output000.ts
+        output001.ts
+        ...
+        output020.ts
+        playlist.m3u8</code></pre>
+<h3 id="实现服务器">实现服务器</h3>
+<p>服务器的大致原理如下：</p>
+<ul>
+<li>视频片段文件作为静态文件</li>
+<li>服务器启动时读取所有播放列表文件，并将所有播放列表合并，存储在内存中</li>
+<li>当用户请求播放列表时，服务器根据服务器已运行时间，动态生成当前时间对应的播放列表</li>
+</ul>
+<p>服务器使用 Haskell 语言中的 Yesod Web 框架实现。Haskell 语言具有语法简洁的特点，最终的源代码仅有 183 行。</p>
+<p>我经过查找资料发现，虽然有许多人与我一样实现了简单的 HLS 服务器，但是多数使用的是 Python 等编程语言，尚无人使用 Haskell 实现 HLS 服务器。本次实验可以视作在此方面的一次尝试。</p>
+<h3 id="运行服务器">运行服务器</h3>
+<p>将切片后生成的文件放置在个人服务器的 <code>prista/hls</code> 目录中（可以自行定义），同时在 <code>src/Main.hs</code> 中，设置 <code>readAndMergePlayListFiles</code> 函数的参数为 <code>"prista/hls"</code>。</p>
+<p>使用 Stack 编译和运行服务器。典型的运行方式如下：</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">stack</span> build</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">stack</span> exec <span class="at">--</span> hls-simple</span></code></pre></div>
+<h2 id="实验结果-1">实验结果</h2>
+<p>使用同样的方法请求个人服务器根目录的 <code>playlist.m3u8</code> 文件，获得正确的播放列表：</p>
+<pre class="m3u8"><code>EXTM3U
+EXT-X-VERSION:3
+EXT-X-MEDIA-SEQUENCE:19
+EXT-X-TARGETDURATION:19
+EXTINF:7.6,
+prista/hls/24599937/output019.ts
+EXTINF:8.9,
+prista/hls/24599937/output020.ts
+EXTINF:11.1,
+prista/hls/24599937/output021.ts
+EXTINF:10.65,
+prista/hls/24599937/output022.ts
+EXTINF:7.0,
+prista/hls/24599937/output023.ts
+EXTINF:4.65,
+prista/hls/24599937/output024.ts
+EXT-X-DISCONTINUITY
+EXTINF:11.832,
+prista/hls/30088402/output000.ts
+EXTINF:14.291,
+prista/hls/30088402/output001.ts
+EXTINF:7.832,
+prista/hls/30088402/output002.ts
+EXTINF:8.374,
+prista/hls/30088402/output003.ts
+EXTINF:10.374,
+prista/hls/30088402/output004.ts
+EXTINF:9.999,
+prista/hls/30088402/output005.ts
+EXTINF:9.999,
+prista/hls/30088402/output006.ts
+EXTINF:9.999,
+prista/hls/30088402/output007.ts
+EXTINF:7.999,
+prista/hls/30088402/output008.ts
+EXTINF:9.999,
+prista/hls/30088402/output009.ts</code></pre>
+<p>在电脑浏览器中，视频文件正常播放：</p>
+<figure>
+<img src="pcview.png" alt="hls-simple on PC" /><figcaption aria-hidden="true">hls-simple on PC</figcaption>
+</figure>
+<p>在手机浏览器中，视频文件也能正常播放：</p>
+<figure>
+<img src="Screenshot_2018-11-15-16-47-26.png" alt="hls-simple on mobile" /><figcaption aria-hidden="true">hls-simple on mobile</figcaption>
+</figure>
+<p><a href="https://github.com/ayaka14732/hls-simple">源代码</a></p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>Zac波. RTMP HLS HTTP 直播协议一次看个够[EB/OL]. https://www.jianshu.com/p/4c89b2c83e59.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>dodgepong. How to set up your own private RTMP server using nginx[EB/OL]. https://obsproject.com/forum/resources/how-to-set-up-your-own-private-rtmp-server-using-nginx.50/.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>xinwenfei. opensuse下遭遇openssl/aes.h: No such file or directory解决办法[EB/OL]. https://blog.csdn.net/xinwenfei/article/details/50777289.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>风吹过的时光. VirtualBox Host-only理解与实践[EB/OL]. https://blog.csdn.net/hzhsan/article/details/45224371.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>dodgepong. How to set up your own private RTMP server using nginx[EB/OL]. https://obsproject.com/forum/resources/how-to-set-up-your-own-private-rtmp-server-using-nginx.50/.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>cuishiying. 搭建HLS直播测试环境[EB/OL]. https://blog.csdn.net/cuishiying/article/details/78579108.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>cuishiying. 搭建HLS直播测试环境[EB/OL]. https://blog.csdn.net/cuishiying/article/details/78579108.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8" role="doc-endnote"><p>cuishiying. 搭建HLS直播测试环境[EB/OL]. https://blog.csdn.net/cuishiying/article/details/78579108.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>nginx-rtmp-module. Directives[EB/OL]. https://github.com/arut/nginx-rtmp-module/wiki/Directives.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p>dodgepong. How to set up your own private RTMP server using nginx[EB/OL]. https://obsproject.com/forum/resources/how-to-set-up-your-own-private-rtmp-server-using-nginx.50/.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p>davids_3233. [nginx] 在 Linux 服务器上部署 nginx 之后不能访问[EB/OL]. https://blog.csdn.net/lipeigang1109/article/details/73295373.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>RFC 8216, HTTP Live Streaming[S]. R. Pantos, Ed., W. May, 2017.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>RFC 8216, HTTP Live Streaming[S]. R. Pantos, Ed., W. May, 2017.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14" role="doc-endnote"><p>lucpp. [原创]直播服务器简单实现 http_flv和hls 内网直播桌面[EB/OL]. http://www.cnblogs.com/luconsole/p/6079534.html.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15" role="doc-endnote"><p>xiaojun11-. HLS实现点播和直播时，M3U8文件的不同[EB/OL]. https://blog.csdn.net/xiaojun111111/article/details/52102454.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16" role="doc-endnote"><p>Apple Developer Documentation. Live Playlist (Sliding Window) Construction[EB/OL]. https://developer.apple.com/documentation/http_live_streaming/example_playlists_for_http_live_streaming/live_playlist_sliding_window_construction.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17" role="doc-endnote"><p>Michael Snoyman. Developing Web Apps with Haskell and Yesod[M]. 2nd Edition. O’Reilly, 2015.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18" role="doc-endnote"><p>Jerry_Insist. 利用ffmepg把ts文件转m3u8并切片[EB/OL]. https://blog.csdn.net/zhangjiarui130/article/details/51691221.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-HK" xml:lang="zh-HK" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="計算語言學, 粵語, 分詞, 結巴分詞, 詞性標註" />
+  <title>結巴分詞處理粵語</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">結巴分詞處理粵語</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#方法">方法</a>
+<ul>
+<li><a href="#為何不可直接使用結巴分詞預設詞庫">為何不可直接使用結巴分詞預設詞庫？</a></li>
+<li><a href="#為何不可直接用-pycantonese-詞庫">為何不可直接用 PyCantonese 詞庫？</a></li>
+<li><a href="#為何需要使用結巴分詞的大詞庫">為何需要使用結巴分詞的大詞庫？</a></li>
+</ul></li>
+<li><a href="#實現">實現</a></li>
+<li><a href="#附錄詞庫對結巴分詞的影響">附錄：詞庫對結巴分詞的影響</a>
+<ul>
+<li><a href="#結巴分詞預設詞庫">結巴分詞預設詞庫</a></li>
+<li><a href="#結巴分詞大詞庫">結巴分詞大詞庫</a></li>
+<li><a href="#pycantonese-詞庫">PyCantonese 詞庫</a></li>
+<li><a href="#合併後的詞庫">合併後的詞庫</a></li>
+</ul></li>
+</ul>
+</nav>
+<blockquote>
+<p><span lang="zh-CN">简体中文版《<a href="../" hreflang="zh-CN">结巴分词处理粤语</a></span>》</p>
+</blockquote>
+<h1 id="方法">方法</h1>
+<p>分詞使用的詞庫是結合結巴分詞大詞庫與 PyCantonese 詞庫而成，不可直接使用結巴分詞預設詞庫。</p>
+<h2 id="為何不可直接使用結巴分詞預設詞庫">為何不可直接使用結巴分詞預設詞庫？</h2>
+<p>結巴分詞詞庫中的詞頻與詞性是基於官話文體的，不可直接用於粵文。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> jieba.posseg <span class="im">as</span> pseg</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> text <span class="op">=</span> <span class="st">&#39;但是，到了吃晚饭的时候，奶牛跑回农场了，福思也迷路了。他很晚才到姐姐的婚礼上，客人们已经在吃饭了。&#39;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">&#39; &#39;</span>.join(<span class="st">&#39;</span><span class="sc">%s</span><span class="st">/</span><span class="sc">%s</span><span class="st">&#39;</span> <span class="op">%</span> (word, flag) <span class="cf">for</span> word, flag <span class="kw">in</span> pseg.cut(text)))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>但是<span class="op">/</span>c ，<span class="op">/</span>x 到<span class="op">/</span>v 了<span class="op">/</span>ul 吃晚饭<span class="op">/</span>l 的<span class="op">/</span>uj 时候<span class="op">/</span>n ，<span class="op">/</span>x 奶牛<span class="op">/</span>n 跑<span class="op">/</span>v 回<span class="op">/</span>v 农场<span class="op">/</span>n 了<span class="op">/</span>ul ，<span class="op">/</span>x 福思<span class="op">/</span>nr 也<span class="op">/</span>d 迷路<span class="op">/</span>n 了<span class="op">/</span>ul 。<span class="op">/</span>x 他<span class="op">/</span>r 很<span class="op">/</span>d 晚<span class="op">/</span>tg 才<span class="op">/</span>d 到<span class="op">/</span>v 姐姐<span class="op">/</span>n 的<span class="op">/</span>uj 婚礼<span class="op">/</span>n 上<span class="op">/</span>f ，<span class="op">/</span>x 客人<span class="op">/</span>n 们<span class="op">/</span>k 已经<span class="op">/</span>d 在<span class="op">/</span>p 吃饭<span class="op">/</span>v 了<span class="op">/</span>ul 。<span class="op">/</span>x</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> text <span class="op">=</span> <span class="st">&#39;但系，到咗食晚饭嘅时候，只乳牛走返咗农场，夫思亦都系途中荡失路。佢好夜先至到家姐嘅婚礼度，𠮶阵时啲客都已经喺度食紧饭啰。&#39;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">&#39; &#39;</span>.join(<span class="st">&#39;</span><span class="sc">%s</span><span class="st">/</span><span class="sc">%s</span><span class="st">&#39;</span> <span class="op">%</span> (word, flag) <span class="cf">for</span> word, flag <span class="kw">in</span> pseg.cut(text)))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>但<span class="op">/</span>c 系<span class="op">/</span>n ，<span class="op">/</span>x 到<span class="op">/</span>v 咗<span class="op">/</span>zg 食<span class="op">/</span>v 晚饭<span class="op">/</span>n 嘅<span class="op">/</span>x 时候<span class="op">/</span>n ，<span class="op">/</span>x 只<span class="op">/</span>d 乳牛<span class="op">/</span>n 走<span class="op">/</span>v 返<span class="op">/</span>v 咗<span class="op">/</span>zg 农场<span class="op">/</span>n ，<span class="op">/</span>x 夫思<span class="op">/</span>n 亦<span class="op">/</span>d 都<span class="op">/</span>d 系<span class="op">/</span>v 途中<span class="op">/</span>s 荡失路<span class="op">/</span>i 。<span class="op">/</span>x 佢<span class="op">/</span>yg 好<span class="op">/</span>a 夜<span class="op">/</span>tg 先<span class="op">/</span>d 至<span class="op">/</span>p 到<span class="op">/</span>v 家<span class="op">/</span>q 姐<span class="op">/</span>n 嘅<span class="op">/</span>zg 婚礼<span class="op">/</span>n 度<span class="op">/</span>zg ，<span class="op">/</span>x 𠮶<span class="op">/</span>x 阵<span class="op">/</span>ng 时<span class="op">/</span>ng 啲<span class="op">/</span>zg 客<span class="op">/</span>ng 都<span class="op">/</span>d 已经<span class="op">/</span>d 喺<span class="op">/</span>yg 度<span class="op">/</span>q 食<span class="op">/</span>v 紧<span class="op">/</span>d 饭<span class="op">/</span>n 啰<span class="op">/</span>zg 。<span class="op">/</span>x</span></code></pre></div>
+<p>（注：詞性標記可以參考 <a href="https://gist.github.com/luw2007/6016931#ictclas-%E6%B1%89%E8%AF%AD%E8%AF%8D%E6%80%A7%E6%A0%87%E6%B3%A8%E9%9B%86">ICTCLAS 漢語詞性標註集</a>）</p>
+<p>可以看出，結巴分詞對粵語詞語的識別效果並不理想。</p>
+<h2 id="為何不可直接用-pycantonese-詞庫">為何不可直接用 PyCantonese 詞庫？</h2>
+<p>PyCantonese 專案的語料庫以對話語料為主，體裁較不正式，而粵文維基的條目有許多正式的書面詞語。</p>
+<p>為此，可以將結巴分詞預設詞庫與從 PyCantonese 專案匯出的詞庫結合起來，將二者合併為新的詞庫。</p>
+<p>在合併兩個詞庫前，需要為二者的詞頻賦予一定的權重，再將結果相加。採用的方法是調整 PyCantonese 的詞頻，使 PyCantonese 中「嘅」字的詞頻與結巴分詞詞庫中「的」字的詞頻一致。這僅是一種近似的方法，並非是將二者等比例合併。</p>
+<h2 id="為何需要使用結巴分詞的大詞庫">為何需要使用結巴分詞的大詞庫？</h2>
+<p>雖然<a href="https://github.com/fxsjy/jieba/blob/67fa2e36e72f69d9134b8a1037b83fbb070b9775/README.md">目前結巴分詞的首頁</a>稱「支援繁體分詞」，但使用預設詞庫時，分詞效果並不理想：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> jieba.posseg <span class="im">as</span> pseg</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> text <span class="op">=</span> <span class="st">&#39;英超榜首的利物浦主場將會迎戰般尼茅夫，領隊高普賽前表示，門將艾利臣在足總盃對車路士的比賽中臀部肌肉受傷，今場以及下周中歐聯16強次回合對馬德里體育會的賽事，都肯定無法上陣。&#39;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">&#39; &#39;</span>.join(<span class="st">&#39;</span><span class="sc">%s</span><span class="st">/</span><span class="sc">%s</span><span class="st">&#39;</span> <span class="op">%</span> (word, flag) <span class="cf">for</span> word, flag <span class="kw">in</span> pseg.cut(text)))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>英超<span class="op">/</span>nr 榜首<span class="op">/</span>n 的<span class="op">/</span>uj 利物浦<span class="op">/</span>ns 主場<span class="op">/</span>n 將<span class="op">/</span>d 會<span class="op">/</span>v 迎戰<span class="op">/</span>v 般<span class="op">/</span>u 尼茅夫<span class="op">/</span>nrt ，<span class="op">/</span>x 領隊<span class="op">/</span>n 高普賽<span class="op">/</span>nr 前<span class="op">/</span>f 表示<span class="op">/</span>v ，<span class="op">/</span>x 門<span class="op">/</span>n 將<span class="op">/</span>d 艾利臣在足總<span class="op">/</span>nr 盃<span class="op">/</span>yg 對<span class="op">/</span>p 車<span class="op">/</span>n 路<span class="op">/</span>n 士<span class="op">/</span>ng 的<span class="op">/</span>uj 比<span class="op">/</span>p 賽<span class="op">/</span>vn 中<span class="op">/</span>f 臀部<span class="op">/</span>n 肌肉<span class="op">/</span>n 受傷<span class="op">/</span>v ，<span class="op">/</span>x 今<span class="op">/</span>tg 場<span class="op">/</span>q 以及<span class="op">/</span>c 下周<span class="op">/</span>t 中歐<span class="op">/</span>ns 聯<span class="op">/</span>v <span class="dv">16</span><span class="op">/</span>m 強<span class="op">/</span>a 次<span class="op">/</span>q 回合<span class="op">/</span>v 對<span class="op">/</span>p 馬<span class="op">/</span>nr 德里<span class="op">/</span>ns 體育會<span class="op">/</span>n 的<span class="op">/</span>uj 賽事<span class="op">/</span>n ，<span class="op">/</span>x 都<span class="op">/</span>d 肯定<span class="op">/</span>v 無法上<span class="op">/</span>l 陣<span class="op">/</span>n 。<span class="op">/</span>x</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> text <span class="op">=</span> <span class="st">&#39;英超榜首的利物浦主场将会迎战般尼茅夫，领队高普赛前表示，门将艾利臣在足总杯对车路士的比赛中臀部肌肉受伤，今场以及下周中欧联16强次回合对马德里体育会的赛事，都肯定无法上阵。&#39;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">&#39; &#39;</span>.join(<span class="st">&#39;</span><span class="sc">%s</span><span class="st">/</span><span class="sc">%s</span><span class="st">&#39;</span> <span class="op">%</span> (word, flag) <span class="cf">for</span> word, flag <span class="kw">in</span> pseg.cut(text)))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>英超<span class="op">/</span>nr 榜首<span class="op">/</span>n 的<span class="op">/</span>uj 利物浦<span class="op">/</span>ns 主场<span class="op">/</span>n 将<span class="op">/</span>d 会<span class="op">/</span>v 迎战<span class="op">/</span>v 般尼茅夫<span class="op">/</span>nz ，<span class="op">/</span>x 领队<span class="op">/</span>n 高普<span class="op">/</span>nr 赛前<span class="op">/</span>t 表示<span class="op">/</span>v ，<span class="op">/</span>x 门将<span class="op">/</span>n 艾利臣<span class="op">/</span>nr 在<span class="op">/</span>p 足总杯<span class="op">/</span>n 对<span class="op">/</span>p 车路<span class="op">/</span>n 士<span class="op">/</span>ng 的<span class="op">/</span>uj 比赛<span class="op">/</span>vn 中<span class="op">/</span>f 臀部<span class="op">/</span>n 肌肉<span class="op">/</span>n 受伤<span class="op">/</span>v ，<span class="op">/</span>x 今<span class="op">/</span>tg 场<span class="op">/</span>q 以及<span class="op">/</span>c 下周<span class="op">/</span>t 中欧<span class="op">/</span>ns 联<span class="op">/</span>v <span class="dv">16</span><span class="op">/</span>m 强<span class="op">/</span>a 次<span class="op">/</span>q 回合<span class="op">/</span>v 对<span class="op">/</span>p 马德里<span class="op">/</span>nr 体育<span class="op">/</span>vn 会<span class="op">/</span>v 的<span class="op">/</span>uj 赛事<span class="op">/</span>n ，<span class="op">/</span>x 都<span class="op">/</span>d 肯定<span class="op">/</span>v 无法<span class="op">/</span>n 上阵<span class="op">/</span>v 。<span class="op">/</span>x</span></code></pre></div>
+<p>可以看出，結巴分詞預設詞庫對繁體文字的分詞能力明顯弱於簡體分詞，而結巴分詞大詞庫則同時支援繁體與簡體。</p>
+<h1 id="實現">實現</h1>
+<blockquote>
+<p>程式碼見 <a href="https://github.com/ayaka14732/cantoseg/tree/main/build">ayaka14732/cantoseg</a>。</p>
+</blockquote>
+<ol type="1">
+<li>首先安裝 PyCantonese，然後編寫程式匯出 PyCantonese 詞庫。執行後生成 <code>dict_cantonese.txt</code>。</li>
+<li>下載最新的<a href="https://raw.githubusercontent.com/fxsjy/jieba/master/extra_dict/dict.txt.big">結巴分詞大詞庫</a>，存儲為 <code>dict.big.txt</code>。</li>
+<li>編寫程式合併詞庫。執行後生成 <code>merged_dict.txt</code>。</li>
+</ol>
+<p>使用：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jieba</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>jieba.set_dictionary(<span class="st">&#39;merged_dict.txt&#39;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>jieba.initialize()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jieba.posseg <span class="im">as</span> pseg</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>...</span></code></pre></div>
+<h1 id="附錄詞庫對結巴分詞的影響">附錄：詞庫對結巴分詞的影響</h1>
+<p>原文：</p>
+<blockquote>
+<p>考古證明，香港喺舊石器時代就有人住。喺西貢半島北岸黃地峒，有石器同整石器嘅架生。喺新界同大嶼山好多地方，都搵到新石器時代嘅遺址。旺角（以前叫「芒角」）就曾經係東漢、隋朝同唐朝人做陶器嘅地方。李鄭屋古墓亦證明香港喺東漢嗰時，畀番禺管。喺唐朝嗰陣，香港由廣州寶安縣管，嗰陣軍隊就係駐喺而家嘅屯門（屯兵之門），而呢區個名就係咁嚟㗎喇。</p>
+</blockquote>
+<h2 id="結巴分詞預設詞庫">結巴分詞預設詞庫</h2>
+<pre><code>考古/vn 證明/n ，/x 香港/ns 喺/yg 舊/a 石器/n 時代/n 就/d 有人/r 住/v 。/x 喺/y 西/f 貢/vg 半/m 島/n 北岸/f 黃地峒/ns ，/x 有/v 石器/n 同/p 整/b 石器/n 嘅/yg 架/q 生/v 。/x 喺/x 新界/n 同/p 大嶼山/ns 好多/m 地方/n ，/x 都/d 搵/yg 到/v 新石器/n 時代/nr 嘅/zg 遺/vg 址/ng 。/x 旺角/n （/x 以前/f 叫/v 「/x 芒角/n 」/x ）/x 就/d 曾/d 經/p 係/zg 東/f 漢/j 、/x 隋朝/t 同/p 唐朝/t 人/n 做/v 陶器/n 嘅/x 地方/n 。/x 李鄭/nr 屋/s 古墓/n 亦/d 證明/v 香港/ns 喺東漢/nr 嗰/zg 時/ng ，/x 畀/g 番禺/ns 管/vn 。/x 喺/x 唐朝/t 嗰/yg 陣/ng ，/x 香港/ns 由/p 廣州/ns 寶安縣/ns 管/vn ，/x 嗰陣軍隊就/nr 係/zg 駐/v 喺而家/nr 嘅/zg 屯/v 門/n （/x 屯兵/n 之門/ns ）/x ，/x 而呢/y 區/n 個/q 名就/nr 係/zg 咁/x 嚟/zg 㗎/x 喇/n 。/x</code></pre>
+<p>可以看出分詞效果並不理想。</p>
+<h2 id="結巴分詞大詞庫">結巴分詞大詞庫</h2>
+<pre><code>考古/vn 證明/n ，/x 香港/ns 喺/x 舊石器時代/t 就/d 有人/r 住/v 。/x 喺/x 西貢/ns 半島/n 北岸/f 黃地峒/ns ，/x 有/v 石器/n 同/p 整/b 石器/n 嘅/yg 架/q 生/v 。/x 喺/x 新界/n 同/p 大嶼山/ns 好多/m 地方/n ，/x 都/d 搵/yg 到/v 新石器/n 時代/n 嘅/x 遺址/n 。/x 旺角/n （/x 以前/f 叫/v 「/x 芒角/n 」/x ）/x 就/d 曾經/d 係/zg 東漢/t 、/x 隋朝/t 同/p 唐朝/t 人/n 做/v 陶器/n 嘅/x 地方/n 。/x 李鄭/nr 屋/s 古墓/n 亦/d 證明/n 香港/ns 喺/x 東漢/t 嗰/yg 時/ng ，/x 畀/g 番禺/ns 管/vn 。/x 喺/x 唐朝/t 嗰/yg 陣/ng ，/x 香港/ns 由/p 廣州/ns 寶安縣/ns 管/vn ，/x 嗰/yg 陣/ng 軍隊/n 就/d 係/yg 駐/v 喺而家/nr 嘅/zg 屯門/ns （/x 屯兵/n 之門/ns ）/x ，/x 而呢/y 區/n 個/q 名就/nr 係/zg 咁/x 嚟/zg 㗎/x 喇/n 。/x</code></pre>
+<p>與結巴分詞預設詞庫相比，結巴分詞大詞庫效果更佳，但仍不能正確處理粵語詞（如「喺」）。</p>
+<h2 id="pycantonese-詞庫">PyCantonese 詞庫</h2>
+<pre><code>考古/vn 證明/v ，/x 香港/ns 喺/yg 舊/a 石/ng 器/n 時代/n 就/u 有人/r 住/v 。/x 喺/y 西/f 貢/vg 半/m 島/n 北/f 岸/n 黃/a 地/uv峒/g ，/x 有/v 石器/n 同/p 整石/n 器/n 嘅/zg 架/q 生/v 。/x 喺/r 新界/ns 同/p 大嶼山/ns 好多/m 地方/n ，/x 都/d 搵/yg 到/v 新/a 石/ng 器/n 時代/n 嘅/y 遺/vg 址/ng 。/x 旺角/ns （/x 以前/f 叫/v 「/x 芒角/n 」/x ）/x 就/u 曾經/d 係/y 東/f 漢/j 、/x 隋朝/t 同/p 唐朝/t 人/n 做/v 陶/nr 器/n 嘅/zg 地方/n 。/x 李/nr 鄭屋/ns 古墓/n 亦/d 證明/v 香港/ns 喺/y 東/f 漢/j 嗰時/t ，/x畀/x 番禺/ns 管/v 。/x 喺/yg 唐/tg 朝/p 嗰陣/r ，/x 香港/ns 由/v 廣州/ns 寶安縣/ns 管/vn ，/x 嗰陣/r 軍隊/n 就係/d 駐/v 喺/zg 而家/t 嘅/e 屯門/n （/x 屯兵/n 之/u 門/n ）/x ，/x 而呢/y 區/n 個/q 名/q 就係/d 咁/x 嚟/zg 㗎/x 喇/u 。/x</code></pre>
+<p>PyCantonese 詞庫以對話語料為主，不能識別專有名詞。</p>
+<h2 id="合併後的詞庫">合併後的詞庫</h2>
+<pre><code>考古/vn 證明/v ，/x 香港/ns 喺/r 舊石器時代/t 就/u 有人/r 住/v 。/x 喺/r 西貢/ns 半島/n 北岸/f 黃地峒/ns ，/x 有/v 石器/n 同/p 整/b 石器/n 嘅/yg 架/q 生/v 。/x 喺/r 新界/n 同/cg 大嶼山/ns 好多/m 地方/n ，/x 都/d 搵/yg 到/v 新石器/n 時代/n 嘅/e 遺址/n。/x 旺角/n （/x 以前/t 叫/v 「/x 芒角/n 」/x ）/x 就/u 曾經/d 係/zg 東漢/t 、/x 隋朝/t 同/cg 唐朝/t 人/n 做/v 陶器/n 嘅/e 地方/n 。/x 李鄭/nr 屋/s 古墓/n 亦/d 證明/v 香港/ns 喺/r 東漢/t 嗰時/t ，/x 畀/g 番禺/ns 管/v 。/x 喺/r 唐朝/t 嗰陣/r ，/x 香港/ns 由/v 廣州/ns 寶安縣/ns 管/v ，/x 嗰陣/r 軍隊/n 就係/d 駐/v 喺/zg 而家/t 嘅/e 屯門/n （/x 屯兵/n 之門/ns ）/x ，/x 而呢/y 區/n 個/q 名/q 就係/d 咁/x 嚟/zg 㗎/x 喇/u 。/x</code></pre>
+<p>合併後既能處理粵語詞，又能處理專有名詞，是幾種方法中最好的。</p>
+<p>然而，這種方法的效果仍然不夠理想，未來需要建設規模更大的粵語語料庫。</p>
+<p>（初稿作於 2020 年 3 月 7 日，發佈於 2020 年 7 月 17 日，修改於 2020 年 8 月 22 日，原為計算語言學課程實驗作）</p>
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <title>繁简中文转换概说</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
+  <style>
+  :lang(zh-Hant-CN) { font-language-override: 'ZHS'; }
+  td { vertical-align: middle !important; }
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">繁简中文转换概说</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#预备知识">预备知识</a>
+<ul>
+<li><a href="#unicode-字符集">Unicode 字符集</a></li>
+<li><a href="#中文的地区差异">中文的地区差异</a></li>
+</ul></li>
+<li><a href="#字形差异">字形差异</a></li>
+<li><a href="#编码差异">编码差异</a></li>
+<li><a href="#用字差异">用字差异</a>
+<ul>
+<li><a href="#opencc-标准">OpenCC 标准</a></li>
+<li><a href="#一简对多繁">一简对多繁</a></li>
+<li><a href="#一繁对多简">一繁对多简</a></li>
+<li><a href="#一繁对多繁">一繁对多繁</a></li>
+<li><a href="#例外">例外</a></li>
+</ul></li>
+<li><a href="#用词差异">用词差异</a></li>
+<li><a href="#opencc-程序">OpenCC 程序</a>
+<ul>
+<li><a href="#opencc-原理">OpenCC 原理</a></li>
+<li><a href="#opencc-应用">OpenCC 应用</a></li>
+</ul></li>
+<li><a href="#问与答">问与答</a>
+<ul>
+<li><a href="#如何查看汉字的-unicode-码位">如何查看汉字的 Unicode 码位？</a></li>
+<li><a href="#如何查看-unicode-码位对应的字符">如何查看 Unicode 码位对应的字符？</a></li>
+<li><a href="#unicode-和-utf-8-有什么区别">Unicode 和 UTF-8 有什么区别？</a></li>
+</ul></li>
+</ul>
+</nav>
+<blockquote>
+<p>同時發佈於知乎：<a href="https://zhuanlan.zhihu.com/p/104314323">繁简中文转换概说 - 三日月 綾香的文章</a></p>
+</blockquote>
+<h1 id="预备知识">预备知识</h1>
+<h2 id="unicode-字符集">Unicode 字符集</h2>
+<p><img src="encode.png" alt="图中是计算机存储和显示字符的过程。Unicode 字符集的字符组成文本，使用 UTF-8 编码储存；而文本使用各地区字体显示，效果不同"/></p>
+<p>在计算机中储存的字符，都要经过 <strong>编码</strong>。目前通用的编码是 <strong>UTF-8 编码</strong>。</p>
+<p>UTF-8 编码的对象是 <strong>Unicode 字符集</strong>，换言之，只有 Unicode 字符集收录的字符才能被编码。</p>
+<p>Unicode 字符集的每个字符都有唯一的 <strong>Unicode 码位</strong>。一段连续的 Unicode 码位称为 <strong>区</strong>。</p>
+<p>Unicode 中收录的汉字分布在以下几个区：</p>
+<ul>
+<li>中日韩统一表意文字 (U+4E00-U+9FFF)</li>
+<li>中日韩统一表意文字扩充区A (U+3400-U+4DBF)</li>
+<li>中日韩统一表意文字扩充区B (U+20000-U+2A6DF)</li>
+<li>中日韩统一表意文字扩充区C (U+2A700-U+2B73F)</li>
+<li>中日韩统一表意文字扩充区D (U+2B740-U+2B81F)</li>
+<li>中日韩统一表意文字扩充区E (U+2B820-U+2CEAF)</li>
+<li>中日韩统一表意文字扩充区F (U+2CEB0-U+2EBEF)</li>
+<li>中日韩统一表意文字扩充区G (U+30000-U+3134F)</li>
+</ul>
+<p>从码位并不能直接判断简繁体。</p>
+<p>有一些区是为兼容其他字符集而设的，称为 <strong>兼容区</strong>；还有一些区域是为用户自己造字而设的，称为 <strong>私人使用区</strong>（PUA），一般情况下不应使用。但是，这些区的字符在计算机上的显示效果有时与普通的字符并无差异，在处理来源不明的数据时需要特别留意。</p>
+<h2 id="中文的地区差异">中文的地区差异</h2>
+<p>中国大陆、香港、台湾、日本、韩国、新加坡等地各有不同的汉字标准（或规范，以下通称标准），详见维基百科 <a href="https://zh.wikipedia.org/zh-hk/%E6%BC%A2%E5%AD%97%E6%A8%99%E6%BA%96%E5%88%97%E8%A1%A8">汉字标准列表</a>。</p>
+<p>中文环境的汉字标准共有五种：</p>
+<ul>
+<li><span lang="zh-CN">简体中文（中国大陆）</span>，简称「<span lang="zh-CN">大陆简体</span>」</li>
+<li><span lang="zh-SG">简体中文（新加坡）</span>，与大陆简体相同，仅用词有别</li>
+<li><span lang="zh-HK">繁體中文（香港）</span>，简称「<span lang="zh-HK">香港繁體</span>」</li>
+<li><span lang="zh-TW">繁體中文（臺灣）</span>，简称「<span lang="zh-TW">臺灣繁體</span>」或「<span lang="zh-TW">臺灣正體</span>」</li>
+<li><span lang="zh-Hant-CN">繁體中文（中國大陸）</span>，简称「<span lang="zh-Hant-CN">大陸繁體</span>」</li>
+</ul>
+<p>实际上大陆繁体并不常见，因为大陆出版的古籍亦需要保留原文样态，不会随意根据现代标准修改。</p>
+<p>地区差异分为以下几类：</p>
+<ol type="1">
+<li>句子的表达方式不同（最难，本文暂不讨论）</li>
+<li>句子大致相同，用词不同（称「用词差异」）</li>
+<li>用词相同，但汉字的形态可能不同。这分为三种情况：
+<ol type="1">
+<li>汉字形态不同，但 Unicode 码位相同（称「字形差异」）</li>
+<li>汉字形态不同，且 Unicode 码位也不同，但是同一汉字（称「编码差异」）</li>
+<li>汉字形态不同，且 Unicode 码位也不同，但是不同汉字（称「用字差异」）</li>
+</ol></li>
+</ol>
+<p>以下分别讲解。</p>
+<h1 id="字形差异">字形差异</h1>
+<p>例如「削弱」一词，香港与台湾均用「削（U+524A）弱」，但是分别使用香港与台湾的字体显示，会有明显差异。</p>
+<ul>
+<li>香港：<span lang="zh-HK"><img src="soek-HK.png" alt="削"/><img src="joek.png" alt="弱"/></span></li>
+<li>台湾：<span lang="zh-TW"><img src="soek-TW.png" alt="削"/><img src="joek.png" alt="弱"/></span></li>
+</ul>
+<p>此类差异，需要用户选用合适的字体，方能正确显示，例如 <a href="https://github.com/adobe-fonts/source-han-sans">思源黑体</a> 支持陆、港、台、日、韩五地的汉字字形。</p>
+<p>作为开发者，通常是通过在代码中指定语言来解决，例如「育」字：</p>
+<div lang="en-x-code">
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ul&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;li&gt;</span>大陆：<span class="kw">&lt;span</span><span class="ot"> lang=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span>育<span class="kw">&lt;/span&gt;&lt;/li&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;li&gt;</span>台湾：<span class="kw">&lt;span</span><span class="ot"> lang=</span><span class="st">&quot;zh-TW&quot;</span><span class="kw">&gt;</span>育<span class="kw">&lt;/span&gt;&lt;/li&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ul&gt;</span></span></code></pre></div>
+</div>
+<p>效果如下：</p>
+<ul>
+<li>大陆：<span lang="zh-CN">育</span></li>
+<li>台湾：<span lang="zh-TW">育</span></li>
+</ul>
+<h1 id="编码差异">编码差异</h1>
+<p>对于「说明」一词中的「说」字，香港用「<span lang="zh-HK">説</span>」(U+8AAC)，台湾用「<span lang="zh-TW">說</span>」(U+8AAA)，码位本身就不相同。但是，尽管「説」、「說」码位不同，却明显是同一汉字，这样的关系称为 <strong>微差异码</strong>。</p>
+<ul>
+<li>香港：<span lang="zh-HK"><img src="syut-HK.png" alt="説"/><img src="ming.png" alt="明"/></span></li>
+<li>台湾：<span lang="zh-TW"><img src="syut-TW.png" alt="說"/><img src="ming.png" alt="明"/></span></li>
+</ul>
+<h1 id="用字差异">用字差异</h1>
+<p>对于「化妝」一词中的「妝」字，香港用「<span lang="zh-HK">粧</span>」(U+7CA7)，台湾用「<span lang="zh-TW">妝</span>」(U+599D)，码位不相同，且为不同汉字。</p>
+<ul>
+<li>香港：<span lang="zh-HK"><img src="faa-HK.png" alt="化"/><img src="zong-HK.png" alt="粧"/></span></li>
+<li>台湾：<span lang="zh-TW"><img src="faa-TW.png" alt="化"/><img src="zong-TW.png" alt="妝"/></span></li>
+</ul>
+<h2 id="opencc-标准">OpenCC 标准</h2>
+<p><a href="https://github.com/BYVoid/OpenCC">OpenCC 项目</a> 总结了古籍、书法、文字学等领域传统的繁体汉字用字，据此确定的用字标准称为 OpenCC 标准。</p>
+<p><img src="opencc2all.png" alt="图为 OpenCC 标准基本杜绝了下面提到的几类「一对多」问题的示意"/></p>
+<p>OpenCC 用字标准制定的原则之一是「能分则不合」，基本杜绝了下面提到的几类「一对多」问题。</p>
+<h2 id="一简对多繁">一简对多繁</h2>
+<p>「一简对多繁」是指同一个简体汉字可能对应多个繁体汉字的现象。由于一简对多繁，在将简体汉字转换为繁体汉字时，不能简单地逐字转换，需要考虑上下文。</p>
+<table>
+<thead>
+<tr>
+<th>
+简体
+</th>
+<th>
+繁体
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td lang="zh-CN" rowspan="2">
+发
+</td>
+<td lang="zh-HK">
+發（發行）
+</td>
+</tr>
+<tr>
+<td lang="zh-HK">
+髮（頭髮）
+</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>
+简体
+</th>
+<th>
+繁体
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td lang="zh-CN" rowspan="2">
+面
+</td>
+<td lang="zh-HK">
+面（下面）
+</td>
+</tr>
+<tr>
+<td lang="zh-HK">
+麪（下麪條）
+</td>
+</tr>
+</tbody>
+</table>
+<p>常有人将简体的「<span lang="zh-CN">头发</span>」转换为繁体的「<del lang="zh-HK">頭發</del>」，就是因为一简对多繁的影响。</p>
+<p>（在台湾标准中「麪」写作「麵」）</p>
+<h2 id="一繁对多简">一繁对多简</h2>
+<p>与「一简对多繁」类似，还有「一繁对多简」问题，但这种情况远少于「一简对多繁」。</p>
+<table>
+<thead>
+<tr>
+<th>
+繁体
+</th>
+<th>
+简体
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td lang="zh-HK" rowspan="2">
+乾
+</td>
+<td lang="zh-CN">
+乾（乾坤）
+</td>
+</tr>
+<tr>
+<td lang="zh-CN">
+干（干燥）
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="一繁对多繁">一繁对多繁</h2>
+<p>繁体汉字的不同标准之间也存在一对多的情况，称为「一繁对多繁」，但这种情况也远少于「一简对多繁」。</p>
+<p><strong>一台湾繁对多香港繁</strong></p>
+<table>
+<thead>
+<tr>
+<th>
+台湾繁体
+</th>
+<th>
+香港繁体
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td lang="zh-TW" rowspan="2">
+著
+</td>
+<td lang="zh-HK">
+著（著作）
+</td>
+</tr>
+<tr>
+<td lang="zh-HK">
+着（拿着）
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一香港繁对多台湾繁</strong></p>
+<table>
+<thead>
+<tr>
+<th>
+香港繁体
+</th>
+<th>
+台湾繁体
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td lang="zh-HK" rowspan="2">
+台
+</td>
+<td lang="zh-TW">
+臺（臺灣）
+</td>
+</tr>
+<tr>
+<td lang="zh-TW">
+台（普通话 <span lang="cmn-Latn">tāi</span>，天台山）
+</td>
+</tr>
+</tbody>
+</table>
+<p>（现在台湾民间也常用「<span lang="zh-TW">台灣</span>」，与香港同）</p>
+<p><strong>一香港、台湾繁对多 OpenCC 繁</strong></p>
+<table>
+<thead>
+<tr>
+<th>
+香港、台湾繁体
+</th>
+<th>
+OpenCC 繁体
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td lang="zh-HK" rowspan="2">
+才
+</td>
+<td lang="zh-Hant-x-opencc">
+才（組織才能十分出衆）
+</td>
+</tr>
+<tr>
+<td lang="zh-Hant-x-opencc">
+纔（實幹纔能夢想成真）
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="例外">例外</h2>
+<p>OpenCC 基本杜绝了「一对多问题」，换言之，如果文本使用 OpenCC 用字标准，转换为其他用字标准时通常不会出现「一对多」，故不需要根据上下文进行额外的判断。</p>
+<p>但是，OpenCC 标准也有少数例外：</p>
+<p><strong>一、「湧」、「涌」问题</strong></p>
+<table>
+<thead>
+<tr>
+<th>
+OpenCC 繁体
+</th>
+<th>
+香港繁体
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td lang="zh-Hant-x-opencc" rowspan="2">
+涌
+</td>
+<td lang="zh-HK">
+湧（湧起）
+</td>
+</tr>
+<tr>
+<td lang="zh-HK">
+涌（普通话 <span lang="cmn-Latn">chōng</span>，粤语 <span lang="yue-Latn">cung¹</span>，東涌）
+</td>
+</tr>
+</tbody>
+</table>
+<p>「涌」是粤语区常见的地名用字。OpenCC 标准依据的是古代传统典籍，根据《说文解字》确定「涌」为「湧」的本字，因此将「湧」写为「涌」，并不考虑粤语区的情况。</p>
+<p><strong>二、「无线」、「有线」问题</strong></p>
+<p>实际使用时，由于历史原因，并不一定遵守标准。如香港公司名：「<span lang="zh-HK">無綫</span>」、「<span lang="zh-HK">有線</span>」。</p>
+<h1 id="用词差异">用词差异</h1>
+<p>不同地区的用词存在差异。例如：</p>
+<ul>
+<li>中国大陆和台湾称草莓，香港称为士多啤梨</li>
+<li>变压器在香港及中国大陆部分使用粤语的地方称为「火牛」</li>
+<li>在中国大陆，通常称为「自行车」；台湾称「脚踏车」，江浙、上海、福建等地亦有「脚踏车」一称；在香港、澳门、广东、广西、湖南等中国南方地区则更常称其为「单车」；在新加坡、马来西亚、广东潮汕地区则称之「脚车」，江西赣语更称之为「线车（嘚）」、「钢丝车」、「脚踏车嘚」</li>
+</ul>
+<p>出于本地化的需要，繁简转换通常至少需要考虑中国大陆、台湾、香港的用词差异。</p>
+<p>用字差异、编码差异与用词差异无关，是相互独立的：</p>
+<ul>
+<li>不是用字差异或编码差异、是用词差异：大陆繁、台湾用「<span lang="zh-TW">隱私</span>」，香港用「<span lang="zh-HK">私隱</span>」</li>
+<li>是用字差异、不是用词差异：大陆繁、台湾用「<span lang="zh-TW">床前</span>」，香港用「<span lang="zh-HK">牀前</span>」</li>
+<li>是编码差异、不是用词差异：大陆繁、香港用「<span lang="zh-HK">用户</span>」，台湾用「<span lang="zh-TW">用戶</span>」</li>
+</ul>
+<h1 id="opencc-程序">OpenCC 程序</h1>
+<h2 id="opencc-原理">OpenCC 原理</h2>
+<p>OpenCC 是用于繁简转换的程序，许多 Linux 发行版已内置该程序，Windows 系统亦可自行编译安装。</p>
+<p>由于「一对多」现象的存在，繁简转换不是简单地逐字对应，而是需要以词为单位考虑。因此，繁简转换分为两步：分词与词汇转换。</p>
+<p>OpenCC 默认采用「正向最长匹配」的分词算法。例如，若词库中同时存在「<span lang="zh-Hant">快取</span>」、「<span lang="zh-Hant">記憶體</span>」和「<span lang="zh-Hant">快取記憶體</span>」，则「<span lang="zh-Hant">快取記憶體</span>」的切分结果为「<span lang="zh-Hant">快取記憶體</span>」而不是「<span lang="zh-Hant">快取/記憶體</span>」。</p>
+<p>词汇转换就是将分词后的词汇逐一查找转换表。若有多个结果，就返回第一个。</p>
+<p>若用户编译 OpenCC 不成功，也可以自行实现。下面是使用 57 行 Python 代码的一种简易实现（仅为示例，不做性能优化，且命令行参数有一定差异）。</p>
+<p>首先将 <a href="https://github.com/sgalal/opencc-data/tree/master/data">词典数据</a> 置于 <code lang="en-x-code">data</code> 文件夹中，然后编写代码如下：</p>
+<div lang="en-x-code">
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python3</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pygtrie</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_trie(ds):  <span class="co"># build a trie</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> pygtrie.CharTrie()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> d <span class="kw">in</span> ds:  <span class="co"># read a list of dictionaries</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(os.path.join(<span class="st">&#39;dict&#39;</span>, d <span class="op">+</span> <span class="st">&#39;.txt&#39;</span>)) <span class="im">as</span> f:</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> line <span class="kw">in</span> f:</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> line <span class="op">!=</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span> <span class="kw">and</span> line[<span class="dv">0</span>] <span class="op">!=</span> <span class="st">&#39;#&#39;</span>:  <span class="co"># ignore empty and commented lines</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                    l, r <span class="op">=</span> line.rstrip().split(<span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)  <span class="co"># split the line by TAB</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                    t[l] <span class="op">=</span> r  <span class="co"># put words into the trie</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> t</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> replace_words(s, t):</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> []  <span class="co"># list of coverted words</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> s:</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        longest_prefix <span class="op">=</span> t.longest_prefix(s)  <span class="co"># match the longest prefix</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> longest_prefix:  <span class="co"># if the prefix does not exist</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>            l.append(s[<span class="dv">0</span>])  <span class="co"># append the first character</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>            s <span class="op">=</span> s[<span class="dv">1</span>:]  <span class="co"># remove the first character from the string</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:  <span class="co"># if exists</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>            l.append(longest_prefix.value.split(<span class="st">&#39; &#39;</span>)[<span class="dv">0</span>])  <span class="co"># append the first converted word</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>            s <span class="op">=</span> s[<span class="bu">len</span>(longest_prefix.key):]  <span class="co"># remove the word from the string</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&#39;&#39;</span>.join(l)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>DICT_FROM <span class="op">=</span> <span class="op">\</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    { <span class="st">&#39;cn&#39;</span>: (<span class="st">&#39;STCharacters&#39;</span>, <span class="st">&#39;STPhrases&#39;</span>)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&#39;hk&#39;</span>: (<span class="st">&#39;HKVariantsRev&#39;</span>, <span class="st">&#39;HKVariantsRevPhrases&#39;</span>)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&#39;tw&#39;</span>: (<span class="st">&#39;TWVariantsRev&#39;</span>, <span class="st">&#39;TWVariantsRevPhrases&#39;</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&#39;twp&#39;</span>: (<span class="st">&#39;TWVariantsRev&#39;</span>, <span class="st">&#39;TWVariantsRevPhrases&#39;</span>, <span class="st">&#39;TWPhrasesRev&#39;</span>)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&#39;jp&#39;</span>: (<span class="st">&#39;JPVariantsRev&#39;</span>,)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>DICT_TO <span class="op">=</span> <span class="op">\</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    { <span class="st">&#39;cn&#39;</span>: (<span class="st">&#39;TSCharacters&#39;</span>, <span class="st">&#39;TSPhrases&#39;</span>)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&#39;hk&#39;</span>: (<span class="st">&#39;HKVariants&#39;</span>, <span class="st">&#39;HKVariantsPhrases&#39;</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&#39;tw&#39;</span>: (<span class="st">&#39;TWVariants&#39;</span>,)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&#39;twp&#39;</span>: (<span class="st">&#39;TWVariants&#39;</span>, <span class="st">&#39;TWPhrasesIT&#39;</span>, <span class="st">&#39;TWPhrasesName&#39;</span>, <span class="st">&#39;TWPhrasesOther&#39;</span>)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&#39;jp&#39;</span>: (<span class="st">&#39;JPVariants&#39;</span>,)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span><span class="st">&#39;Open Chinese Convert (OpenCC) Command Line Tool&#39;</span>)</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>parser.add_argument(<span class="st">&#39;-f&#39;</span>, <span class="st">&#39;--from&#39;</span>, default<span class="op">=</span><span class="st">&#39;cn&#39;</span>, dest<span class="op">=</span><span class="st">&#39;from_region&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;from region&#39;</span>)</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>parser.add_argument(<span class="st">&#39;-t&#39;</span>, <span class="st">&#39;--to&#39;</span>, default<span class="op">=</span><span class="st">&#39;twp&#39;</span>, dest<span class="op">=</span><span class="st">&#39;to_region&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;to region&#39;</span>)</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> sys.stdin.read()</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> args.from_region <span class="op">!=</span> <span class="st">&#39;t&#39;</span>:</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> replace_words(s, build_trie(DICT_FROM[args.from_region]))</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> args.to_region <span class="op">!=</span> <span class="st">&#39;t&#39;</span>:</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> replace_words(s, build_trie(DICT_TO[args.to_region]))</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>sys.stdout.write(s)</span></code></pre></div>
+</div>
+<h2 id="opencc-应用">OpenCC 应用</h2>
+<p>OpenCC 可在命令行中使用，亦可通过 API 在程序中调用。</p>
+<p><strong>命令行用法</strong></p>
+<p>将繁体中文（OpenCC 标准）转换为简体中文（中国大陆），不转换用词：</p>
+<div lang="en-x-code">
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="st">&#39;嘗試&#39;</span> <span class="kw">|</span> <span class="ex">opencc</span> <span class="at">-c</span> t2s</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">尝试</span></span></code></pre></div>
+</div>
+<p>将简体中文（中国大陆）转换为繁体中文（香港），不转换用词：</p>
+<div lang="en-x-code">
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="st">&#39;地球仪&#39;</span> <span class="kw">|</span> <span class="ex">opencc</span> <span class="at">-c</span> s2hk</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">地球儀</span></span></code></pre></div>
+</div>
+<p>将简体中文（中国大陆）转换为繁体中文（台湾），转换用词：</p>
+<div lang="en-x-code">
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="st">&#39;内存&#39;</span> <span class="kw">|</span> <span class="ex">opencc</span> <span class="at">-c</span> s2twp</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">記憶體</span></span></code></pre></div>
+</div>
+<p><strong>应用举例：输入法</strong></p>
+<ul>
+<li>字形上，应能根据用户语言自动调整字体。作为开发者，通常是通过在代码中指定语言</li>
+<li>用字上，
+<ul>
+<li>词条应只收繁体字（OpenCC 标准），然后通过转换模块完成繁简转换</li>
+<li>单字应酌情收录异体字，以确保在某个标准下可以打出非标准用字，如「<span lang="zh-Hant-CN">綫</span>」，但应把字频调低</li>
+</ul></li>
+<li>用词上，应多地兼收，如「<span lang="zh-HK">網絡</span>」、「<span lang="zh-TW">網路</span>」</li>
+</ul>
+<h1 id="问与答">问与答</h1>
+<h2 id="如何查看汉字的-unicode-码位">如何查看汉字的 Unicode 码位？</h2>
+<p>使用 Python 查看汉字的 Unicode 码位：</p>
+<div lang="en-x-code">
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="bu">hex</span>(<span class="bu">ord</span>(<span class="st">&#39;一&#39;</span>)))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bn">0x4e00</span></span></code></pre></div>
+</div>
+<p>将 <code lang="en-x-code">0x</code> 换为 <code lang="en-x-code">U+</code>，即可得到汉字「一」的 Unicode 码位为 U+4E00。</p>
+<h2 id="如何查看-unicode-码位对应的字符">如何查看 Unicode 码位对应的字符？</h2>
+<p>使用 Python 查看 Unicode 码位对应的字符：</p>
+<div lang="en-x-code">
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="bu">chr</span>(<span class="bn">0x9fa5</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>龥</span></code></pre></div>
+</div>
+<p>这说明 Unicode 码位 U+9FA5 对应汉字「龥」。</p>
+<h2 id="unicode-和-utf-8-有什么区别">Unicode 和 UTF-8 有什么区别？</h2>
+<p>Unicode 是 <strong>字符集</strong>，UTF-8 是对 Unicode 字符集的一种 <strong>编码方式</strong>。</p>
+<div lang="en-x-code">
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> python <span class="at">-c</span> <span class="st">&#39;print(hex(ord(&quot;湫&quot;)))&#39;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x6e6b</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="at">-n</span> 湫 <span class="kw">|</span> <span class="ex">xxd</span> <span class="at">-ps</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">e6b9ab</span></span></code></pre></div>
+</div>
+<p>前两行表明「湫」字的 Unicode 码位是一个抽象的十六进制数字 U+6E6B，不涉及具体编码；后两行表明「湫」字在计算机中实际上是以十六进制的 UTF-8 编码 <code lang="en-x-code">e6b9ab</code> 存储的。</p>
+</body>
+</html>

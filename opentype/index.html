@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <title>体验 OpenType 的 locl/smpl/trad/ss01-ss20 特性</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
+  <style>
+  .sample {
+    border: 1px solid;
+    font-family: unset;
+    font-language-override: unset;
+    text-align: center;
+  }
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">体验 OpenType 的 locl/smpl/trad/ss01-ss20 特性</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#locl-特性">locl 特性</a></li>
+<li><a href="#smpl-特性与-trad-特性">smpl 特性与 trad 特性</a></li>
+<li><a href="#ss01-ss20-特性">ss01-ss20 特性</a></li>
+</ul>
+</nav>
+<blockquote>
+<p>注：本文中的示例需要安装相应的字体才能显示。</p>
+</blockquote>
+<h1 id="简介">简介</h1>
+<p>现在的字体有一类特性，可以在不改变字符的情况下改变显示出来的样子。</p>
+<p>在浏览器中，可以通过设置 CSS 简单地实现。</p>
+<h1 id="locl-特性">locl 特性</h1>
+<p>locl 特性可以根据地区的不同自动改变字形。这一特性是默认启用的。</p>
+<p>比如下面的 HTML：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;ko-KR&quot;</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Source Han Serif K&#39;, serif;&quot;</span><span class="kw">&gt;</span>羽<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-CN&quot;</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Source Han Serif K&#39;, serif;&quot;</span><span class="kw">&gt;</span>羽<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<div class="sample">
+<p lang="ko-KR" style="font-family: &#39;Source Han Serif K&#39;, serif;">
+羽
+</p>
+<p lang="zh-CN" style="font-family: &#39;Source Han Serif K&#39;, serif;">
+羽
+</p>
+</div>
+<p>这里指定了韩国字形的字体 Source Han Serif K，但由于这一字体支持 locl 特性，当在 HTML 中指定 <code>lang="zh-CN"</code> 时，会自动使用大陆字形。</p>
+<h1 id="smpl-特性与-trad-特性">smpl 特性与 trad 特性</h1>
+<p>这两种特性分别是将简体字形转换为繁体字形，以及将繁体字形转换为简体字形；有些日文字体也可以通过 trad 特性将新字形转换为旧字形。</p>
+<p>例如下面的 HTML：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Yu Mincho&#39;, serif;&quot;</span><span class="kw">&gt;</span>国家<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Yu Mincho&#39;, serif; font-feature-settings: &#39;trad&#39;;&quot;</span><span class="kw">&gt;</span>国家<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<div class="sample">
+<p style="font-family: &#39;Yu Mincho&#39;, serif;">
+国家
+</p>
+<p style="font-family: &#39;Yu Mincho&#39;, serif; font-feature-settings: &#39;trad&#39;;">
+国家
+</p>
+</div>
+<p>当然，这一字体的转换规则并不完善：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Yu Mincho&#39;, serif;&quot;</span><span class="kw">&gt;</span>花弁<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Yu Mincho&#39;, serif; font-feature-settings: &#39;trad&#39;;&quot;</span><span class="kw">&gt;</span>花弁<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<div class="sample">
+<p style="font-family: &#39;Yu Mincho&#39;, serif;">
+花弁
+</p>
+<p style="font-family: &#39;Yu Mincho&#39;, serif; font-feature-settings: &#39;trad&#39;;">
+花弁
+</p>
+</div>
+<p>但是，更精确的转换在技术上是可行的。（注：见我的新文章《<a href="https://ayaka.shn.hk/s2tfont/">正确实现简转繁字体</a>》）</p>
+<p>虽然 trad 特性在日文字体中已经得到支持，但是我还没有找到支持 smpl 特性的字体。当然，等我有空也可以自己开发一个。</p>
+<h1 id="ss01-ss20-特性">ss01-ss20 特性</h1>
+<p>虽然我还没有找到支持 smpl 特性的字体，但有一个字体也可以达到把繁体字转为简体字的效果，而且它甚至可以转换为二简字等七种写法！这就是 <a href="https://github.com/ButTaiwan/evilsung">Evil Sung</a>。</p>
+<p>ss01-ss20 特性可以定义字符的 stylistic alternatives。OpenType 预留了 20 种 stylistic alternatives，这个字体一口气用了 7 种，定义了汉字的各种写法，分别是 1935 第一批 KMT、1964 简化字总表、1969 新加坡简体、1974 新加坡简体、1977 二简第一表、1977 二简第二表和 1986 简体字总表。</p>
+<p>比如下面的 HTML：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss01&#39;;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss02&#39;;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss03&#39;;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss04&#39;;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss05&#39;;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss06&#39;;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss07&#39;;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<div class="sample">
+<p style="font-family: &#39;Evil Sung&#39;, serif;">
+寻梦？撑一支长篙。
+</p>
+<p style="font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss01&#39;;">
+寻梦？撑一支长篙。
+</p>
+<p style="font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss02&#39;;">
+寻梦？撑一支长篙。
+</p>
+<p style="font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss03&#39;;">
+寻梦？撑一支长篙。
+</p>
+<p style="font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss04&#39;;">
+寻梦？撑一支长篙。
+</p>
+<p style="font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss05&#39;;">
+寻梦？撑一支长篙。
+</p>
+<p style="font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss06&#39;;">
+寻梦？撑一支长篙。
+</p>
+<p style="font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss07&#39;;">
+寻梦？撑一支长篙。
+</p>
+</div>
+<p>要在 Google Chrome 中使用，首先安装 Custom CSS 这一拓展，然后找一个充满繁体字的页面。</p>
+<p>添加 Custom CSS 即可：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">*</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">&quot;Evil Sung&quot;</span><span class="op">,</span> <span class="dv">serif</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-feature-settings</span>: <span class="st">&quot;ss06&quot;</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>类似地，在 Mozilla Firefox 中也可以通过 Stylus 这一拓展解决。</p>
+<p>（作于 2020 年 2 月 24 日，更新于 2020 年 8 月 14 日）</p>
+</body>
+</html>

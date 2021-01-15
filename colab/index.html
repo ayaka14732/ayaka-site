@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="Google Colab, 服务器, ssh, 深度学习, GPU" />
+  <title>ssh 连接 Google Colab 服务器</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ssh 连接 Google Colab 服务器</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#实现思路">实现思路</a></li>
+<li><a href="#实现步骤">实现步骤</a>
+<ul>
+<li><a href="#将中转服务器的公钥加入-google-colab-服务器">将中转服务器的公钥加入 Google Colab 服务器</a></li>
+<li><a href="#配置-google-colab-服务器">配置 Google Colab 服务器</a></li>
+<li><a href="#将-google-colab-服务器的公钥加入中转服务器">将 Google Colab 服务器的公钥加入中转服务器</a></li>
+<li><a href="#将-google-colab-服务器的-ssh-端口转发到中转服务器">将 Google Colab 服务器的 ssh 端口转发到中转服务器</a></li>
+<li><a href="#连接-google-colab-服务器">连接 Google Colab 服务器</a></li>
+</ul></li>
+<li><a href="#备考">备考</a>
+<ul>
+<li><a href="#查看-gpu-型号">查看 GPU 型号</a></li>
+<li><a href="#查看系统信息">查看系统信息</a></li>
+<li><a href="#查看-gpu-使用情况">查看 GPU 使用情况</a></li>
+<li><a href="#保持-ssh-连接">保持 ssh 连接</a></li>
+<li><a href="#挂载-google-drive">挂载 Google Drive</a></li>
+<li><a href="#防止没有操作网页导致资源被回收">防止没有操作网页导致资源被回收</a></li>
+</ul></li>
+</ul>
+</nav>
+<blockquote>
+<p>另见《<a href="/aistudio/">ssh 连接 AI Studio 服务器</a>》</p>
+</blockquote>
+<h1 id="简介">简介</h1>
+<p>Google Colab 提供了免费的服务器资源，可以使用 Google Colab 的 CPU，也可以使用 GPU 运行深度学习程序。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在真实的终端中输入命令。为此，本文提供一种借助中转服务器，使用 ssh 连接 Google Colab 服务器的方法。</p>
+<h1 id="实现思路">实现思路</h1>
+<p>为了通过 ssh 连接 Google Colab 服务器，需要一个有公网 IP 的中转服务器。通过端口转发，将 Google Colab 服务器的 ssh 端口转发到中转服务器上，然后连接中转服务器，达到连接 Google Colab 服务器的目的。</p>
+<h1 id="实现步骤">实现步骤</h1>
+<h2 id="将中转服务器的公钥加入-google-colab-服务器">将中转服务器的公钥加入 Google Colab 服务器</h2>
+<p>在 Google Colab 单元格中运行以下命令：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>sh</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p <span class="op">~/</span>.ssh</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>echo <span class="st">&#39;&lt;PUBLIC_KEY&gt;&#39;</span> <span class="op">&gt;&gt;</span> <span class="op">~/</span>.ssh<span class="op">/</span>authorized_keys</span></code></pre></div>
+<p>其中，<code>&lt;PUBLIC_KEY&gt;</code> 要替换为中转服务器的 ssh 公钥。</p>
+<h2 id="配置-google-colab-服务器">配置 Google Colab 服务器</h2>
+<p>在 Google Colab 单元格中运行以下命令：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>sh</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Update system and install necessary packages</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>apt update <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>yes <span class="op">|</span> unminimize <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>apt install <span class="op">-</span>qq <span class="op">-</span>o<span class="op">=</span>Dpkg::Use<span class="op">-</span>Pty<span class="op">=</span><span class="dv">0</span> openssh<span class="op">-</span>server pwgen net<span class="op">-</span>tools psmisc pciutils <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Config ssh</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>ssh<span class="op">-</span>keygen <span class="op">-</span>t rsa <span class="op">-</span>N <span class="st">&quot;&quot;</span> <span class="op">-</span>f <span class="op">~/</span>.ssh<span class="op">/</span>id_rsa</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Config sshd</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>echo ListenAddress <span class="fl">127.0.0.1</span> <span class="op">&gt;&gt;</span> <span class="op">/</span>etc<span class="op">/</span>ssh<span class="op">/</span>sshd_config</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p <span class="op">/</span>var<span class="op">/</span>run<span class="op">/</span>sshd</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="op">/</span>usr<span class="op">/</span>sbin<span class="op">/</span>sshd</span></code></pre></div>
+<p>另外，我还根据自己的使用习惯进行以下配置：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>sh</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>apt install <span class="op">-</span>qq <span class="op">-</span>o<span class="op">=</span>Dpkg::Use<span class="op">-</span>Pty<span class="op">=</span><span class="dv">0</span> zsh neofetch python<span class="op">-</span>virtualenv nano python3<span class="fl">.8</span> python3<span class="fl">.8</span><span class="op">-</span>dev python3<span class="fl">.8</span><span class="op">-</span>distutils python3<span class="fl">.8</span><span class="op">-</span>venv <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set default shell to zsh</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>chsh <span class="op">-</span>s `which zsh`</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Install oh-my-zsh</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>yes <span class="op">|</span> sh <span class="op">-</span>c <span class="st">&quot;$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Customize zsh theme</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>wget <span class="op">-</span>q <span class="op">-</span>P <span class="op">/</span>root<span class="op">/</span>.oh<span class="op">-</span>my<span class="op">-</span>zsh<span class="op">/</span>custom<span class="op">/</span>themes https:<span class="op">//</span>gist.githubusercontent.com<span class="op">/</span>ayaka14732<span class="op">/</span>d15e5a583de03a3b310019f869cc2302<span class="op">/</span>raw<span class="op">/</span><span class="dv">118</span>b7b46ffcf560bf85a35460d7df8343abc62c1<span class="op">/</span>af<span class="op">-</span>magic<span class="op">-%</span><span class="fl">25E7</span><span class="op">%</span><span class="dv">25</span>B6<span class="op">%</span><span class="dv">25</span>BE.zsh<span class="op">-</span>theme</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>sed <span class="op">-</span>r <span class="op">-</span>i <span class="st">&#39;s/robbyrussell/af-magic-綾/&#39;</span> <span class="op">~/</span>.zshrc</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Install pip for Python 3.8</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>curl https:<span class="op">//</span>bootstrap.pypa.io<span class="op">/</span>get<span class="op">-</span>pip.py <span class="op">-</span>o get<span class="op">-</span>pip.py</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>python3<span class="fl">.8</span> get<span class="op">-</span>pip.py</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>rm <span class="op">-</span>f get<span class="op">-</span>pip.py</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Set timezone</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>echo <span class="st">&#39;export TZ=&quot;:Asia/Hong_Kong&quot;&#39;</span> <span class="op">&gt;&gt;</span> <span class="op">~/</span>.zshrc</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Set alias</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>echo <span class="st">&#39;alias python=python3.8</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="st">alias pip=&quot;python3.8 -m pip&quot;&#39;</span> <span class="op">&gt;&gt;</span> <span class="op">~/</span>.zshrc</span></code></pre></div>
+<h2 id="将-google-colab-服务器的公钥加入中转服务器">将 Google Colab 服务器的公钥加入中转服务器</h2>
+<p>在 Google Colab 单元格中运行以下命令：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat <span class="op">~/</span>.ssh<span class="op">/</span>id_rsa.pub</span></code></pre></div>
+<p>可以查看上一步生成的 Google Colab 服务器的公钥。</p>
+<p>然后，在中转服务器上运行：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&#39;&lt;PUBLIC_KEY&gt;&#39;</span> <span class="op">&gt;&gt;</span> ~/.ssh/authorized_keys</span></code></pre></div>
+<p>其中，<code>&lt;PUBLIC_KEY&gt;</code> 要替换为 Google Colab 服务器的公钥。</p>
+<h2 id="将-google-colab-服务器的-ssh-端口转发到中转服务器">将 Google Colab 服务器的 ssh 端口转发到中转服务器</h2>
+<p>在 Google Colab 的单元格中运行以下命令：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>sh <span class="op">--</span>bg</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ssh <span class="op">-</span>fNT <span class="op">-</span>R <span class="dv">7423</span>:<span class="fl">127.0.0.1</span>:<span class="dv">22</span> user<span class="op">@</span>example.com</span></code></pre></div>
+<p>其中，<code>user@example.com</code> 要替换为中转服务器登录用户名和 IP 地址。</p>
+<h2 id="连接-google-colab-服务器">连接 Google Colab 服务器</h2>
+<p>首先在本地登录中转服务器：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> user@example.com</span></code></pre></div>
+<p>其中，<code>user@example.com</code> 要替换为中转服务器登录用户名和 IP 地址。</p>
+<p>然后在中转服务器上登录 Google Colab 服务器：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-p7423</span> root@127.0.0.1</span></code></pre></div>
+<p>当重新启动 Google Colab 运行环境时，Google Colab 服务器的 host key 会发生变化，导致无法再次在中转服务器上登录 Google Colab 服务器。此时可以在中转服务器上运行以下命令，删除原来储存的 host key：</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-R</span> <span class="st">&quot;[127.0.0.1]:7423&quot;</span></span></code></pre></div>
+<p>然后重新登录 Google Colab 服务器。</p>
+<h1 id="备考">备考</h1>
+<h2 id="查看-gpu-型号">查看 GPU 型号</h2>
+<p>在 Google Colab 的单元格中运行以下命令：</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.cuda.get_device_name())</span></code></pre></div>
+<p>如果 GPU 型号不理想，可以尝试重新启动 Google Colab 运行环境。</p>
+<h2 id="查看系统信息">查看系统信息</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">neofetch</span></span></code></pre></div>
+<h2 id="查看-gpu-使用情况">查看 GPU 使用情况</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="va">LD_LIBRARY_PATH=</span>/usr/lib64-nvidia <span class="ex">watch</span> <span class="at">-n</span> 1 nvidia-smi</span></code></pre></div>
+<p>不能直接使用 <code>export LD_LIBRARY_PATH=/usr/lib64-nvidia</code>，这样会导致某些程序不能使用 GPU。</p>
+<h2 id="保持-ssh-连接">保持 ssh 连接</h2>
+<p>为了防止 ssh 连接一段时间后就中断，可以在 ssh 选项中加入：</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dt">ServerAliveInterval</span><span class="ot">=</span><span class="dv">60</span></span></code></pre></div>
+<h2 id="挂载-google-drive">挂载 Google Drive</h2>
+<p>在启动 8 小时左右，服务器资源会被回收。为了防止数据丢失，可以定期将中间结果保存到 Google Drive 中。将 Google Drive 挂载到 Google Colab 的方法是在 Google Colab 单元格中运行：</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">&#39;/content/gdrive&#39;</span>)</span></code></pre></div>
+<p>然后按提示操作。</p>
+<h2 id="防止没有操作网页导致资源被回收">防止没有操作网页导致资源被回收</h2>
+<p>如果一段时间没有操作网页，服务器资源将被回收。为此，可以在网页上运行一段输出日志的代码，告诉 Google Colab 这个服务器还在用：</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> datetime</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;out.log&#39;</span>, <span class="st">&#39;w&#39;</span>) <span class="im">as</span> f:</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10000</span>):</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(datetime.datetime.now(), <span class="st">&#39;Doing hard work here i =&#39;</span>, i)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(datetime.datetime.now(), <span class="st">&#39;Doing hard work here i =&#39;</span>, i, <span class="bu">file</span><span class="op">=</span>f)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        time.sleep(<span class="dv">1000</span>)</span></code></pre></div>
+<p>（2020 年 9 月 17 日）</p>
+</body>
+</html>

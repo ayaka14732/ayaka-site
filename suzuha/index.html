@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="铃羽系统, 汉语, 数制拓展, 《切韵》音系, 计算机科学" />
+  <title>铃羽系统在汉语数制拓展表示中的应用</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">铃羽系统在汉语数制拓展表示中的应用</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#问题的提出与解决思路">问题的提出与解决思路</a></li>
+<li><a href="#实现方法">实现方法</a></li>
+<li><a href="#实现步骤与结果">实现步骤与结果</a></li>
+</ul>
+</nav>
+<blockquote>
+<p>同时发布于知乎：<a href="https://www.zhihu.com/question/43588825/answer/1080391161">谁能给我一个60进制的乘法表。？ - 三日月 綾香的回答</a></p>
+<p>另见：<a href="generator/" hreflang="zh-HK">铃羽系统乘法表生成器</a>（支持 2 至 64 进制）、<a href="../radix16/" hreflang="zh-HK">铃羽系统十六进制乘法口诀表</a></p>
+</blockquote>
+<blockquote>
+<p>摘要：日常生活中人们通常采用十进制计数，因此语言的数词也大致与十进制匹配；现代计算机科学中引入了二进制、八进制和十六进制表示数据，同时其他数制也有其理论与实践价值，但是十以上的数词在汉语中并无合适的对应数词，给十进制以上的数制的应用带来诸多不便。本文通过构造「铃羽系统」，以中古汉语的代表音系——《切韵》音系为基础，生成了一个面向汉语普通话及各方言的数制拓展表示方案。</p>
+</blockquote>
+<h1 id="问题的提出与解决思路">问题的提出与解决思路</h1>
+<p>日常生活中人们通常采用十进制计数，因此语言的数词也大致与十进制匹配；现代计算机科学中引入了二进制、八进制和十六进制表示数据，同时其他数制也有其理论与实践价值，但是十以上的数词在汉语中并无合适的对应数词，给十进制以上的数制的应用带来诸多不便。</p>
+<p>目前，对于阿拉伯数字，通行的做法是使用二十六个英文字母作为 <q lang="en">0</q> 至 <q lang="en">9</q> 的后继，这可以将数制的表示拓展至最大 36 位，例如，在 16 进制中，数字 59 可以表示为 <q lang="en">3b</q>。但是，这套规则无法应用于汉语，这是因为英文字母的发音与汉语音系不相适应，即使某些发音确实相适应，例如上例中的「b」的发音，在汉语中确实符合音系规则，且存在可对应的的汉字（如普通话「壁」等），但是在语言中将汉语和英文字母的发音直接混用，仍有不自然之感。</p>
+<p>然而，汉语中的数词呈现规律的构造规则。例如，当数据为一位整数时，读为「零」至「九」，当数据为两位数时，两个数位仍分别读为「零」至「九」，并以「十」作为分隔。这为数制的拓展提供了条件：对于一个进制数大于十的数制，可以为其中那些用以表示 10 及以上的数字的数码，赋予一个符合音系规则的特定的发音；在此基础上，仍沿用汉语中数词的构造规则，即可在汉语中表达该种数制。</p>
+<p>为了得到这样的一个拓展表示，我们需要得到一组发音序列 {零，一，二，…，八，九，…}，当进制数为 <span class="math inline"><em>n</em></span> 时，取该序列的前 <span class="math inline"><em>n</em></span> 项，通过汉语中数词的构造规则即可构成汉语中的数字。例如，当进制数为 3 时，取前 3 项「零」、「一」、「二」；此时三进制中的数 121 可表示为「一百二十一」。这样，只需规定「九」以后的发音，即可将数制拓展表示。</p>
+<p>由于汉语的方言众多，若直接为「九」以后的数字规定发音，难以包括所有方言；但是，现代汉语的各方言大多由中古汉语分化而来，因此，只需要规定「九」以后的数字的中古汉语读音，其在现代汉语各方言中的读音都可以经推导得到。同时，日语、韩语和越南语中的汉字音都可以与中古汉语建立一定的对应关系，故使用中古汉语规定「九」的后继数字的发音，这套规则还可以在一定程度上应用于上述三种语言。</p>
+<p>中古汉语的音系以《广韵》为代表。为了使得到的发音符合《切韵》音系，妥当的做法是在《广韵》的已有的音节中规定「九」的后继数字的读音。另外，若规定读音时依照一定的顺序，这样的读音必然不够自然；若完全采用随机方法，又不具有可重复性，因此，我们采用伪随机数解决该问题。Haskell 语言提供了生成随机数的单子——random 单子和用于求值的 <code>evalRand</code> 函数，只要每次使用相同的随机数种子，在相同的随机数生成方式下必然得到相同的结果。至此，问题变为在给定的区间——《广韵》中的小韵数——使用确定的随机数种子随机生成数值序列的问题。</p>
+<p>在上述过程中，我们只是为「九」的后继数字规定中古汉语的「音」，但没有制定一个与该发音相对应的文字。但是，为了实际的操作方便，对于每个「九」的后继数字，我们仍然选择了《广韵》中与该「音」对应的其中一个汉字作为代表字。这样做的好处有：使规定的发音可以用文字书写，便于记录和记忆；可以以规定的代表字作为依据，上推上古汉语的发音；对于某些方言，若某个数字的发音无法确定，也可以据此确定读音。当然，这些代表字的写法肯定不像「一」到「九」的写法那样简便，不过我们也可以将这些代表字理解为类似「壹」到「玖」的大写数字，从而达到风格上的统一。</p>
+<h1 id="实现方法">实现方法</h1>
+<p>首先由 Haskell 语言生成足够长度的随机数序列，随机数种子设定为 42。</p>
+<p>已知「零」到「九」对应的《广韵》小韵号分别为 939、3290、2226、1090、2230、1381、3203、3291、3430 与 1933。将这些小韵号作为被选择的小韵的数组的初始值。</p>
+<p>从随机数序列的第一个数开始，如果这个数对应的《广韵》小韵与任何一个已被选择的小韵的相似度小于给定值，则舍弃这一随机数；否则，将这一随机数加入被选择的小韵数组的末尾。这样做是为了避免选出的汉字中出现读音相近的字。</p>
+<p>在被选择的小韵数组达到足够长度后，从每个小韵中选出一个字作为代表字。选择代表字的标准为：尽量不选太常用的字，否则在文本中会与该字的本义发生混淆；尽量不选太生僻的字，因为难于记忆和书写；尽量不选 Unicode 编码为拓展 B 区及以后的字，因为在某些旧系统中无法正常显示。</p>
+<p>在选出代表字后，还要规定这些字的读音。规定读音时的标准如下：</p>
+<ol type="1">
+<li>如果该字有现代读音，且不是多音字，则选取该音</li>
+<li>如果该字有现代读音，且是多音字，则首先根据选出该字时使用的《广韵》小韵推导现代读音，再从现代的多个读音中选取一个最接近推导读音的发音</li>
+<li>如果该字没有现代读音，则规定为选出该字时使用的《广韵》小韵推导的现代读音</li>
+</ol>
+<p>另外，在《切韵》音系中发音不同的字，在现代也可能变得相同。如果发生读音相同的情况，则用最自然的方式将后一个字改读为其他音。</p>
+<p>我们认为，这样的规定读音的方式是最合理的。</p>
+<p>有人可能认为，对于多音字，应该严格使用《广韵》小韵推导的现代读音，不应参考现代读音。我们认为，对于多音字，参考现代读音是更加合理的。在语言演化的过程中，多音字读音合并的现象十分常见，例如「疏」字在《广韵》中有「所葅切」与「所去切」两种读法，而普通话仅保留了「所葅切」对应的 <span lang="cmn-Latn">shū</span> 音；多音字的多个读音之间也可能相互影响，例如「曼」字在《广韵》中有「母官切」与「無販切」两种读法，分别对应 <span lang="cmn-Latn">mán</span> 和 <span lang="cmn-Latn">wàn</span>，但随着语言的演化，在普通话中只有唯一的读音 <span lang="cmn-Latn">màn</span>。</p>
+<p>还有人可能认为，在发生读音相同的情况时，如果将后一个字改读为其他音，会破坏语言的系统性。实际上，这种现象在语言的演化中是十分常见的，并不能认为是破坏了语言的系统性。例如按照演化规律，普通话「炎」和「癌」应该同读为 <span lang="cmn-Latn">yán</span>，为了避免发生混淆，将「癌」字读为 <span lang="cmn-Latn">ái</span><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>；粤语「不」读 <span lang="yue-Latn">bat¹</span>，按照演化规律「必」也应该读 <span lang="yue-Latn">bat¹</span>，但为了避免同音而读为 <span lang="yue-Latn">bit¹</span><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。</p>
+<h1 id="实现步骤与结果">实现步骤与结果</h1>
+<p>下载<a href="https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/faq.php">常用字頻序表</a>，将前 3000 字保存为 <code>first3000.txt</code>，其余字保存为 <code>after3000.txt</code>。</p>
+<p>编写代码，生成随机数序列。将以下代码保存为 <code>random.hs</code>：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#!/usr/bin/env runhaskell</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Control.Monad.Random</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ot">dice ::</span> <span class="dt">RandomGen</span> g <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Rand</span> g [<span class="dt">Int</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>dice n <span class="ot">=</span> <span class="fu">sequenceA</span> <span class="op">$</span> <span class="fu">replicate</span> n <span class="op">$</span> getRandomR (<span class="dv">1</span>, <span class="dv">3874</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="fu">print</span> <span class="op">$</span> evalRand (dice <span class="dv">80</span>) (mkStdGen <span class="dv">42</span>)</span></code></pre></div>
+<p>运行，得到随机数序列：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./random.hs</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[2468,3238,3708,3811,3223,3064,2479,938,3137,3222,2346,1470,2329,3263,1479,1142,520,34,2354,843,2159,1193,2471,1707,81,633,767,2707,2404,2537,2103,1884,1261,409,919,2532,129,1071,1869,712,229,2957,3797,1899,3453,1407,738,2249,3288,1241,593,2587,1415,341,1636,822,1379,1548,1919,651,1718,3791,1602,1005,3462,3653,1095,1008,1255,686,1612,936,3096,3522,1047,579,2750,2953,3205,3099]</span></span></code></pre></div>
+<p>使用 <a href="https://github.com/sgalal/qieyun-js">qieyun-js</a> 加载切韵音系数据：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> npm install qieyun@0.4.0</span></code></pre></div>
+<p>编写代码。将以下代码保存为 <code>index.js</code>：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;use strict&#39;</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> fs <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;fs&#39;</span>)<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> Qieyun <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;qieyun&#39;</span>)<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> randList <span class="op">=</span> [<span class="dv">2468</span><span class="op">,</span> <span class="dv">3238</span><span class="op">,</span> <span class="dv">3708</span><span class="op">,</span> <span class="dv">3811</span><span class="op">,</span> <span class="dv">3223</span><span class="op">,</span> <span class="dv">3064</span><span class="op">,</span> <span class="dv">2479</span><span class="op">,</span> <span class="dv">938</span><span class="op">,</span> <span class="dv">3137</span><span class="op">,</span> <span class="dv">3222</span><span class="op">,</span> <span class="dv">2346</span><span class="op">,</span> <span class="dv">1470</span><span class="op">,</span> <span class="dv">2329</span><span class="op">,</span> <span class="dv">3263</span><span class="op">,</span> <span class="dv">1479</span><span class="op">,</span> <span class="dv">1142</span><span class="op">,</span> <span class="dv">520</span><span class="op">,</span> <span class="dv">34</span><span class="op">,</span> <span class="dv">2354</span><span class="op">,</span> <span class="dv">843</span><span class="op">,</span> <span class="dv">2159</span><span class="op">,</span> <span class="dv">1193</span><span class="op">,</span> <span class="dv">2471</span><span class="op">,</span> <span class="dv">1707</span><span class="op">,</span> <span class="dv">81</span><span class="op">,</span> <span class="dv">633</span><span class="op">,</span> <span class="dv">767</span><span class="op">,</span> <span class="dv">2707</span><span class="op">,</span> <span class="dv">2404</span><span class="op">,</span> <span class="dv">2537</span><span class="op">,</span> <span class="dv">2103</span><span class="op">,</span> <span class="dv">1884</span><span class="op">,</span> <span class="dv">1261</span><span class="op">,</span> <span class="dv">409</span><span class="op">,</span> <span class="dv">919</span><span class="op">,</span> <span class="dv">2532</span><span class="op">,</span> <span class="dv">129</span><span class="op">,</span> <span class="dv">1071</span><span class="op">,</span> <span class="dv">1869</span><span class="op">,</span> <span class="dv">712</span><span class="op">,</span> <span class="dv">229</span><span class="op">,</span> <span class="dv">2957</span><span class="op">,</span> <span class="dv">3797</span><span class="op">,</span> <span class="dv">1899</span><span class="op">,</span> <span class="dv">3453</span><span class="op">,</span> <span class="dv">1407</span><span class="op">,</span> <span class="dv">738</span><span class="op">,</span> <span class="dv">2249</span><span class="op">,</span> <span class="dv">3288</span><span class="op">,</span> <span class="dv">1241</span><span class="op">,</span> <span class="dv">593</span><span class="op">,</span> <span class="dv">2587</span><span class="op">,</span> <span class="dv">1415</span><span class="op">,</span> <span class="dv">341</span><span class="op">,</span> <span class="dv">1636</span><span class="op">,</span> <span class="dv">822</span><span class="op">,</span> <span class="dv">1379</span><span class="op">,</span> <span class="dv">1548</span><span class="op">,</span> <span class="dv">1919</span><span class="op">,</span> <span class="dv">651</span><span class="op">,</span> <span class="dv">1718</span><span class="op">,</span> <span class="dv">3791</span><span class="op">,</span> <span class="dv">1602</span><span class="op">,</span> <span class="dv">1005</span><span class="op">,</span> <span class="dv">3462</span><span class="op">,</span> <span class="dv">3653</span><span class="op">,</span> <span class="dv">1095</span><span class="op">,</span> <span class="dv">1008</span><span class="op">,</span> <span class="dv">1255</span><span class="op">,</span> <span class="dv">686</span><span class="op">,</span> <span class="dv">1612</span><span class="op">,</span> <span class="dv">936</span><span class="op">,</span> <span class="dv">3096</span><span class="op">,</span> <span class="dv">3522</span><span class="op">,</span> <span class="dv">1047</span><span class="op">,</span> <span class="dv">579</span><span class="op">,</span> <span class="dv">2750</span><span class="op">,</span> <span class="dv">2953</span><span class="op">,</span> <span class="dv">3205</span><span class="op">,</span> <span class="dv">3099</span>]<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> first3000 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>(fs<span class="op">.</span><span class="fu">readFileSync</span>(<span class="st">&#39;first3000.txt&#39;</span><span class="op">,</span> <span class="st">&#39;utf8&#39;</span>))<span class="op">;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> after3000 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>(fs<span class="op">.</span><span class="fu">readFileSync</span>(<span class="st">&#39;after3000.txt&#39;</span><span class="op">,</span> <span class="st">&#39;utf8&#39;</span>))<span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> srs <span class="op">=</span> [<span class="dv">939</span><span class="op">,</span> <span class="dv">3290</span><span class="op">,</span> <span class="dv">2226</span><span class="op">,</span> <span class="dv">1090</span><span class="op">,</span> <span class="dv">2230</span><span class="op">,</span> <span class="dv">1381</span><span class="op">,</span> <span class="dv">3203</span><span class="op">,</span> <span class="dv">3291</span><span class="op">,</span> <span class="dv">3430</span><span class="op">,</span> <span class="dv">1933</span>]<span class="op">;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">srSimilarity</span>(a<span class="op">,</span> b) {</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> score <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (Qieyun<span class="op">.</span><span class="fu">get母</span>(a) <span class="op">!=</span> Qieyun<span class="op">.</span><span class="fu">get母</span>(b)) score <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (Qieyun<span class="op">.</span><span class="fu">get開合</span>(a) <span class="op">!=</span> Qieyun<span class="op">.</span><span class="fu">get開合</span>(b)) score <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (Qieyun<span class="op">.</span><span class="fu">get等</span>(a) <span class="op">!=</span> Qieyun<span class="op">.</span><span class="fu">get等</span>(b)) score <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (Qieyun<span class="op">.</span><span class="fu">get韻賅上去入</span>(a) <span class="op">!=</span> Qieyun<span class="op">.</span><span class="fu">get韻賅上去入</span>(b)) score <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (Qieyun<span class="op">.</span><span class="fu">get聲</span>(a) <span class="op">!=</span> Qieyun<span class="op">.</span><span class="fu">get聲</span>(b)) score <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> score<span class="op">;</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (srs<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> <span class="dv">64</span>) {</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> nextRand <span class="op">=</span> randList<span class="op">.</span><span class="fu">shift</span>()<span class="op">;</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span>srs<span class="op">.</span><span class="fu">some</span>((sr) <span class="kw">=&gt;</span> <span class="fu">srSimilarity</span>(nextRand<span class="op">,</span> sr) <span class="op">&lt;=</span> <span class="dv">1</span>)) {</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        srs<span class="op">.</span><span class="fu">push</span>(nextRand)<span class="op">;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">selectBestChar</span>(xs) {</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> highestEver <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> choice<span class="op">;</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> xs) {</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> score <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="op">!</span>first3000<span class="op">.</span><span class="fu">has</span>(x)) score <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (after3000<span class="op">.</span><span class="fu">has</span>(x)) score <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (x<span class="op">.</span><span class="at">length</span> <span class="op">==</span> <span class="dv">1</span>) score <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (score <span class="op">&gt;</span> highestEver) {</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>            highestEver <span class="op">=</span> score<span class="op">;</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>            choice <span class="op">=</span> x<span class="op">;</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> choice<span class="op">;</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">&#39;小韻號：&#39;</span> <span class="op">+</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(srs<span class="op">.</span><span class="fu">slice</span>(<span class="dv">10</span>)))<span class="op">;</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">&#39;漢字：&#39;</span> <span class="op">+</span> srs<span class="op">.</span><span class="fu">slice</span>(<span class="dv">10</span>)<span class="op">.</span><span class="fu">map</span>((sr) <span class="kw">=&gt;</span> <span class="fu">selectBestChar</span>(Qieyun<span class="op">.</span><span class="fu">query小韻號</span>(sr)<span class="op">.</span><span class="fu">map</span>((字頭_解釋) <span class="kw">=&gt;</span> 字頭_解釋[<span class="dv">0</span>])))<span class="op">.</span><span class="fu">join</span>(<span class="st">&#39;&#39;</span>))<span class="op">;</span></span></code></pre></div>
+<p>运行，得到结果：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> node index.js</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">小韻號：[2468,3238,3811,3064,2479,3137,2346,1470,2329,3263,1479,1142,520,843,2159,1193,2471,1707,633,767,2707,2404,2537,2103,1884,409,919,129,1869,712,229,2957,1899,3453,1407,738,2249,1241,593,2587,1415,341,1636,822,1548,1919,651,1718,3791,1602,1005,1255,686,3096]</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">漢字：䵘熇灄詬譺殮菟矧緅粟窘鵮頇穅帔耩膪鮑恮硨驠裔瀣仲逞礥鯖詑瑒魛裾絎炯鴰堄娿㿷跬鋗捃㢊𢰇諞邙齦拯迢堖遪銑哹兕橇譖</span></span></code></pre></div>
+<p>其中，由于「殮」字意义较为负面，使用同小韵的「瀲」字代替。</p>
+<p>然后人工规定普通话读音如下：</p>
+<ol type="1">
+<li>壹 <span lang="zh-Latn">yī</span></li>
+<li>貳 <span lang="zh-Latn">èr</span></li>
+<li>參 <span lang="zh-Latn">sān</span></li>
+<li>肆 <span lang="zh-Latn">sì</span></li>
+<li>伍 <span lang="zh-Latn">wǔ</span></li>
+<li>陸 <span lang="zh-Latn">liù</span></li>
+<li>柒 <span lang="zh-Latn">qī</span></li>
+<li>捌 <span lang="zh-Latn">bā</span></li>
+<li>玖 <span lang="zh-Latn">jiǔ</span></li>
+<li>䵘 <span lang="zh-Latn">shài</span></li>
+<li>熇 <span lang="zh-Latn">hè</span></li>
+<li>灄 <span lang="zh-Latn">shè</span></li>
+<li>詬 <span lang="zh-Latn">gòu</span></li>
+<li>譺 <span lang="zh-Latn">ài</span></li>
+<li>瀲 <span lang="zh-Latn">liàn</span></li>
+<li>菟 <span lang="zh-Latn">tù</span></li>
+<li>矧 <span lang="zh-Latn">shěn</span></li>
+<li>緅 <span lang="zh-Latn">zōu</span></li>
+<li>粟 <span lang="zh-Latn">sù</span></li>
+<li>窘 <span lang="zh-Latn">jiǒng</span></li>
+<li>鵮 <span lang="zh-Latn">qiān</span></li>
+<li>頇 <span lang="zh-Latn">hān</span></li>
+<li>穅 <span lang="zh-Latn">kāng</span></li>
+<li>帔 <span lang="zh-Latn">pèi</span></li>
+<li>耩 <span lang="zh-Latn">jiǎng</span></li>
+<li>膪 <span lang="zh-Latn">chuài</span></li>
+<li>鮑 <span lang="zh-Latn">bào</span></li>
+<li>恮 <span lang="zh-Latn">zhuān</span></li>
+<li>硨 <span lang="zh-Latn">chē</span></li>
+<li>驠 <span lang="zh-Latn">yàn</span></li>
+<li>裔 <span lang="zh-Latn">yì</span></li>
+<li>瀣 <span lang="zh-Latn">xiè</span></li>
+<li>仲 <span lang="zh-Latn">zhòng</span></li>
+<li>逞 <span lang="zh-Latn">chěng</span></li>
+<li>礥 <span lang="zh-Latn">xín</span></li>
+<li>鯖 <span lang="zh-Latn">qīng</span></li>
+<li>詑 <span lang="zh-Latn">tuó</span></li>
+<li>瑒 <span lang="zh-Latn">chàng</span></li>
+<li>魛 <span lang="zh-Latn">dāo</span></li>
+<li>裾 <span lang="zh-Latn">jū</span></li>
+<li>絎 <span lang="zh-Latn">háng</span></li>
+<li>炯 <span lang="zh-Latn">xiòng</span></li>
+<li>鴰 <span lang="zh-Latn">guā</span></li>
+<li>堄 <span lang="zh-Latn">nì</span></li>
+<li>娿 <span lang="zh-Latn">ē</span></li>
+<li>㿷 <span lang="zh-Latn">cuó</span></li>
+<li>跬 <span lang="zh-Latn">kuǐ</span></li>
+<li>鋗 <span lang="zh-Latn">xuān</span></li>
+<li>捃 <span lang="zh-Latn">jùn</span></li>
+<li>㢊 <span lang="zh-Latn">ǎi</span></li>
+<li>𢰇 <span lang="zh-Latn">yē</span></li>
+<li>諞 <span lang="zh-Latn">piǎn</span></li>
+<li>邙 <span lang="zh-Latn">máng</span></li>
+<li>齦 <span lang="zh-Latn">yín</span></li>
+<li>拯 <span lang="zh-Latn">zhěng</span></li>
+<li>迢 <span lang="zh-Latn">tiáo</span></li>
+<li>堖 <span lang="zh-Latn">nǎo</span></li>
+<li>遪 <span lang="zh-Latn">cà</span></li>
+<li>銑 <span lang="zh-Latn">xǐ</span></li>
+<li>哹 <span lang="zh-Latn">fú</span></li>
+<li>兕 <span lang="zh-Latn">xì</span></li>
+<li>橇 <span lang="zh-Latn">qiāo</span></li>
+<li>譖 <span lang="zh-Latn">zèn</span></li>
+</ol>
+<p>（初稿作于 2017 年 9 月 27 日，定稿于 2020 年 3 月 15 日，修订于 2020 年 3 月 18 日）</p>
+<p>注：由于本文初稿作于 2017 年 9 月 27 日，为阿万音铃羽诞生之日，因此特地将本系统命名为「铃羽系统」。</p>
+<figure>
+<img src="bilibili.png" alt="阿万音铃羽诞生之日哔哩哔哩网站的截图" /><figcaption aria-hidden="true">阿万音铃羽诞生之日哔哩哔哩网站的截图</figcaption>
+</figure>
+<p><a href="sourcecode.tar.gz">源代码</a></p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>必须区分的两个字如果按规律应该演变成同音字，那母语者通常会怎么处理？ - 王伟超Mijiag的回答 <a href="https://www.zhihu.com/question/314764789/answer/615293621" lang="en-US">https://www.zhihu.com/question/314764789/answer/615293621</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>如何評價臺灣教育部門字典認定「尷尬」也可以讀作 jiān jiè？ - 谭樊马克的回答 <a href="https://www.zhihu.com/question/56672682/answer/189128061" lang="en-US">https://www.zhihu.com/question/56672682/answer/189128061</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>必须区分的两个字如果按规律应该演变成同音字，那母语者通常会怎么处理？ <a href="https://www.zhihu.com/question/314764789" lang="en-US">https://www.zhihu.com/question/314764789</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

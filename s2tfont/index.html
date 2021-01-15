@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="简繁转换, 字体, 简转繁字体, OpenType 特性, GSUB 规则" />
+  <title>正确实现简转繁字体</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">正确实现简转繁字体</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#一简对多繁现象">「一简对多繁」现象</a></li>
+<li><a href="#opencc-的简繁转换算法">OpenCC 的简繁转换算法</a></li>
+<li><a href="#opentype-字体的-gsub-规则">OpenType 字体的 GSUB 规则</a></li>
+<li><a href="#使用-gsub-规则实现简繁转换算法">使用 GSUB 规则实现简繁转换算法</a></li>
+<li><a href="#局限性">局限性</a>
+<ul>
+<li><a href="#句子本身存在歧义">句子本身存在歧义</a></li>
+<li><a href="#opencc-简繁转换算法的局限性">OpenCC 简繁转换算法的局限性</a></li>
+<li><a href="#opencc-词库的局限性">OpenCC 词库的局限性</a></li>
+<li><a href="#opentype-字体的局限性">OpenType 字体的局限性</a></li>
+</ul></li>
+<li><a href="#功能扩展">功能扩展</a>
+<ul>
+<li><a href="#opentype-字体的-trad-特性">OpenType 字体的 trad 特性</a></li>
+<li><a href="#地区字词转换">地区字词转换</a></li>
+</ul></li>
+<li><a href="#字体下载">字体下载</a></li>
+</ul>
+</nav>
+<blockquote>
+<p><span lang="zh-HK">繁體中文版《<a href="hant/" hreflang="zh-HK">正確實現簡轉繁字型</a></span>》，同时发布于知乎：<a href="https://zhuanlan.zhihu.com/p/166089642" hreflang="zh-CN">正确实现简转繁字体 - 三日月 綾香的文章</a></p>
+</blockquote>
+<h1 id="简介">简介</h1>
+<p>简转繁字体是将简体文本以繁体字显示的字体。对于习惯阅读繁体字的用户，在某些没有简繁转换的平台（如电子书阅读设备），可以利用简转繁字体将简体文本以繁体字显示，从而减轻阅读时的负担。</p>
+<p><img src="https://raw.githubusercontent.com/ayaka14732/FanWunMing/f0f2f9bd0d8f76a853248ec03e3f54296dc85b80/demo.png" /></p>
+<p>然而，现有的简转繁字体是简单地将简体字的码位对应繁体字形，不能处理简体字与繁体字之间存在的「一简对多繁」现象，因此使用效果并不理想，也使许多人产生了「字体不能正确处理简转繁」的错误印象。</p>
+<p>事实上，目前通行的 OpenType 字体格式提供了大量字体特性。使用其中的 GSUB（glyph substitution，字图替换）规则，可以实现能处理「一简对多繁」的简转繁字体。</p>
+<p>本文介绍了简繁转换工具 <a href="https://github.com/BYVoid/OpenCC">OpenCC</a> 与 OpenType 字体的 GSUB 规则，并介绍了将二者结合，在字体层面实现简繁转换的方法。利用同一方法，也可以实现能处理多音字的拼音字体及注音字体。</p>
+<h1 id="一简对多繁现象">「一简对多繁」现象</h1>
+<p>「一简对多繁」是指一个简体字对应多个繁体字的现象。例如，简体字「后」同时对应「<span lang="zh-HK">後</span>」（<span lang="zh-HK">後面</span>）与「<span lang="zh-HK">后</span>」（<span lang="zh-HK">太后</span>）两个繁体字。</p>
+<p>由于「一简对多繁」现象，在简转繁时需要考虑上下文。</p>
+<h1 id="opencc-的简繁转换算法">OpenCC 的简繁转换算法</h1>
+<p>OpenCC 是开源的中文简繁转换工具，可以利用词语处理「一简对多繁」现象。</p>
+<p>OpenCC 词库除了定义单字的简繁对应关系外，还定义了数万个词语的简繁对应关系。OpenCC 程序运行时根据「正向最大匹配」算法匹配文章中的简体词语，然后转换为繁体。</p>
+<p>例如，在转换句子「太后的头发很干燥」时，程序根据词库中存在的词语，从左至右依次匹配「太后」、「的」、「头发」、「很」、「干燥」，然后分别转换为「<span lang="zh-HK">太后</span>」、「<span lang="zh-HK">的</span>」、「<span lang="zh-HK">頭髮</span>」、「<span lang="zh-HK">很</span>」、「<span lang="zh-HK">乾燥</span>」。</p>
+<h1 id="opentype-字体的-gsub-规则">OpenType 字体的 GSUB 规则</h1>
+<p>OpenType 字体提供了 GSUB 规则，用于替换字体中的字图。</p>
+<p>GSUB 规则可以分为以下六类：</p>
+<ol type="1">
+<li>single substitution（一对一替换）</li>
+<li>ligature substitution（多对一替换）</li>
+<li>multiple substitution（一对多替换）</li>
+<li>alternate substitution（一对一替换，但提供多种选择）</li>
+<li>chaining contextual substitution（带上下文的一对一/多对一/一对多替换）</li>
+<li>reverse chaining contextual substitution（逆向、带上下文的一对一替换）</li>
+</ol>
+<h1 id="使用-gsub-规则实现简繁转换算法">使用 GSUB 规则实现简繁转换算法</h1>
+<p>简繁转换需要实现多对多替换，例如将「错综复杂」转换为「<span lang="zh-HK">錯綜複雜</span>」，四个字均发生了变化。然而，以上六种 GSUB 规则仅包括一对一、多对一、一对多替换，却不包括多对多替换。</p>
+<p>为了实现多对多替换，可以采用「伪字图」的方法。首先使用多对一替换，将简体词语替换为一个伪字图；然后使用一对多替换，将这个伪字图替换为繁体词语。</p>
+<p>示例如下：</p>
+<table>
+<tr>
+<th>
+输入字符串
+</th>
+<td>
+U+97E9
+</td>
+<td>
+U+5267
+</td>
+<td>
+U+5947
+</td>
+<td>
+U+7687
+</td>
+<td>
+U+540E
+</td>
+<td>
+U+64AD
+</td>
+<td>
+U+51FA
+</td>
+<td>
+U+540E
+</td>
+</tr>
+<tr>
+<th>
+对应简体字图
+</th>
+<td>
+韩
+</td>
+<td>
+剧
+</td>
+<td>
+奇
+</td>
+<td>
+皇
+</td>
+<td>
+后
+</td>
+<td>
+播
+</td>
+<td>
+出
+</td>
+<td>
+后
+</td>
+</tr>
+<tr>
+<th>
+第一步替换
+</th>
+<td colspan="2">
+伪字图 0
+</td>
+<td>
+奇
+</td>
+<td colspan="2">
+伪字图 1
+</td>
+<td colspan="2">
+伪字图 2
+</td>
+<td>
+后
+</td>
+</tr>
+<tr>
+<th>
+第二步替换
+</th>
+<td colspan="2">
+伪字图 0
+</td>
+<td lang="zh-HK">
+奇
+</td>
+<td colspan="2">
+伪字图 1
+</td>
+<td colspan="2">
+伪字图 2
+</td>
+<td lang="zh-HK">
+後
+</td>
+</tr>
+<tr>
+<th>
+第三步替换
+</th>
+<td lang="zh-HK">
+韓
+</td>
+<td lang="zh-HK">
+劇
+</td>
+<td lang="zh-HK">
+奇
+</td>
+<td lang="zh-HK">
+皇
+</td>
+<td lang="zh-HK">
+后
+</td>
+<td lang="zh-HK">
+播
+</td>
+<td lang="zh-HK">
+出
+</td>
+<td lang="zh-HK">
+後
+</td>
+</tr>
+</table>
+<ul>
+<li>第一步替换（多对一替换）将简体词语「韩剧」、「皇后」、「播出」分别替换为三个伪字图。</li>
+<li>第二步替换（一对一替换）将不成词的单字「后」替换为繁体字「<span lang="zh-HK">後</span>」，简繁同形的「奇」保持不变。</li>
+<li>第三步替换（一对多替换）将三个伪字图替换为对应的繁体词语「<span lang="zh-HK">韓劇</span>」、「<span lang="zh-HK">皇后</span>」、「<span lang="zh-HK">播出</span>」。</li>
+</ul>
+<p>注意「皇后」、「播出」是繁简同形的词语，但仍要在第一步替换为伪字图，否则会影响第二步替换。</p>
+<p>经过简单的试验可以发现，OpenType 字体在执行第一步替换时遵循「正向最大匹配」原则，这与 OpenCC 的简繁转换算法相同，因此二者是等效的。</p>
+<h1 id="局限性">局限性</h1>
+<h2 id="句子本身存在歧义">句子本身存在歧义</h2>
+<p>简转繁不可能做到完全准确。例如「时间不准差一分钟」这个句子本身存在歧义，对应的繁体既可能是「<span lang="zh-HK">時間不準差一分鐘</span>」（不准确），也可能是「<span lang="zh-HK">時間不准差一分鐘</span>」（不允许）。</p>
+<h2 id="opencc-简繁转换算法的局限性">OpenCC 简繁转换算法的局限性</h2>
+<p>「正向最大匹配」算法存在一定的局限性。例如，对句子「拥有 116 年历史」执行正向最大匹配，当匹配到「年」时，由于「年历」是一个词，会被匹配，从而错误地转换为「<del lang="zh-HK" style="text-decoration: none;">擁有 116 年曆史</del>」；正确的写法应该为「<span lang="zh-HK">擁有 116 年歷史</span>」。</p>
+<h2 id="opencc-词库的局限性">OpenCC 词库的局限性</h2>
+<p>OpenCC 词库不可能囊括所有词语，例如新词不一定能及时收录于 OpenCC 词库中。</p>
+<h2 id="opentype-字体的局限性">OpenType 字体的局限性</h2>
+<p>在上述方法中，一条简繁词语的对应关系需要使用一个伪字图，而伪字图也会占据字图数量。OpenType 字体的字图数量上限为 65535 个。</p>
+<p>为了防止字图数量超过上限，可以采取两种方法：</p>
+<p>第一：可以从字体中删除一些生僻字的字图。</p>
+<p>第二：可以适当删除一些简繁词语的对应关系。应优先删除繁简同形、且在逐字转换时不会产生错误的词语，例如上面例子中的「播出」。</p>
+<h1 id="功能扩展">功能扩展</h1>
+<h2 id="opentype-字体的-trad-特性">OpenType 字体的 trad 特性</h2>
+<p>OpenType 字体提供了 trad 特性。在排版引擎中打开 trad 特性时，字体可以将简体字显示为对应的繁体字。但是，目前支持 trad 特性的字体并不多。</p>
+<p>只要将上述替换表放入字体的 trad 表中，就可以制作支持 trad 特性、且能处理「一简对多繁」的字体。</p>
+<h2 id="地区字词转换">地区字词转换</h2>
+<p>OpenCC 支持中国大陆、台湾、香港的习惯用字和用词转换。如果在上述简繁词语的对应关系中加入地区字词的对应关系，就可以处理不同地区的字词转换，例如将「内存」轉換為「<span lang="zh-TW">記憶體</span>」。</p>
+<p>另外，OpenType 字体可以根据语言指定不同的替换表。只要根据 OpenCC 词库，在 <code>ZHS</code>, <code>ZHT</code>, <code>ZHH</code> 表中指定不同的替换表，就可以使同一字体在不同语言环境下使用不同的字词转换。</p>
+<h1 id="字体下载">字体下载</h1>
+<p>根据上述方法制作了简转繁字体<a href="https://github.com/ayaka14732/FanWunMing">繁媛明朝</a>。</p>
+<p>（作于 2020 年 7 月 31 日，修改于 2020 年 10 月 1 日）</p>
+</body>
+</html>
