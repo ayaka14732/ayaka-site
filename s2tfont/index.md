@@ -7,6 +7,8 @@ keywords:
 - 简转繁字体
 - OpenType 特性
 - GSUB 规则
+math: |-
+  <link rel="alternate" hreflang="zh-HK" href="hant/"/>
 ---
 
 > [繁體中文版《[正確實現簡轉繁字型](hant/){hreflang=zh-HK}]{lang=zh-HK}》，同时发布于知乎：[正确实现简转繁字体 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/166089642){hreflang=zh-CN}

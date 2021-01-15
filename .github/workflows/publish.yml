@@ -40,9 +40,6 @@ jobs:
         # Switch branch
         git fetch
         git checkout gh-pages
-
-        # Reset to the first commit
-        git reset --hard ba6d14554914dee7185eb13916bed6f3cdab89c7
         )
 
         # Build
@@ -60,8 +57,8 @@ jobs:
         rm -rf $temp_dir
 
         # Set commit identity
-        git config user.email "ayaka@mail.shn.hk"
-        git config user.name "Ayaka Mikazuki"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
 
         # Publish
         git add .

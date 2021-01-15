@@ -7,6 +7,8 @@ keywords:
 - 分词
 - 结巴分词
 - 词性标注
+math: |-
+  <link rel="alternate" hreflang="zh-HK" href="hant/"/>
 ---
 
 > [繁體中文版《[結巴分詞處理粵語](hant/){hreflang=zh-HK}]{lang=zh-HK}》
