@@ -7,6 +7,8 @@ keywords:
 - 簡轉繁字型
 - OpenType 特性
 - GSUB 規則
+math: |-
+  <link rel="alternate" hreflang="zh-CN" href="../"/>
 ---
 
 > [简体中文版《[正确实现简转繁字体](../){hreflang=zh-CN}]{lang=zh-CN}》，同時發佈於知乎：[正确实现简转繁字体 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/166089642){lang=zh-CN hreflang=zh-CN}
