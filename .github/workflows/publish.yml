@@ -1,0 +1,71 @@
+name: Publish
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+    - name: Install pandoc
+      run: |
+        # Create directory
+        mkdir -p ~/pandoc
+        cd ~/pandoc
+
+        # Download installer
+        curl -LsSo pandoc.deb https://github.com/jgm/pandoc/releases/download/2.11.3.1/pandoc-2.11.3.1-1-amd64.deb
+
+        # Extract pandoc binary
+        ar x pandoc.deb data.tar.gz && rm -f pandoc.deb
+        tar xvf data.tar.gz ./usr/bin/pandoc && rm -f data.tar.gz
+        mv usr/bin/pandoc . && rm -rf usr
+    - name: Publish
+      run: |
+        # Add pandoc to PATH
+        export PATH=$PATH:~/pandoc
+
+        # Create a temporary directory
+        export temp_dir=`mktemp -d -p ~`
+
+        (
+        # Preserve .git
+        mv .git $temp_dir
+        cd $temp_dir
+
+        # Switch branch
+        git fetch
+        git checkout gh-pages
+
+        # Reset to the first commit
+        git reset --hard ba6d14554914dee7185eb13916bed6f3cdab89c7
+        )
+
+        # Build
+        python3 build.py
+
+        # Remove source files and README
+        rm -rf index.md **/index.md README.md build.py pandoc.yaml
+
+        # Remove all dot files except . and ..
+        # https://unix.stackexchange.com/a/77313
+        rm -rf ..?* .[!.]*
+
+        # Restore .git
+        mv $temp_dir/.git .
+        rm -rf $temp_dir
+
+        # Set commit identity
+        git config user.email "ayaka@mail.shn.hk"
+        git config user.name "Ayaka Mikazuki"
+
+        # Publish
+        git add .
+        if [ -n "$(git status --porcelain)" ]; then
+          git commit -m "Publish `TZ='Asia/Hong_Kong' date`"
+          git push -f origin gh-pages
+        fi

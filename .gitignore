@@ -1,0 +1,9 @@
+.mypy_cache
+.vscode
+**/index.html
+
+# TeX files
+**/index.tex
+**/index.aux
+**/index.log
+**/index.pdf

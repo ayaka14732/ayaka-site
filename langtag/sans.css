@@ -1,0 +1,356 @@
+/* 關於指定字體的説明：
+1. 字形優先順序：韓國 > 中國大陸 > 香港 > 日本 > 臺灣。
+2. 若系統中找不到 Source Han Sans/Noto Sans CJK 系列字體，不應立即採用系統的備援字體，而是使用 web font 載入此系列字體。
+*/
+/* 引入 'Noto Sans SC', 'Noto Sans HK', 'Noto Sans JP', 'Noto Sans TC' */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap');
+/* 分語言指定字形 */
+.sans :lang(zh), .sans :lang(zh-Hans),
+.sans :lang(hak), .sans :lang(hak-Hans),
+.sans :lang(zh-hak), .sans :lang(zh-hak-Hans) {
+	font-family:
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans", "Noto Sans CJK JP",
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		'Noto Sans SC', 'Noto Sans HK', 'Noto Sans JP', 'Noto Sans TC',
+		sans-serif, sans-serif;
+	font-language-override: "ZHS";
+}
+.sans :lang(yue), .sans :lang(yue-Hant),
+.sans :lang(zh-yue), .sans :lang(zh-yue-Hant) {
+	font-family:
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans", "Noto Sans CJK JP",
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		'Noto Sans HK', 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans TC',
+		sans-serif, sans-serif;
+	font-language-override: "ZHH";
+}
+.sans :lang(zh-Hant),
+.sans :lang(nan), .sans :lang(nan-Hant),
+.sans :lang(zh-nan), .sans :lang(zh-nan-Hant) {
+	font-family:
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans", "Noto Sans CJK JP",
+		'Noto Sans TC', 'Noto Sans SC', 'Noto Sans HK', 'Noto Sans JP',
+		sans-serif, sans-serif;
+	font-language-override: "ZHT";
+}
+/* 預設為大陸字形者 */
+.sans :lang(cdo), .sans :lang(cdo-Hant), .sans :lang(cdo-Hans),
+.sans :lang(zh-cdo), .sans :lang(zh-cdo-Hant), .sans :lang(zh-cdo-Hans),
+.sans :lang(cjy), .sans :lang(cjy-Hant), .sans :lang(cjy-Hans),
+.sans :lang(zh-cjy), .sans :lang(zh-cjy-Hant), .sans :lang(zh-cjy-Hans),
+.sans :lang(cmn), .sans :lang(cmn-Hant), .sans :lang(cmn-Hans),
+.sans :lang(zh-cmn), .sans :lang(zh-cmn-Hant), .sans :lang(zh-cmn-Hans),
+.sans :lang(cnp), .sans :lang(cnp-Hant), .sans :lang(cnp-Hans),
+.sans :lang(zh-cnp), .sans :lang(zh-cnp-Hant), .sans :lang(zh-cnp-Hans),
+.sans :lang(cpx), .sans :lang(cpx-Hant), .sans :lang(cpx-Hans),
+.sans :lang(zh-cpx), .sans :lang(zh-cpx-Hant), .sans :lang(zh-cpx-Hans),
+.sans :lang(csp), .sans :lang(csp-Hant), .sans :lang(csp-Hans),
+.sans :lang(zh-csp), .sans :lang(zh-csp-Hant), .sans :lang(zh-csp-Hans),
+.sans :lang(czh), .sans :lang(czh-Hant), .sans :lang(czh-Hans),
+.sans :lang(zh-czh), .sans :lang(zh-czh-Hant), .sans :lang(zh-czh-Hans),
+.sans :lang(czo), .sans :lang(czo-Hant), .sans :lang(czo-Hans),
+.sans :lang(zh-czo), .sans :lang(zh-czo-Hant), .sans :lang(zh-czo-Hans),
+.sans :lang(gan), .sans :lang(gan-Hant), .sans :lang(gan-Hans),
+.sans :lang(zh-gan), .sans :lang(zh-gan-Hant), .sans :lang(zh-gan-Hans),
+.sans :lang(hsn), .sans :lang(hsn-Hant), .sans :lang(hsn-Hans),
+.sans :lang(zh-hsn), .sans :lang(zh-hsn-Hant), .sans :lang(zh-hsn-Hans),
+.sans :lang(mnp), .sans :lang(mnp-Hant), .sans :lang(mnp-Hans),
+.sans :lang(zh-mnp), .sans :lang(zh-mnp-Hant), .sans :lang(zh-mnp-Hans),
+.sans :lang(wuu), .sans :lang(wuu-Hant), .sans :lang(wuu-Hans),
+.sans :lang(zh-wuu), .sans :lang(zh-wuu-Hant), .sans :lang(zh-wuu-Hans),
+.sans :lang(nan-Hans), .sans :lang(zh-nan-Hans),
+.sans :lang(yue-Hans), .sans :lang(zh-yue-Hans) {
+	font-family:
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans", "Noto Sans CJK JP",
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		'Noto Sans SC', 'Noto Sans HK', 'Noto Sans JP', 'Noto Sans TC',
+		sans-serif, sans-serif;
+	font-language-override: "ZHS";
+}
+/* 預設為台灣字形者 */
+.sans :lang(hak-Hant), .sans :lang(zh-hak-Hant) {
+	font-family:
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans", "Noto Sans CJK JP",
+		'Noto Sans TC', 'Noto Sans SC', 'Noto Sans HK', 'Noto Sans JP',
+		sans-serif, sans-serif;
+	font-language-override: "ZHT";
+}
+/* 預設為日本字形者 */
+.sans :lang(ja) {
+	font-family:
+		"Source Han Sans", "Noto Sans CJK JP",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		'Noto Sans JP', 'Noto Sans SC', 'Noto Sans HK', 'Noto Sans TC',
+		sans-serif, sans-serif;
+	font-language-override: "JAN";
+}
+/* 預設為韓國字形者 */
+.sans :lang(ko),
+.sans :lang(lzh), .sans :lang(lzh-Hant), .sans :lang(lzh-Hans),
+.sans :lang(zh-lzh), .sans :lang(zh-lzh-Hant), .sans :lang(zh-lzh-Hans),
+.sans :lang(ltc), .sans :lang(ltc-Hant), .sans :lang(ltc-Hans),
+.sans :lang(och), .sans :lang(och-Hant), .sans :lang(och-Hans) {
+	font-family:
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans", "Noto Sans CJK JP",
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		'Noto Sans SC', 'Noto Sans HK', 'Noto Sans JP', 'Noto Sans TC',
+		sans-serif, sans-serif;
+	font-language-override: "KOR";
+}
+/* 分地區指定字形 */
+.sans :lang(zh-KR), .sans :lang(zh-Hant-KR), .sans :lang(zh-Hans-KR),
+.sans :lang(cdo-KR), .sans :lang(cdo-Hant-KR), .sans :lang(cdo-Hans-KR),
+.sans :lang(zh-cdo-KR), .sans :lang(zh-cdo-Hant-KR), .sans :lang(zh-cdo-Hans-KR),
+.sans :lang(cjy-KR), .sans :lang(cjy-Hant-KR), .sans :lang(cjy-Hans-KR),
+.sans :lang(zh-cjy-KR), .sans :lang(zh-cjy-Hant-KR), .sans :lang(zh-cjy-Hans-KR),
+.sans :lang(cmn-KR), .sans :lang(cmn-Hant-KR), .sans :lang(cmn-Hans-KR),
+.sans :lang(zh-cmn-KR), .sans :lang(zh-cmn-Hant-KR), .sans :lang(zh-cmn-Hans-KR),
+.sans :lang(cnp-KR), .sans :lang(cnp-Hant-KR), .sans :lang(cnp-Hans-KR),
+.sans :lang(zh-cnp-KR), .sans :lang(zh-cnp-Hant-KR), .sans :lang(zh-cnp-Hans-KR),
+.sans :lang(cpx-KR), .sans :lang(cpx-Hant-KR), .sans :lang(cpx-Hans-KR),
+.sans :lang(zh-cpx-KR), .sans :lang(zh-cpx-Hant-KR), .sans :lang(zh-cpx-Hans-KR),
+.sans :lang(csp-KR), .sans :lang(csp-Hant-KR), .sans :lang(csp-Hans-KR),
+.sans :lang(zh-csp-KR), .sans :lang(zh-csp-Hant-KR), .sans :lang(zh-csp-Hans-KR),
+.sans :lang(czh-KR), .sans :lang(czh-Hant-KR), .sans :lang(czh-Hans-KR),
+.sans :lang(zh-czh-KR), .sans :lang(zh-czh-Hant-KR), .sans :lang(zh-czh-Hans-KR),
+.sans :lang(czo-KR), .sans :lang(czo-Hant-KR), .sans :lang(czo-Hans-KR),
+.sans :lang(zh-czo-KR), .sans :lang(zh-czo-Hant-KR), .sans :lang(zh-czo-Hans-KR),
+.sans :lang(gan-KR), .sans :lang(gan-Hant-KR), .sans :lang(gan-Hans-KR),
+.sans :lang(zh-gan-KR), .sans :lang(zh-gan-Hant-KR), .sans :lang(zh-gan-Hans-KR),
+.sans :lang(hak-KR), .sans :lang(hak-Hant-KR), .sans :lang(hak-Hans-KR),
+.sans :lang(zh-hak-KR), .sans :lang(zh-hak-Hant-KR), .sans :lang(zh-hak-Hans-KR),
+.sans :lang(hsn-KR), .sans :lang(hsn-Hant-KR), .sans :lang(hsn-Hans-KR),
+.sans :lang(zh-hsn-KR), .sans :lang(zh-hsn-Hant-KR), .sans :lang(zh-hsn-Hans-KR),
+.sans :lang(mnp-KR), .sans :lang(mnp-Hant-KR), .sans :lang(mnp-Hans-KR),
+.sans :lang(zh-mnp-KR), .sans :lang(zh-mnp-Hant-KR), .sans :lang(zh-mnp-Hans-KR),
+.sans :lang(nan-KR), .sans :lang(nan-Hant-KR), .sans :lang(nan-Hans-KR),
+.sans :lang(zh-nan-KR), .sans :lang(zh-nan-Hant-KR), .sans :lang(zh-nan-Hans-KR),
+.sans :lang(wuu-KR), .sans :lang(wuu-Hant-KR), .sans :lang(wuu-Hans-KR),
+.sans :lang(zh-wuu-KR), .sans :lang(zh-wuu-Hant-KR), .sans :lang(zh-wuu-Hans-KR),
+.sans :lang(yue-KR), .sans :lang(yue-Hant-KR), .sans :lang(yue-Hans-KR),
+.sans :lang(zh-yue-KR), .sans :lang(zh-yue-Hant-KR), .sans :lang(zh-yue-Hans-KR) {
+	font-family:
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans", "Noto Sans CJK JP",
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		'Noto Sans SC', 'Noto Sans HK', 'Noto Sans JP', 'Noto Sans TC',
+		sans-serif, sans-serif;
+	font-language-override: "KOR";
+}
+.sans :lang(zh-Hant-CN),
+.sans :lang(lzh-CN), .sans :lang(lzh-Hant-CN), .sans :lang(lzh-Hans-CN),
+.sans :lang(zh-lzh-CN), .sans :lang(zh-lzh-Hant-CN), .sans :lang(zh-lzh-Hans-CN),
+.sans :lang(nan-CN), .sans :lang(nan-Hant-CN), .sans :lang(nan-Hans-CN),
+.sans :lang(zh-nan-CN), .sans :lang(zh-nan-Hant-CN), .sans :lang(zh-nan-Hans-CN),
+.sans :lang(yue-CN), .sans :lang(yue-Hant-CN), .sans :lang(yue-Hans-CN),
+.sans :lang(zh-yue-CN), .sans :lang(zh-yue-Hant-CN), .sans :lang(zh-yue-Hans-CN),
+.sans :lang(zh-Hant-SG),
+.sans :lang(lzh-SG), .sans :lang(lzh-Hant-SG), .sans :lang(lzh-Hans-SG),
+.sans :lang(zh-lzh-SG), .sans :lang(zh-lzh-Hant-SG), .sans :lang(zh-lzh-Hans-SG),
+.sans :lang(nan-SG), .sans :lang(nan-Hant-SG), .sans :lang(nan-Hans-SG),
+.sans :lang(zh-nan-SG), .sans :lang(zh-nan-Hant-SG), .sans :lang(zh-nan-Hans-SG),
+.sans :lang(yue-SG), .sans :lang(yue-Hant-SG), .sans :lang(yue-Hans-SG),
+.sans :lang(zh-yue-SG), .sans :lang(zh-yue-Hant-SG), .sans :lang(zh-yue-Hans-SG),
+.sans :lang(ltc-CN), .sans :lang(ltc-Hant-CN), .sans :lang(ltc-Hans-CN),
+.sans :lang(och-CN), .sans :lang(och-Hant-CN), .sans :lang(och-Hans-CN),
+.sans :lang(ltc-SG), .sans :lang(ltc-Hant-SG), .sans :lang(ltc-Hans-SG),
+.sans :lang(och-SG), .sans :lang(och-Hant-SG), .sans :lang(och-Hans-SG) {
+	font-family:
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans", "Noto Sans CJK JP",
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		'Noto Sans SC', 'Noto Sans HK', 'Noto Sans JP', 'Noto Sans TC',
+		sans-serif, sans-serif;
+	font-language-override: "ZHS";
+}
+.sans :lang(zh-HK), .sans :lang(zh-Hant-HK), .sans :lang(zh-Hans-HK),
+.sans :lang(cdo-HK), .sans :lang(cdo-Hant-HK), .sans :lang(cdo-Hans-HK),
+.sans :lang(zh-cdo-HK), .sans :lang(zh-cdo-Hant-HK), .sans :lang(zh-cdo-Hans-HK),
+.sans :lang(cjy-HK), .sans :lang(cjy-Hant-HK), .sans :lang(cjy-Hans-HK),
+.sans :lang(zh-cjy-HK), .sans :lang(zh-cjy-Hant-HK), .sans :lang(zh-cjy-Hans-HK),
+.sans :lang(cmn-HK), .sans :lang(cmn-Hant-HK), .sans :lang(cmn-Hans-HK),
+.sans :lang(zh-cmn-HK), .sans :lang(zh-cmn-Hant-HK), .sans :lang(zh-cmn-Hans-HK),
+.sans :lang(cnp-HK), .sans :lang(cnp-Hant-HK), .sans :lang(cnp-Hans-HK),
+.sans :lang(zh-cnp-HK), .sans :lang(zh-cnp-Hant-HK), .sans :lang(zh-cnp-Hans-HK),
+.sans :lang(cpx-HK), .sans :lang(cpx-Hant-HK), .sans :lang(cpx-Hans-HK),
+.sans :lang(zh-cpx-HK), .sans :lang(zh-cpx-Hant-HK), .sans :lang(zh-cpx-Hans-HK),
+.sans :lang(csp-HK), .sans :lang(csp-Hant-HK), .sans :lang(csp-Hans-HK),
+.sans :lang(zh-csp-HK), .sans :lang(zh-csp-Hant-HK), .sans :lang(zh-csp-Hans-HK),
+.sans :lang(czh-HK), .sans :lang(czh-Hant-HK), .sans :lang(czh-Hans-HK),
+.sans :lang(zh-czh-HK), .sans :lang(zh-czh-Hant-HK), .sans :lang(zh-czh-Hans-HK),
+.sans :lang(czo-HK), .sans :lang(czo-Hant-HK), .sans :lang(czo-Hans-HK),
+.sans :lang(zh-czo-HK), .sans :lang(zh-czo-Hant-HK), .sans :lang(zh-czo-Hans-HK),
+.sans :lang(gan-HK), .sans :lang(gan-Hant-HK), .sans :lang(gan-Hans-HK),
+.sans :lang(zh-gan-HK), .sans :lang(zh-gan-Hant-HK), .sans :lang(zh-gan-Hans-HK),
+.sans :lang(hak-HK), .sans :lang(hak-Hant-HK), .sans :lang(hak-Hans-HK),
+.sans :lang(zh-hak-HK), .sans :lang(zh-hak-Hant-HK), .sans :lang(zh-hak-Hans-HK),
+.sans :lang(hsn-HK), .sans :lang(hsn-Hant-HK), .sans :lang(hsn-Hans-HK),
+.sans :lang(zh-hsn-HK), .sans :lang(zh-hsn-Hant-HK), .sans :lang(zh-hsn-Hans-HK),
+.sans :lang(lzh-HK), .sans :lang(lzh-Hant-HK), .sans :lang(lzh-Hans-HK),
+.sans :lang(zh-lzh-HK), .sans :lang(zh-lzh-Hant-HK), .sans :lang(zh-lzh-Hans-HK),
+.sans :lang(mnp-HK), .sans :lang(mnp-Hant-HK), .sans :lang(mnp-Hans-HK),
+.sans :lang(zh-mnp-HK), .sans :lang(zh-mnp-Hant-HK), .sans :lang(zh-mnp-Hans-HK),
+.sans :lang(nan-HK), .sans :lang(nan-Hant-HK), .sans :lang(nan-Hans-HK),
+.sans :lang(zh-nan-HK), .sans :lang(zh-nan-Hant-HK), .sans :lang(zh-nan-Hans-HK),
+.sans :lang(wuu-HK), .sans :lang(wuu-Hant-HK), .sans :lang(wuu-Hans-HK),
+.sans :lang(zh-wuu-HK), .sans :lang(zh-wuu-Hant-HK), .sans :lang(zh-wuu-Hans-HK),
+.sans :lang(zh-MO), .sans :lang(zh-Hant-MO), .sans :lang(zh-Hans-MO),
+.sans :lang(cdo-MO), .sans :lang(cdo-Hant-MO), .sans :lang(cdo-Hans-MO),
+.sans :lang(zh-cdo-MO), .sans :lang(zh-cdo-Hant-MO), .sans :lang(zh-cdo-Hans-MO),
+.sans :lang(cjy-MO), .sans :lang(cjy-Hant-MO), .sans :lang(cjy-Hans-MO),
+.sans :lang(zh-cjy-MO), .sans :lang(zh-cjy-Hant-MO), .sans :lang(zh-cjy-Hans-MO),
+.sans :lang(cmn-MO), .sans :lang(cmn-Hant-MO), .sans :lang(cmn-Hans-MO),
+.sans :lang(zh-cmn-MO), .sans :lang(zh-cmn-Hant-MO), .sans :lang(zh-cmn-Hans-MO),
+.sans :lang(cnp-MO), .sans :lang(cnp-Hant-MO), .sans :lang(cnp-Hans-MO),
+.sans :lang(zh-cnp-MO), .sans :lang(zh-cnp-Hant-MO), .sans :lang(zh-cnp-Hans-MO),
+.sans :lang(cpx-MO), .sans :lang(cpx-Hant-MO), .sans :lang(cpx-Hans-MO),
+.sans :lang(zh-cpx-MO), .sans :lang(zh-cpx-Hant-MO), .sans :lang(zh-cpx-Hans-MO),
+.sans :lang(csp-MO), .sans :lang(csp-Hant-MO), .sans :lang(csp-Hans-MO),
+.sans :lang(zh-csp-MO), .sans :lang(zh-csp-Hant-MO), .sans :lang(zh-csp-Hans-MO),
+.sans :lang(czh-MO), .sans :lang(czh-Hant-MO), .sans :lang(czh-Hans-MO),
+.sans :lang(zh-czh-MO), .sans :lang(zh-czh-Hant-MO), .sans :lang(zh-czh-Hans-MO),
+.sans :lang(czo-MO), .sans :lang(czo-Hant-MO), .sans :lang(czo-Hans-MO),
+.sans :lang(zh-czo-MO), .sans :lang(zh-czo-Hant-MO), .sans :lang(zh-czo-Hans-MO),
+.sans :lang(gan-MO), .sans :lang(gan-Hant-MO), .sans :lang(gan-Hans-MO),
+.sans :lang(zh-gan-MO), .sans :lang(zh-gan-Hant-MO), .sans :lang(zh-gan-Hans-MO),
+.sans :lang(hak-MO), .sans :lang(hak-Hant-MO), .sans :lang(hak-Hans-MO),
+.sans :lang(zh-hak-MO), .sans :lang(zh-hak-Hant-MO), .sans :lang(zh-hak-Hans-MO),
+.sans :lang(hsn-MO), .sans :lang(hsn-Hant-MO), .sans :lang(hsn-Hans-MO),
+.sans :lang(zh-hsn-MO), .sans :lang(zh-hsn-Hant-MO), .sans :lang(zh-hsn-Hans-MO),
+.sans :lang(lzh-MO), .sans :lang(lzh-Hant-MO), .sans :lang(lzh-Hans-MO),
+.sans :lang(zh-lzh-MO), .sans :lang(zh-lzh-Hant-MO), .sans :lang(zh-lzh-Hans-MO),
+.sans :lang(mnp-MO), .sans :lang(mnp-Hant-MO), .sans :lang(mnp-Hans-MO),
+.sans :lang(zh-mnp-MO), .sans :lang(zh-mnp-Hant-MO), .sans :lang(zh-mnp-Hans-MO),
+.sans :lang(nan-MO), .sans :lang(nan-Hant-MO), .sans :lang(nan-Hans-MO),
+.sans :lang(zh-nan-MO), .sans :lang(zh-nan-Hant-MO), .sans :lang(zh-nan-Hans-MO),
+.sans :lang(wuu-MO), .sans :lang(wuu-Hant-MO), .sans :lang(wuu-Hans-MO),
+.sans :lang(zh-wuu-MO), .sans :lang(zh-wuu-Hant-MO), .sans :lang(zh-wuu-Hans-MO),
+.sans :lang(ltc-HK), .sans :lang(ltc-Hant-HK), .sans :lang(ltc-Hans-HK),
+.sans :lang(och-HK), .sans :lang(och-Hant-HK), .sans :lang(och-Hans-HK),
+.sans :lang(ltc-MO), .sans :lang(ltc-Hant-MO), .sans :lang(ltc-Hans-MO),
+.sans :lang(och-MO), .sans :lang(och-Hant-MO), .sans :lang(och-Hans-MO) {
+	font-family:
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans", "Noto Sans CJK JP",
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		'Noto Sans HK', 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans TC',
+		sans-serif, sans-serif;
+	font-language-override: "ZHH";
+}
+.sans :lang(zh-JP), .sans :lang(zh-Hant-JP), .sans :lang(zh-Hans-JP),
+.sans :lang(cdo-JP), .sans :lang(cdo-Hant-JP), .sans :lang(cdo-Hans-JP),
+.sans :lang(zh-cdo-JP), .sans :lang(zh-cdo-Hant-JP), .sans :lang(zh-cdo-Hans-JP),
+.sans :lang(cjy-JP), .sans :lang(cjy-Hant-JP), .sans :lang(cjy-Hans-JP),
+.sans :lang(zh-cjy-JP), .sans :lang(zh-cjy-Hant-JP), .sans :lang(zh-cjy-Hans-JP),
+.sans :lang(cmn-JP), .sans :lang(cmn-Hant-JP), .sans :lang(cmn-Hans-JP),
+.sans :lang(zh-cmn-JP), .sans :lang(zh-cmn-Hant-JP), .sans :lang(zh-cmn-Hans-JP),
+.sans :lang(cnp-JP), .sans :lang(cnp-Hant-JP), .sans :lang(cnp-Hans-JP),
+.sans :lang(zh-cnp-JP), .sans :lang(zh-cnp-Hant-JP), .sans :lang(zh-cnp-Hans-JP),
+.sans :lang(cpx-JP), .sans :lang(cpx-Hant-JP), .sans :lang(cpx-Hans-JP),
+.sans :lang(zh-cpx-JP), .sans :lang(zh-cpx-Hant-JP), .sans :lang(zh-cpx-Hans-JP),
+.sans :lang(csp-JP), .sans :lang(csp-Hant-JP), .sans :lang(csp-Hans-JP),
+.sans :lang(zh-csp-JP), .sans :lang(zh-csp-Hant-JP), .sans :lang(zh-csp-Hans-JP),
+.sans :lang(czh-JP), .sans :lang(czh-Hant-JP), .sans :lang(czh-Hans-JP),
+.sans :lang(zh-czh-JP), .sans :lang(zh-czh-Hant-JP), .sans :lang(zh-czh-Hans-JP),
+.sans :lang(czo-JP), .sans :lang(czo-Hant-JP), .sans :lang(czo-Hans-JP),
+.sans :lang(zh-czo-JP), .sans :lang(zh-czo-Hant-JP), .sans :lang(zh-czo-Hans-JP),
+.sans :lang(gan-JP), .sans :lang(gan-Hant-JP), .sans :lang(gan-Hans-JP),
+.sans :lang(zh-gan-JP), .sans :lang(zh-gan-Hant-JP), .sans :lang(zh-gan-Hans-JP),
+.sans :lang(hak-JP), .sans :lang(hak-Hant-JP), .sans :lang(hak-Hans-JP),
+.sans :lang(zh-hak-JP), .sans :lang(zh-hak-Hant-JP), .sans :lang(zh-hak-Hans-JP),
+.sans :lang(hsn-JP), .sans :lang(hsn-Hant-JP), .sans :lang(hsn-Hans-JP),
+.sans :lang(zh-hsn-JP), .sans :lang(zh-hsn-Hant-JP), .sans :lang(zh-hsn-Hans-JP),
+.sans :lang(lzh-JP), .sans :lang(lzh-Hant-JP), .sans :lang(lzh-Hans-JP),
+.sans :lang(zh-lzh-JP), .sans :lang(zh-lzh-Hant-JP), .sans :lang(zh-lzh-Hans-JP),
+.sans :lang(mnp-JP), .sans :lang(mnp-Hant-JP), .sans :lang(mnp-Hans-JP),
+.sans :lang(zh-mnp-JP), .sans :lang(zh-mnp-Hant-JP), .sans :lang(zh-mnp-Hans-JP),
+.sans :lang(nan-JP), .sans :lang(nan-Hant-JP), .sans :lang(nan-Hans-JP),
+.sans :lang(zh-nan-JP), .sans :lang(zh-nan-Hant-JP), .sans :lang(zh-nan-Hans-JP),
+.sans :lang(wuu-JP), .sans :lang(wuu-Hant-JP), .sans :lang(wuu-Hans-JP),
+.sans :lang(zh-wuu-JP), .sans :lang(zh-wuu-Hant-JP), .sans :lang(zh-wuu-Hans-JP),
+.sans :lang(yue-JP), .sans :lang(yue-Hant-JP), .sans :lang(yue-Hans-JP),
+.sans :lang(zh-yue-JP), .sans :lang(zh-yue-Hant-JP), .sans :lang(zh-yue-Hans-JP),
+.sans :lang(ltc-JP), .sans :lang(ltc-Hant-JP), .sans :lang(ltc-Hans-JP),
+.sans :lang(och-JP), .sans :lang(och-Hant-JP), .sans :lang(och-Hans-JP) {
+	font-family:
+		"Source Han Sans", "Noto Sans CJK JP",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		'Noto Sans JP', 'Noto Sans SC', 'Noto Sans HK', 'Noto Sans TC',
+		sans-serif, sans-serif;
+	font-language-override: "JAN";
+}
+.sans :lang(zh-TW), .sans :lang(zh-Hans-TW),
+.sans :lang(cdo-TW), .sans :lang(cdo-Hant-TW), .sans :lang(cdo-Hans-TW),
+.sans :lang(zh-cdo-TW), .sans :lang(zh-cdo-Hant-TW), .sans :lang(zh-cdo-Hans-TW),
+.sans :lang(cjy-TW), .sans :lang(cjy-Hant-TW), .sans :lang(cjy-Hans-TW),
+.sans :lang(zh-cjy-TW), .sans :lang(zh-cjy-Hant-TW), .sans :lang(zh-cjy-Hans-TW),
+.sans :lang(cmn-TW), .sans :lang(cmn-Hant-TW), .sans :lang(cmn-Hans-TW),
+.sans :lang(zh-cmn-TW), .sans :lang(zh-cmn-Hant-TW), .sans :lang(zh-cmn-Hans-TW),
+.sans :lang(cnp-TW), .sans :lang(cnp-Hant-TW), .sans :lang(cnp-Hans-TW),
+.sans :lang(zh-cnp-TW), .sans :lang(zh-cnp-Hant-TW), .sans :lang(zh-cnp-Hans-TW),
+.sans :lang(cpx-TW), .sans :lang(cpx-Hant-TW), .sans :lang(cpx-Hans-TW),
+.sans :lang(zh-cpx-TW), .sans :lang(zh-cpx-Hant-TW), .sans :lang(zh-cpx-Hans-TW),
+.sans :lang(csp-TW), .sans :lang(csp-Hant-TW), .sans :lang(csp-Hans-TW),
+.sans :lang(zh-csp-TW), .sans :lang(zh-csp-Hant-TW), .sans :lang(zh-csp-Hans-TW),
+.sans :lang(czh-TW), .sans :lang(czh-Hant-TW), .sans :lang(czh-Hans-TW),
+.sans :lang(zh-czh-TW), .sans :lang(zh-czh-Hant-TW), .sans :lang(zh-czh-Hans-TW),
+.sans :lang(czo-TW), .sans :lang(czo-Hant-TW), .sans :lang(czo-Hans-TW),
+.sans :lang(zh-czo-TW), .sans :lang(zh-czo-Hant-TW), .sans :lang(zh-czo-Hans-TW),
+.sans :lang(gan-TW), .sans :lang(gan-Hant-TW), .sans :lang(gan-Hans-TW),
+.sans :lang(zh-gan-TW), .sans :lang(zh-gan-Hant-TW), .sans :lang(zh-gan-Hans-TW),
+.sans :lang(hak-TW), .sans :lang(hak-Hant-TW), .sans :lang(hak-Hans-TW),
+.sans :lang(zh-hak-TW), .sans :lang(zh-hak-Hant-TW), .sans :lang(zh-hak-Hans-TW),
+.sans :lang(hsn-TW), .sans :lang(hsn-Hant-TW), .sans :lang(hsn-Hans-TW),
+.sans :lang(zh-hsn-TW), .sans :lang(zh-hsn-Hant-TW), .sans :lang(zh-hsn-Hans-TW),
+.sans :lang(lzh-TW), .sans :lang(lzh-Hant-TW), .sans :lang(lzh-Hans-TW),
+.sans :lang(zh-lzh-TW), .sans :lang(zh-lzh-Hant-TW), .sans :lang(zh-lzh-Hans-TW),
+.sans :lang(mnp-TW), .sans :lang(mnp-Hant-TW), .sans :lang(mnp-Hans-TW),
+.sans :lang(zh-mnp-TW), .sans :lang(zh-mnp-Hant-TW), .sans :lang(zh-mnp-Hans-TW),
+.sans :lang(wuu-TW), .sans :lang(wuu-Hant-TW), .sans :lang(wuu-Hans-TW),
+.sans :lang(zh-wuu-TW), .sans :lang(zh-wuu-Hant-TW), .sans :lang(zh-wuu-Hans-TW),
+.sans :lang(yue-TW), .sans :lang(yue-Hant-TW), .sans :lang(yue-Hans-TW),
+.sans :lang(zh-yue-TW), .sans :lang(zh-yue-Hant-TW), .sans :lang(zh-yue-Hans-TW),
+.sans :lang(ltc-TW), .sans :lang(ltc-Hant-TW), .sans :lang(ltc-Hans-TW),
+.sans :lang(och-TW), .sans :lang(och-Hant-TW), .sans :lang(och-Hans-TW) {
+	font-family:
+		"Source Han Sans TC", "Noto Sans CJK TC",
+		"Source Han Sans K", "Noto Sans CJK KR",
+		"Source Han Sans SC", "Noto Sans CJK SC",
+		"Source Han Sans HC", "Noto Sans CJK HK",
+		"Source Han Sans", "Noto Sans CJK JP",
+		'Noto Sans TC', 'Noto Sans SC', 'Noto Sans HK', 'Noto Sans JP',
+		sans-serif, sans-serif;
+	font-language-override: "ZHT";
+}

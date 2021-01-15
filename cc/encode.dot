@@ -1,0 +1,12 @@
+digraph {
+    rankdir=BT
+    graph [fontname="Noto Sans CJK SC"]
+    node [fontname="Noto Sans CJK SC"]
+    edge [fontname="Noto Sans CJK SC"]
+    node [shape=plaintext]
+    "文本（Unicode 字符集）" -> 大陆字体
+    "文本（Unicode 字符集）" -> 香港字体
+    "文本（Unicode 字符集）" -> 台湾字体
+    "文本（Unicode 字符集）" -> 日本字体
+    "存储器（UTF-8 编码）" -> "文本（Unicode 字符集）" [dir=back]
+}

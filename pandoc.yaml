@@ -1,0 +1,65 @@
+dir: ltr
+author: 三日月綾香
+documentclass: ctexart
+css:
+  - https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css
+  - https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css
+colorlinks: true
+classoption:
+  - UTF8
+  - AutoFakeBold
+  - AutoFakeSlant
+  - "fontset=none"
+  - "linespread=1.25"
+geometry: "a4paper,left=2.29cm,right=2.29cm,top=1.91cm,bottom=2.41cm,footskip=2em"
+header-includes:
+  - |
+    ```{=html}
+    <!-- Others -->
+    <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        var xs = document.getElementsByTagName('code');
+        for (var i = 0, len = xs.length; i < len; i++)
+          xs[i].lang = 'en-x-code';
+        xs = document.getElementsByClassName('footnote-back');
+        for (var i = 0, len = xs.length; i < len; i++)
+          xs[i].lang = 'en-x-code';
+        document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+          x.classList.add('numberSource');
+        });
+      });
+    </script>
+    ```
+  - |
+    ```{=latex}
+    \defaultCJKfontfeatures{Scale=0.962216}
+    \setCJKmainfont{Noto Serif CJK SC}
+    \setCJKsansfont{DFPHKStdKai-B5}
+    \setCJKmonofont{DFPHKStdKai-B5}
+    \setlength{\parskip}{0.4375em}
+    \setlength\parindent{2em}
+    \lstset{
+      basicstyle=\ttfamily,
+      keywordstyle=\color[rgb]{0.13,0.29,0.53}\bfseries,
+      stringstyle=\color[rgb]{0.31,0.60,0.02},
+      commentstyle=\color[rgb]{0.56,0.35,0.01}\itshape,
+      numberstyle=\scriptsize,
+      showspaces=false,
+      showstringspaces=false,
+      showtabs=false,
+      tabsize=4,
+      frame=single,
+      lineskip=.2\baselineskip,
+      captionpos=b,
+      frame=none,
+      numbers=left,
+      showlines=true,
+      breaklines=true,
+      columns=fullflexible,
+      breakautoindent=true,
+      escapeinside={\%*}{*)},
+      linewidth=\textwidth,
+      postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}},
+    }
+    ```
