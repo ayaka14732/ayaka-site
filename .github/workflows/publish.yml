@@ -46,7 +46,8 @@ jobs:
         python3 build.py
 
         # Remove source files and README
-        rm -rf index.md **/index.md README.md build.py pandoc.yaml
+        find . -name index.md -delete
+        rm -rf README.md build.py pandoc.yaml
 
         # Remove all dot files except . and ..
         # https://unix.stackexchange.com/a/77313
