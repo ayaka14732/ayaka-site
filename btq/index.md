@@ -28,6 +28,6 @@ Watch online:
 </video>
 <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 
-There is a post containing more information about what Bantian station is like in 2012, which can be found [here](https://web.archive.org/web/20210115082059/https://www.hkitalk.net/HKiTalk2/thread-699426-1-1.html).
+There is a post containing more information about what Bantian station is like in 2012, which can be found [here](https://web.archive.org/web/20210115082059/https://www.hkitalk.net/HKiTalk2/thread-699426-1-1.html){hreflang=yue-HK} (in Cantonese).
 
 (Published on 15 January 2021)
