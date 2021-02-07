@@ -38,10 +38,11 @@ math: |-
 1. [論直音、反切與其他註音方式的優劣](pyanxvsdrik/){lang=zh-Hant hreflang=zh-Hant}
 1. [正確實現簡轉繁字型](s2tfont/hant/)
 1. [ssh 连接 Google Colab 服务器](colab/){lang=zh-CN hreflang=zh-CN}
-1. [推粵語](teoi/)（未定稿）
+1. [中古音與粵語（廣州音）對應關係](teoi/)（未定稿）
 1. [漢字的單音化現象](guan/)
 1. [日語漢音的重紐對立](tyongdiu/)
 1. [Bantian Railway Station](btq/){lang=en-UK hreflang=en-UK}
+1. [中古音與《分韻撮要》音系對應關係](fanwan/)（未定稿）
 
 <!--
 nomtopyoh is the page for testing the typesetting.
