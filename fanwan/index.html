@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-HK" xml:lang="zh-HK" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="音韻學, 粵語, 粵語歷史, 分韻撮要, 切韻音系, 中古音, 演化規律, 對應關係" />
+  <title>中古音與《分韻撮要》音系對應關係</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
+  <style>
+  th{text-align:left;}
+  x-biteinkou::after{content:"（未定稿）";}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">中古音與《分韻撮要》音系對應關係<x-biteinkou></x-biteinkou></h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#簡介">簡介</a></li>
+<li><a href="#擬音">擬音</a></li>
+<li><a href="#音系">音系</a>
+<ul>
+<li><a href="#聲母">聲母</a></li>
+<li><a href="#韻母">韻母</a></li>
+<li><a href="#聲調">聲調</a></li>
+</ul></li>
+<li><a href="#對應關係">對應關係</a>
+<ul>
+<li><a href="#聲母-1">聲母</a></li>
+<li><a href="#韻母-1">韻母</a></li>
+<li><a href="#聲調-1">聲調</a></li>
+</ul></li>
+<li><a href="#推導程式">推導程式</a></li>
+</ul>
+</nav>
+<h1 id="簡介">簡介</h1>
+<p>《分韻撮要》是記載清初粵語語音的韻書。</p>
+<p>（TODO：添加《分韻撮要》簡介、版本介紹、本文所參照的版本）</p>
+<h1 id="擬音">擬音</h1>
+<p>（TODO：添加擬音的過程）</p>
+<h1 id="音系">音系</h1>
+<h2 id="聲母">聲母</h2>
+<table>
+<tbody>
+<tr>
+<td>
+幫 b <span lang="yue-Latn-fonipa">/p/</span>
+</td>
+<td>
+滂 p <span lang="yue-Latn-fonipa">/pʰ/</span>
+</td>
+<td>
+非 f <span lang="yue-Latn-fonipa">/f/</span>
+</td>
+<td>
+明 m <span lang="yue-Latn-fonipa">/m/</span>
+</td>
+</tr>
+<tr>
+<td>
+端 d <span lang="yue-Latn-fonipa">/d/</span>
+</td>
+<td>
+透 t <span lang="yue-Latn-fonipa">/tʰ/</span>
+</td>
+<td>
+來 l <span lang="yue-Latn-fonipa">/l/</span>
+</td>
+<td>
+泥 n <span lang="yue-Latn-fonipa">/n/</span>
+</td>
+</tr>
+<tr>
+<td>
+見 g <span lang="yue-Latn-fonipa">/k/</span>
+</td>
+<td>
+溪 k <span lang="yue-Latn-fonipa">/kʰ/</span>
+</td>
+<td>
+曉 h <span lang="yue-Latn-fonipa">/h/</span>
+</td>
+<td>
+我 ng <span lang="yue-Latn-fonipa">/ŋ/</span>
+</td>
+</tr>
+<tr>
+<td>
+古 gw <span lang="yue-Latn-fonipa">/kʷ/</span>
+</td>
+<td>
+困 kw <span lang="yue-Latn-fonipa">/kʷʰ/</span>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+精 z <span lang="yue-Latn-fonipa">/ts/</span>
+</td>
+<td>
+清 c <span lang="yue-Latn-fonipa">/tsʰ/</span>
+</td>
+<td>
+心 s <span lang="yue-Latn-fonipa">/s/</span>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+照 zh <span lang="yue-Latn-fonipa">/tʃ/</span>
+</td>
+<td>
+穿 ch <span lang="yue-Latn-fonipa">/tʃʰ/</span>
+</td>
+<td>
+審 sh <span lang="yue-Latn-fonipa">/ʃ/</span>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+亞 ∅
+</td>
+<td>
+以 j <span lang="yue-Latn-fonipa">/j/</span>
+</td>
+<td>
+云 w <span lang="yue-Latn-fonipa">/w/</span>
+</td>
+<td>
+日 nj <span lang="yue-Latn-fonipa">/ɲ/</span>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="韻母">韻母</h2>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/aː/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/ɐ/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/ɛː/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/ɔː/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/o/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/œː/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/ɵ/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/iː/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/ɿː/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/uː/</span></th>
+<th style="text-align: left;"><span lang="yue-Latn-fonipa">/yː/</span></th>
+<th style="text-align: left;">特殊</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">家 aa <span lang="yue-Latn-fonipa">/aː/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">遮 e <span lang="yue-Latn-fonipa">/ɛː/</span></td>
+<td style="text-align: left;">科 o <span lang="yue-Latn-fonipa">/ɔː/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">幾 i <span lang="yue-Latn-fonipa">/iː/</span></td>
+<td style="text-align: left;">師 ii <span lang="yue-Latn-fonipa">/ɿː/</span></td>
+<td style="text-align: left;">孤 u <span lang="yue-Latn-fonipa">/uː/</span></td>
+<td style="text-align: left;">諸 yu <span lang="yue-Latn-fonipa">/yː/</span></td>
+<td style="text-align: left;">吾 ∅</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">皆 aai <span lang="yue-Latn-fonipa">/aːj/</span></td>
+<td style="text-align: left;">威 ai <span lang="yue-Latn-fonipa">/ɐj/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">栽 oi <span lang="yue-Latn-fonipa">/ɔːj/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">雖 eoi <span lang="yue-Latn-fonipa">/ɵɥ/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">魁 ui <span lang="yue-Latn-fonipa">/uːj/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">交 aau <span lang="yue-Latn-fonipa">/aːw/</span></td>
+<td style="text-align: left;">修 au <span lang="yue-Latn-fonipa">/ɐw/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">朝 iu <span lang="yue-Latn-fonipa">/iːw/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">緘 aam <span lang="yue-Latn-fonipa">/aːm/</span></td>
+<td style="text-align: left;">金 am <span lang="yue-Latn-fonipa">/ɐm/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">甘 om <span lang="yue-Latn-fonipa">/ɔːm/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">兼 im <span lang="yue-Latn-fonipa">/iːm/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">翻 aan <span lang="yue-Latn-fonipa">/aːn/</span></td>
+<td style="text-align: left;">賓 an <span lang="yue-Latn-fonipa">/ɐn/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">干 on <span lang="yue-Latn-fonipa">/ɔːn/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">津 eon <span lang="yue-Latn-fonipa">/ɵn/</span></td>
+<td style="text-align: left;">先 in <span lang="yue-Latn-fonipa">/iːn/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">官 un <span lang="yue-Latn-fonipa">/uːn/</span></td>
+<td style="text-align: left;">鴛 yun <span lang="yue-Latn-fonipa">/yːn/</span></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">彭 aang <span lang="yue-Latn-fonipa">/aːŋ/</span></td>
+<td style="text-align: left;">登 ang <span lang="yue-Latn-fonipa">/ɐŋ/</span></td>
+<td style="text-align: left;">(石) eng <span lang="yue-Latn-fonipa">/ɛːŋ/</span></td>
+<td style="text-align: left;">剛 ong <span lang="yue-Latn-fonipa">/ɔːŋ/</span></td>
+<td style="text-align: left;">東 ung <span lang="yue-Latn-fonipa">/oŋ/</span></td>
+<td style="text-align: left;">張 oeng <span lang="yue-Latn-fonipa">/œːŋ/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">英 ing <span lang="yue-Latn-fonipa">/iːŋ/</span></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>註：入聲韻與陽聲韻相配。</p>
+<h2 id="聲調">聲調</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">聲調</th>
+<th style="text-align: left;">聲調符號</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">陰平</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">陰上</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">陰去</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">陽平</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">陽上</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">陽去</td>
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">上陰入</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">下陰入</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">陽入</td>
+<td style="text-align: left;">6</td>
+</tr>
+</tbody>
+</table>
+<p>其中，下陰入僅出現於「石」等字。</p>
+<h1 id="對應關係">對應關係</h1>
+<h2 id="聲母-1">聲母</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">聲紐</th>
+<th style="text-align: left;">對應《分韻撮要》聲母</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">幫母</td>
+<td style="text-align: left;">輕脣韻 f _ b</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">滂母</td>
+<td style="text-align: left;">輕脣韻 f _ p</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">並母</td>
+<td style="text-align: left;">輕脣韻 f 平聲 p _ b</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">明母</td>
+<td style="text-align: left;">m</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">端母</td>
+<td style="text-align: left;">d</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">透母</td>
+<td style="text-align: left;">t</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">定母</td>
+<td style="text-align: left;">平聲 t _ d</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">泥母</td>
+<td style="text-align: left;">n</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">來母</td>
+<td style="text-align: left;">l</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">知母</td>
+<td style="text-align: left;">zh</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">徹母</td>
+<td style="text-align: left;">ch</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">澄母</td>
+<td style="text-align: left;">平聲 ch _ zh</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">孃母</td>
+<td style="text-align: left;">n</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">精母</td>
+<td style="text-align: left;">z</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">清母</td>
+<td style="text-align: left;">c</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">從母</td>
+<td style="text-align: left;">平聲 c _ z</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">心母</td>
+<td style="text-align: left;">s</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">邪母</td>
+<td style="text-align: left;">平聲 c _ z</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">莊母 二等</td>
+<td style="text-align: left;">zh</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">初母 二等</td>
+<td style="text-align: left;">ch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">崇母 二等</td>
+<td style="text-align: left;">平聲 ch _ zh</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">生母 二等</td>
+<td style="text-align: left;">sh</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">俟母 二等</td>
+<td style="text-align: left;">平聲 ch _ zh</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">莊母 三等</td>
+<td style="text-align: left;">z</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">初母 三等</td>
+<td style="text-align: left;">c</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">崇母 三等</td>
+<td style="text-align: left;">平聲 c _ z</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">生母 三等</td>
+<td style="text-align: left;">s</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">俟母 三等</td>
+<td style="text-align: left;">平聲 c _ z</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">章母</td>
+<td style="text-align: left;">zh</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">昌母</td>
+<td style="text-align: left;">ch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">常母</td>
+<td style="text-align: left;">sh</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">書母</td>
+<td style="text-align: left;">sh</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">船母</td>
+<td style="text-align: left;">sh</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">日母</td>
+<td style="text-align: left;">nj</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">見母</td>
+<td style="text-align: left;">g</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">溪母</td>
+<td style="text-align: left;">h</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">羣母</td>
+<td style="text-align: left;">平聲 k _ g</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">疑母</td>
+<td style="text-align: left;">細音 nj _ ng</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">曉母</td>
+<td style="text-align: left;">h</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">匣母</td>
+<td style="text-align: left;">合口或模韻（非 yu 前 w _ j）_ h</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">影云以母</td>
+<td style="text-align: left;">三四等（非 yu 前 w _ j）_ ∅</td>
+</tr>
+</tbody>
+</table>
+<p>註：</p>
+<ul>
+<li>輕脣韻：東三、鍾微虞廢文元陽尤凡</li>
+<li>莊組三等平翹音規律不明確</li>
+</ul>
+<h2 id="韻母-1">韻母</h2>
+<table>
+<thead>
+<tr>
+<th>
+攝
+</th>
+<th>
+切韻音系韻母
+</th>
+<th>
+分化條件
+</th>
+<th>
+對應《分韻撮要》韻母
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+通
+</td>
+<td colspan="2">
+東冬鍾韻
+</td>
+<td>
+ung
+</td>
+</tr>
+<tr>
+<td rowspan="3">
+江
+</td>
+<td rowspan="3">
+江韻
+</td>
+<td>
+幫組
+</td>
+<td>
+ong
+</td>
+</tr>
+<tr>
+<td>
+舌齒音
+</td>
+<td>
+oeng
+</td>
+</tr>
+<tr>
+<td>
+牙喉音
+</td>
+<td>
+ong
+</td>
+</tr>
+<tr>
+<td rowspan="4">
+止
+</td>
+<td rowspan="4">
+支脂之微韻
+</td>
+<td>
+幫組
+</td>
+<td>
+i
+</td>
+</tr>
+<tr>
+<td>
+開口
+</td>
+<td>
+i
+</td>
+</tr>
+<tr>
+<td>
+合口 舌齒音
+</td>
+<td>
+eoi
+</td>
+</tr>
+<tr>
+<td>
+合口 牙喉音
+</td>
+<td>
+ai
+</td>
+</tr>
+<tr>
+<td rowspan="5">
+遇
+</td>
+<td rowspan="3">
+魚虞韻
+</td>
+<td>
+幫組
+</td>
+<td>
+u
+</td>
+</tr>
+<tr>
+<td>
+莊組
+</td>
+<td>
+o
+</td>
+</tr>
+<tr>
+<td>
+其餘
+</td>
+<td>
+yu
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+模韻
+</td>
+<td>
+疑母
+</td>
+<td>
+∅
+</td>
+</tr>
+<tr>
+<td>
+其餘
+</td>
+<td>
+u
+</td>
+</tr>
+<tr>
+<td rowspan="19">
+蟹
+</td>
+<td colspan="2">
+齊韻
+</td>
+<td>
+ai
+</td>
+</tr>
+<tr>
+<td rowspan="5">
+祭韻
+</td>
+<td>
+幫組
+</td>
+<td>
+ai
+</td>
+</tr>
+<tr>
+<td>
+開口
+</td>
+<td>
+ai
+</td>
+</tr>
+<tr>
+<td>
+合口 舌齒音
+</td>
+<td>
+eoi
+</td>
+</tr>
+<tr>
+<td>
+合口 以母
+</td>
+<td>
+eoi
+</td>
+</tr>
+<tr>
+<td>
+合口 牙喉音
+</td>
+<td>
+ai
+</td>
+</tr>
+<tr>
+<td rowspan="8">
+泰韻
+</td>
+<td>
+幫組
+</td>
+<td>
+ui
+</td>
+</tr>
+<tr>
+<td>
+開口 端組
+</td>
+<td>
+aai
+</td>
+</tr>
+<tr>
+<td>
+開口 來母
+</td>
+<td>
+aai
+</td>
+</tr>
+<tr>
+<td>
+開口 精組
+</td>
+<td>
+oi
+</td>
+</tr>
+<tr>
+<td>
+開口 牙喉音
+</td>
+<td>
+oi
+</td>
+</tr>
+<tr>
+<td>
+合口 舌齒音
+</td>
+<td>
+eoi
+</td>
+</tr>
+<tr>
+<td>
+合口 疑母
+</td>
+<td>
+oi
+</td>
+</tr>
+<tr>
+<td>
+合口 牙喉音
+</td>
+<td>
+ui
+</td>
+</tr>
+<tr>
+<td colspan="2">
+佳皆夬韻
+</td>
+<td>
+aai
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+灰韻
+</td>
+<td>
+疑母
+</td>
+<td>
+oi
+</td>
+</tr>
+<tr>
+<td>
+其餘
+</td>
+<td>
+ui
+</td>
+</tr>
+<tr>
+<td colspan="2">
+咍韻
+</td>
+<td>
+oi
+</td>
+</tr>
+<tr>
+<td colspan="2">
+廢韻
+</td>
+<td>
+ai
+</td>
+</tr>
+<tr>
+<td rowspan="20">
+臻
+</td>
+<td rowspan="10">
+眞韻
+</td>
+<td>
+幫組
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td>
+開口 來母
+</td>
+<td>
+eon
+</td>
+</tr>
+<tr>
+<td>
+開口 知組
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td>
+開口 精組
+</td>
+<td>
+eon
+</td>
+</tr>
+<tr>
+<td>
+開口 莊組
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td>
+開口 章組
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td>
+開口 日母
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td>
+開口 牙喉音
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td>
+合口 舌齒音
+</td>
+<td>
+eon
+</td>
+</tr>
+<tr>
+<td>
+合口 牙喉音
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td colspan="2">
+臻文欣韻
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td rowspan="3">
+元韻
+</td>
+<td>
+幫組
+</td>
+<td>
+aan
+</td>
+</tr>
+<tr>
+<td>
+開口
+</td>
+<td>
+in
+</td>
+</tr>
+<tr>
+<td>
+合口
+</td>
+<td>
+yun
+</td>
+</tr>
+<tr>
+<td rowspan="5">
+魂韻
+</td>
+<td>
+幫組
+</td>
+<td>
+un
+</td>
+</tr>
+<tr>
+<td>
+端組
+</td>
+<td>
+eon
+</td>
+</tr>
+<tr>
+<td>
+來母
+</td>
+<td>
+eon
+</td>
+</tr>
+<tr>
+<td>
+精組
+</td>
+<td>
+yun
+</td>
+</tr>
+<tr>
+<td>
+牙喉音
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td colspan="2">
+痕韻
+</td>
+<td>
+an
+</td>
+</tr>
+<tr>
+<td rowspan="9">
+山
+</td>
+<td rowspan="5">
+寒韻
+</td>
+<td>
+幫組
+</td>
+<td>
+un
+</td>
+</tr>
+<tr>
+<td>
+開口 舌齒音
+</td>
+<td>
+aan
+</td>
+</tr>
+<tr>
+<td>
+開口 牙喉音
+</td>
+<td>
+on
+</td>
+</tr>
+<tr>
+<td>
+合口 舌齒音
+</td>
+<td>
+yun
+</td>
+</tr>
+<tr>
+<td>
+合口 牙喉音
+</td>
+<td>
+un
+</td>
+</tr>
+<tr>
+<td colspan="2">
+刪山韻
+</td>
+<td>
+aan
+</td>
+</tr>
+<tr>
+<td rowspan="3">
+仙先韻
+</td>
+<td>
+幫組
+</td>
+<td>
+in
+</td>
+</tr>
+<tr>
+<td>
+開口
+</td>
+<td>
+in
+</td>
+</tr>
+<tr>
+<td>
+合口
+</td>
+<td>
+yun
+</td>
+</tr>
+<tr>
+<td rowspan="3">
+效
+</td>
+<td colspan="2">
+蕭宵韻
+</td>
+<td>
+iu
+</td>
+</tr>
+<tr>
+<td colspan="2">
+肴韻
+</td>
+<td>
+aau
+</td>
+</tr>
+<tr>
+<td colspan="2">
+豪韻
+</td>
+<td>
+u
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+果
+</td>
+<td rowspan="2">
+歌韻
+</td>
+<td>
+一等
+</td>
+<td>
+o
+</td>
+</tr>
+<tr>
+<td>
+三等
+</td>
+<td>
+e
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+假
+</td>
+<td rowspan="2">
+麻韻
+</td>
+<td>
+二等
+</td>
+<td>
+aa
+</td>
+</tr>
+<tr>
+<td>
+三等
+</td>
+<td>
+e
+</td>
+</tr>
+<tr>
+<td rowspan="5">
+宕
+</td>
+<td rowspan="4">
+陽韻
+</td>
+<td>
+幫組
+</td>
+<td>
+ong
+</td>
+</tr>
+<tr>
+<td>
+開口 莊組
+</td>
+<td>
+ong
+</td>
+</tr>
+<tr>
+<td>
+開口
+</td>
+<td>
+oeng
+</td>
+</tr>
+<tr>
+<td>
+合口
+</td>
+<td>
+ong
+</td>
+</tr>
+<tr>
+<td colspan="2">
+唐韻
+</td>
+<td>
+ong
+</td>
+</tr>
+<tr>
+<td rowspan="4">
+梗
+</td>
+<td rowspan="2">
+庚韻
+</td>
+<td>
+二等
+</td>
+<td>
+ang
+</td>
+</tr>
+<tr>
+<td>
+三等
+</td>
+<td>
+ing
+</td>
+</tr>
+<tr>
+<td colspan="2">
+耕韻
+</td>
+<td>
+ang
+</td>
+</tr>
+<tr>
+<td colspan="2">
+清青韻
+</td>
+<td>
+ing
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+曾
+</td>
+<td colspan="2">
+蒸韻
+</td>
+<td>
+ing
+</td>
+</tr>
+<tr>
+<td colspan="2">
+登韻
+</td>
+<td>
+ang
+</td>
+</tr>
+<tr>
+<td>
+流
+</td>
+<td colspan="2">
+尤侯幽韻
+</td>
+<td>
+au
+</td>
+</tr>
+<tr>
+<td>
+深
+</td>
+<td colspan="2">
+侵韻
+</td>
+<td>
+am
+</td>
+</tr>
+<tr>
+<td rowspan="7">
+咸
+</td>
+<td rowspan="2">
+覃韻
+</td>
+<td>
+舌齒音
+</td>
+<td>
+aam
+</td>
+</tr>
+<tr>
+<td>
+牙喉音
+</td>
+<td>
+om
+</td>
+</tr>
+<tr>
+<td rowspan="3">
+談韻
+</td>
+<td>
+幫組
+</td>
+<td>
+aam
+</td>
+</tr>
+<tr>
+<td>
+舌齒音
+</td>
+<td>
+aam
+</td>
+</tr>
+<tr>
+<td>
+牙喉音
+</td>
+<td>
+om
+</td>
+</tr>
+<tr>
+<td colspan="2">
+鹽添嚴韻
+</td>
+<td>
+im
+</td>
+</tr>
+<tr>
+<td colspan="2">
+咸銜凡韻
+</td>
+<td>
+aam
+</td>
+</tr>
+</tbody>
+</table>
+<p>註：</p>
+<ul>
+<li>i 在 z/c/s 前為 ii</li>
+<li>m 韻尾在聲母為脣音時為 n</li>
+</ul>
+<h2 id="聲調-1">聲調</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">聲調</th>
+<th style="text-align: left;">聲調符號</th>
+<th style="text-align: left;">對應中古聲調</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">陰平</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">平聲（清）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">陰上</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">上聲（清）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">陰去</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">去聲（清）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">陽平</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">平聲（濁）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">陽上</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">上聲（次濁）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">陽去</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">上聲（全濁）、去聲（濁）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">上陰入</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">入聲（清）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">下陰入</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">（僅出現於「石」等字）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">陽入</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">入聲（濁）</td>
+</tr>
+</tbody>
+</table>
+<h1 id="推導程式">推導程式</h1>
+<p>見 <a href="https://github.com/nk2028/qieyun-examples/blob/main/fanwan.js">qieyun-examples</a>。</p>
+</body>
+</html>
