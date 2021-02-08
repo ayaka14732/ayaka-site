@@ -58,7 +58,7 @@ should be after 我的個人思考用語簡介
 # 友好連結
 
 - [Coelacanthus](https://blog.coelacanthus.moe/){lang=en-HK hreflang=zh-CN}
-- [M E S](https://rain.moimo.me/){lang=en-HK hreflang=zh-CN}
+- [mes ames](https://rain.moimo.me/){lang=en-HK hreflang=zh-CN}
 
 # 授權條款
 
