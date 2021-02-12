@@ -1,5 +1,5 @@
 ---
-title: 中古音與粵語（廣州音）對應關係<x-biteinkou></x-biteinkou>
+title: 粵語（廣州音）與中古音對應關係<x-biteinkou></x-biteinkou>
 lang: zh-HK
 keywords:
 - 音韻學
@@ -10,7 +10,7 @@ keywords:
 - 演化規律
 - 對應關係
 math: |-
-  <meta name="description" content="本文介紹中古音與粵語（廣州音）的對應關係，用於根據古代的注音材料推導生僻字的粵語讀音。"/>
+  <meta name="description" content="本文介紹粵語（廣州音）與中古音的對應關係，用於根據古代的注音材料推導生僻字的粵語讀音。"/>
   <style>
   th{text-align:left;}
   x-biteinkou::after{content:"（未定稿）";}
