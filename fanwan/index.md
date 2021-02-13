@@ -1,5 +1,5 @@
 ---
-title: 《分韻撮要》音系與中古音對應關係<x-biteinkou></x-biteinkou>
+title: 《分韻撮要》音系與中古音對應關係
 lang: zh-HK
 keywords:
 - 音韻學
@@ -11,10 +11,7 @@ keywords:
 - 演化規律
 - 對應關係
 math: |-
-  <style>
-  th{text-align:left;}
-  x-biteinkou::after{content:"（未定稿）";}
-  </style>
+  <style>th{text-align:left;}</style>
 ---
 
 # 目的
@@ -23,53 +20,53 @@ math: |-
 
 # 音系與擬音
 
-本文依照的《分韻撮要》版本為 1782 年的《江湖尺牘分韻撮要合集》，聲母按照韻典網《分韻撮要》聲母系統，擬音參考了羅言發《澳門粵語音系的歷史變遷及其成因》(2013)，並在不影響音系的前提下作了少量修改。
+本文依照的《分韻撮要》版本為 1782 年的《江湖尺牘分韻撮要合集》，聲母與聲調的劃分依照[韻典網](https://ytenx.org/pyonh/)，擬音參考了羅言發《澳門粵語音系的歷史變遷及其成因》(2013)，並在不影響音系的前提下作了少量修改。
 
 ## 聲母
 
 <table>
 <tbody>
 <tr>
-<td>幫 b <span lang="yue-Latn-fonipa">/p/</span></td>
-<td>滂 p <span lang="yue-Latn-fonipa">/pʰ/</span></td>
-<td>非 f <span lang="yue-Latn-fonipa">/f/</span></td>
-<td>明 m <span lang="yue-Latn-fonipa">/m/</span></td>
+<td>幫 b [/p/]{lang=yue-Latn-fonipa}</td>
+<td>滂 p [/pʰ/]{lang=yue-Latn-fonipa}</td>
+<td>非 f [/f/]{lang=yue-Latn-fonipa}</td>
+<td>明 m [/m/]{lang=yue-Latn-fonipa}</td>
 </tr>
 <tr>
-<td>端 d <span lang="yue-Latn-fonipa">/d/</span></td>
-<td>透 t <span lang="yue-Latn-fonipa">/tʰ/</span></td>
-<td>來 l <span lang="yue-Latn-fonipa">/l/</span></td>
-<td>泥 n <span lang="yue-Latn-fonipa">/n/</span></td>
+<td>端 d [/d/]{lang=yue-Latn-fonipa}</td>
+<td>透 t [/tʰ/]{lang=yue-Latn-fonipa}</td>
+<td>來 l [/l/]{lang=yue-Latn-fonipa}</td>
+<td>泥 n [/n/]{lang=yue-Latn-fonipa}</td>
 </tr>
 <tr>
-<td>見 g <span lang="yue-Latn-fonipa">/k/</span></td>
-<td>溪 k <span lang="yue-Latn-fonipa">/kʰ/</span></td>
-<td>曉 h <span lang="yue-Latn-fonipa">/h/</span></td>
-<td>我 ng <span lang="yue-Latn-fonipa">/ŋ/</span></td>
+<td>見 g [/k/]{lang=yue-Latn-fonipa}</td>
+<td>溪 k [/kʰ/]{lang=yue-Latn-fonipa}</td>
+<td>曉 h [/h/]{lang=yue-Latn-fonipa}</td>
+<td>我 ng [/ŋ/]{lang=yue-Latn-fonipa}</td>
 </tr>
 <tr>
-<td>古 gw <span lang="yue-Latn-fonipa">/kʷ/</span></td>
-<td>困 kw <span lang="yue-Latn-fonipa">/kʷʰ/</span></td>
+<td>古 gw [/kʷ/]{lang=yue-Latn-fonipa}</td>
+<td>困 kw [/kʷʰ/]{lang=yue-Latn-fonipa}</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td>精 z <span lang="yue-Latn-fonipa">/ts/</span></td>
-<td>清 c <span lang="yue-Latn-fonipa">/tsʰ/</span></td>
-<td>心 s <span lang="yue-Latn-fonipa">/s/</span></td>
+<td>精 z [/ts/]{lang=yue-Latn-fonipa}</td>
+<td>清 c [/tsʰ/]{lang=yue-Latn-fonipa}</td>
+<td>心 s [/s/]{lang=yue-Latn-fonipa}</td>
 <td></td>
 </tr>
 <tr>
-<td>照 zh <span lang="yue-Latn-fonipa">/tʃ/</span></td>
-<td>穿 ch <span lang="yue-Latn-fonipa">/tʃʰ/</span></td>
-<td>審 sh <span lang="yue-Latn-fonipa">/ʃ/</span></td>
+<td>照 zh [/tʃ/]{lang=yue-Latn-fonipa}</td>
+<td>穿 ch [/tʃʰ/]{lang=yue-Latn-fonipa}</td>
+<td>審 sh [/ʃ/]{lang=yue-Latn-fonipa}</td>
 <td></td>
 </tr>
 <tr>
 <td>亞 &empty;</td>
-<td>以 j <span lang="yue-Latn-fonipa">/j/</span></td>
-<td>云 w <span lang="yue-Latn-fonipa">/w/</span></td>
-<td>日 nj <span lang="yue-Latn-fonipa">/ɲ/</span></td>
+<td>以 j [/j/]{lang=yue-Latn-fonipa}</td>
+<td>云 w [/w/]{lang=yue-Latn-fonipa}</td>
+<td>日 nj [/ɲ/]{lang=yue-Latn-fonipa}</td>
 </tr>
 </tbody>
 </table>
@@ -90,7 +87,7 @@ math: |-
 註：
 
 1. 入聲韻與陽聲韻相配，為節省篇幅，未在表中列出。
-1. 吾韻讀 ng [/ŋ/]{lang=yue-Latn-fonipa}，沒有韻母，未在表中列出。
+1. 吾韻擬音 ng [/ŋ/]{lang=yue-Latn-fonipa}，沒有韻母，未在表中列出。
 1. 有研究認為，跖、尺、石三個小韻為寄入英韻的 ek [/ɛːk/]{lang=yue-Latn-fonipa} 韻母。但由於字少，無論是否考慮該觀點，均不會對歸納對應關係產生影響。
 
 ## 聲調

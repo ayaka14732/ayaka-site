@@ -42,7 +42,7 @@ math: |-
 1. [漢字的單音化現象](guan/)
 1. [日語漢音的重紐對立](tyongdiu/)
 1. [Bantian Railway Station](btq/){lang=en-UK hreflang=en-UK}
-1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿）
+1. [《分韻撮要》音系與中古音對應關係](fanwan/)
 
 <!--
 nomtopyoh is the page for testing the typesetting.
