@@ -49,9 +49,8 @@
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#簡介">簡介</a></li>
-<li><a href="#擬音">擬音</a></li>
-<li><a href="#音系">音系</a>
+<li><a href="#目的">目的</a></li>
+<li><a href="#音系與擬音">音系與擬音</a>
 <ul>
 <li><a href="#聲母">聲母</a></li>
 <li><a href="#韻母">韻母</a></li>
@@ -63,15 +62,13 @@
 <li><a href="#韻母-1">韻母</a></li>
 <li><a href="#聲調-1">聲調</a></li>
 </ul></li>
-<li><a href="#推導程式">推導程式</a></li>
+<li><a href="#程式碼實現">程式碼實現</a></li>
 </ul>
 </nav>
-<h1 id="簡介">簡介</h1>
-<p>《分韻撮要》是記載清初粵語語音的韻書。</p>
-<p>（TODO：添加《分韻撮要》簡介、版本介紹、本文所參照的版本）</p>
-<h1 id="擬音">擬音</h1>
-<p>（TODO：添加擬音的過程）</p>
-<h1 id="音系">音系</h1>
+<h1 id="目的">目的</h1>
+<p>本文得出《分韻撮要》音系與中古音的對應關係，以便與現代粵語與中古音的對應關係對比，從而系統性地把握粵語的演變規律。</p>
+<h1 id="音系與擬音">音系與擬音</h1>
+<p>本文依照的《分韻撮要》版本為 1782 年的《江湖尺牘分韻撮要合集》，聲母按照韻典網《分韻撮要》聲母系統，擬音參考了羅言發《澳門粵語音系的歷史變遷及其成因》(2013)，並在不影響音系的前提下作了少量修改。</p>
 <h2 id="聲母">聲母</h2>
 <table>
 <tbody>
@@ -171,21 +168,21 @@
 </tr>
 </tbody>
 </table>
+<p>註：韻典網所立古、困二母，與諸 yu <span lang="yue-Latn-fonipa">/yː/</span>、鴛 yun <span lang="yue-Latn-fonipa">/yːn/</span> 二韻拼合時，本文分別擬為 g <span lang="yue-Latn-fonipa">/k/</span> 與 k <span lang="yue-Latn-fonipa">/kʰ/</span>。由於諸、鴛二韻不與見、溪二母相拼，這樣做在音系上是等價的。</p>
 <h2 id="韻母">韻母</h2>
 <table>
 <colgroup>
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -200,7 +197,6 @@
 <th style="text-align: left;"><span lang="yue-Latn-fonipa">/ɿː/</span></th>
 <th style="text-align: left;"><span lang="yue-Latn-fonipa">/uː/</span></th>
 <th style="text-align: left;"><span lang="yue-Latn-fonipa">/yː/</span></th>
-<th style="text-align: left;">特殊</th>
 </tr>
 </thead>
 <tbody>
@@ -216,7 +212,6 @@
 <td style="text-align: left;">師 ii <span lang="yue-Latn-fonipa">/ɿː/</span></td>
 <td style="text-align: left;">孤 u <span lang="yue-Latn-fonipa">/uː/</span></td>
 <td style="text-align: left;">諸 yu <span lang="yue-Latn-fonipa">/yː/</span></td>
-<td style="text-align: left;">吾 ∅</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">皆 aai <span lang="yue-Latn-fonipa">/aːj/</span></td>
@@ -230,7 +225,6 @@
 <td style="text-align: left;"></td>
 <td style="text-align: left;">魁 ui <span lang="yue-Latn-fonipa">/uːj/</span></td>
 <td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">交 aau <span lang="yue-Latn-fonipa">/aːw/</span></td>
@@ -241,7 +235,6 @@
 <td style="text-align: left;"></td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">朝 iu <span lang="yue-Latn-fonipa">/iːw/</span></td>
-<td style="text-align: left;"></td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"></td>
@@ -258,7 +251,6 @@
 <td style="text-align: left;"></td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">翻 aan <span lang="yue-Latn-fonipa">/aːn/</span></td>
@@ -272,7 +264,6 @@
 <td style="text-align: left;"></td>
 <td style="text-align: left;">官 un <span lang="yue-Latn-fonipa">/uːn/</span></td>
 <td style="text-align: left;">鴛 yun <span lang="yue-Latn-fonipa">/yːn/</span></td>
-<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">彭 aang <span lang="yue-Latn-fonipa">/aːŋ/</span></td>
@@ -286,11 +277,15 @@
 <td style="text-align: left;"></td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
-<p>註：入聲韻與陽聲韻相配。</p>
+<p>註：</p>
+<ol type="1">
+<li>入聲韻與陽聲韻相配，為節省篇幅，未在表中列出。</li>
+<li>吾韻讀 ng <span lang="yue-Latn-fonipa">/ŋ/</span>，沒有韻母，未在表中列出。</li>
+<li>有研究認為，跖、尺、石三個小韻為寄入英韻的 ek <span lang="yue-Latn-fonipa">/ɛːk/</span> 韻母。但由於字少，無論是否考慮該觀點，均不會對歸納對應關係產生影響。</li>
+</ol>
 <h2 id="聲調">聲調</h2>
 <table>
 <thead>
@@ -325,41 +320,37 @@
 <td style="text-align: left;">6</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">上陰入</td>
+<td style="text-align: left;">陰入</td>
 <td style="text-align: left;">1</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">下陰入</td>
-<td style="text-align: left;">3</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">陽入</td>
 <td style="text-align: left;">6</td>
 </tr>
 </tbody>
 </table>
-<p>其中，下陰入僅出現於「石」等字。</p>
+<p>註：此處將陰入一律設為 1，不影響對應關係的歸納。</p>
 <h1 id="對應關係">對應關係</h1>
 <h2 id="聲母-1">聲母</h2>
 <table>
 <thead>
 <tr class="header">
 <th style="text-align: left;">聲紐</th>
-<th style="text-align: left;">對應《分韻撮要》聲母</th>
+<th style="text-align: left;">對應聲母</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">幫母</td>
-<td style="text-align: left;">輕脣韻 f _ b</td>
+<td style="text-align: left;">輕脣韻 f 其餘 b</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">滂母</td>
-<td style="text-align: left;">輕脣韻 f _ p</td>
+<td style="text-align: left;">輕脣韻 f 其餘 p</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">並母</td>
-<td style="text-align: left;">輕脣韻 f 平聲 p _ b</td>
+<td style="text-align: left;">輕脣韻 f 平聲 p 其餘 b</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">明母</td>
@@ -375,7 +366,7 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">定母</td>
-<td style="text-align: left;">平聲 t _ d</td>
+<td style="text-align: left;">平聲 t 其餘 d</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">泥母</td>
@@ -395,7 +386,7 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;">澄母</td>
-<td style="text-align: left;">平聲 ch _ zh</td>
+<td style="text-align: left;">平聲 ch 其餘 zh</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">孃母</td>
@@ -411,7 +402,7 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;">從母</td>
-<td style="text-align: left;">平聲 c _ z</td>
+<td style="text-align: left;">平聲 c 其餘 z</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">心母</td>
@@ -419,7 +410,7 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;">邪母</td>
-<td style="text-align: left;">平聲 c _ z</td>
+<td style="text-align: left;">平聲 c 其餘 z</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">莊母 二等</td>
@@ -431,7 +422,7 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">崇母 二等</td>
-<td style="text-align: left;">平聲 ch _ zh</td>
+<td style="text-align: left;">平聲 ch 其餘 zh</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">生母 二等</td>
@@ -439,7 +430,7 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">俟母 二等</td>
-<td style="text-align: left;">平聲 ch _ zh</td>
+<td style="text-align: left;">平聲 ch 其餘 zh</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">莊母 三等</td>
@@ -451,7 +442,7 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;">崇母 三等</td>
-<td style="text-align: left;">平聲 c _ z</td>
+<td style="text-align: left;">平聲 c 其餘 z</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">生母 三等</td>
@@ -459,7 +450,7 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;">俟母 三等</td>
-<td style="text-align: left;">平聲 c _ z</td>
+<td style="text-align: left;">平聲 c 其餘 z</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">章母</td>
@@ -495,11 +486,11 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">羣母</td>
-<td style="text-align: left;">平聲 k _ g</td>
+<td style="text-align: left;">平聲 k 其餘 g</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">疑母</td>
-<td style="text-align: left;">細音 nj _ ng</td>
+<td style="text-align: left;">細音 nj 其餘 ng</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">曉母</td>
@@ -507,19 +498,15 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;">匣母</td>
-<td style="text-align: left;">合口或模韻（非 yu 前 w _ j）_ h</td>
+<td style="text-align: left;">合口或模韻（非 yu 前 w 其餘 j）其餘 h</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">影云以母</td>
-<td style="text-align: left;">三四等（非 yu 前 w _ j）_ ∅</td>
+<td style="text-align: left;">三四等（非 yu 前 w 其餘 j）其餘 ∅</td>
 </tr>
 </tbody>
 </table>
-<p>註：</p>
-<ul>
-<li>輕脣韻：東三、鍾微虞廢文元陽尤凡</li>
-<li>莊組三等平翹音規律不明確</li>
-</ul>
+<p>註：莊組三等的平翹音對應關係不明確。</p>
 <h2 id="韻母-1">韻母</h2>
 <table>
 <thead>
@@ -533,8 +520,8 @@
 <th>
 分化條件
 </th>
-<th>
-對應《分韻撮要》韻母
+<th style="white-space: nowrap;">
+對應韻母
 </th>
 <th>
 例字
@@ -635,7 +622,7 @@ i
 開口
 </td>
 <td>
-i
+i（z/c/s 前為 ii）
 </td>
 <td>
 是 shi6 以 ji5 地 di6 時 shi4
@@ -1319,7 +1306,6 @@ un
 半 bun3 滿 mun5 判 pun3 末 mut6
 </td>
 <td>
-饅 man4/mun4
 </td>
 </tr>
 <tr>
@@ -1429,7 +1415,7 @@ in
 yun
 </td>
 <td>
-全 cyun4 員 jyun4 決 kwyut1 權 kwyun4
+全 cyun4 員 jyun4 決 kyut1 權 kyun4
 </td>
 <td>
 拴 syun4/shaan1 雋 zeon3
@@ -1736,7 +1722,7 @@ au
 侵韻
 </td>
 <td>
-am
+am（脣音為 -n，下同）
 </td>
 <td>
 十 shap6 心 sam1 立 lap6 入 njap6
@@ -1852,11 +1838,6 @@ aam
 </tr>
 </tbody>
 </table>
-<p>註：</p>
-<ul>
-<li>i 在 z/c/s 前為 ii</li>
-<li>m 韻尾在聲母為脣音時為 n</li>
-</ul>
 <h2 id="聲調-1">聲調</h2>
 <table>
 <thead>
@@ -1898,23 +1879,18 @@ aam
 <td style="text-align: left;">上聲（全濁）、去聲（濁）</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">上陰入</td>
+<td style="text-align: left;">陰入</td>
 <td style="text-align: left;">1</td>
 <td style="text-align: left;">入聲（清）</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">下陰入</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">（僅出現於「石」等字）</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">陽入</td>
 <td style="text-align: left;">6</td>
 <td style="text-align: left;">入聲（濁）</td>
 </tr>
 </tbody>
 </table>
-<h1 id="推導程式">推導程式</h1>
+<h1 id="程式碼實現">程式碼實現</h1>
 <p>見 <a href="https://github.com/nk2028/qieyun-examples/blob/main/fanwan.js">qieyun-examples</a>。</p>
 </body>
 </html>
