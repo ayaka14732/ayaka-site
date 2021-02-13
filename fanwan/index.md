@@ -17,17 +17,13 @@ math: |-
   </style>
 ---
 
-# 簡介
+# 目的
 
-《分韻撮要》是記載清初粵語語音的韻書。
+本文得出《分韻撮要》音系與中古音的對應關係，以便與現代粵語與中古音的對應關係對比，從而系統性地把握粵語的演變規律。
 
-（TODO：添加《分韻撮要》簡介、版本介紹、本文所參照的版本）
+# 音系與擬音
 
-# 擬音
-
-（TODO：添加擬音的過程）
-
-# 音系
+本文依照的《分韻撮要》版本為 1782 年的《江湖尺牘分韻撮要合集》，聲母按照韻典網《分韻撮要》聲母系統，擬音參考了羅言發《澳門粵語音系的歷史變遷及其成因》(2013)，並在不影響音系的前提下作了少量修改。
 
 ## 聲母
 
@@ -78,18 +74,24 @@ math: |-
 </tbody>
 </table>
 
+註：韻典網所立古、困二母，與諸 yu [/yː/]{lang=yue-Latn-fonipa}、鴛 yun [/yːn/]{lang=yue-Latn-fonipa} 二韻拼合時，本文分別擬為 g [/k/]{lang=yue-Latn-fonipa} 與 k [/kʰ/]{lang=yue-Latn-fonipa}。由於諸、鴛二韻不與見、溪二母相拼，這樣做在音系上是等價的。
+
 ## 韻母
 
-| [/aː/]{lang=yue-Latn-fonipa} | [/ɐ/]{lang=yue-Latn-fonipa} | [/ɛː/]{lang=yue-Latn-fonipa} | [/ɔː/]{lang=yue-Latn-fonipa} | [/o/]{lang=yue-Latn-fonipa} | [/œː/]{lang=yue-Latn-fonipa} | [/ɵ/]{lang=yue-Latn-fonipa} | [/iː/]{lang=yue-Latn-fonipa} | [/ɿː/]{lang=yue-Latn-fonipa} | [/uː/]{lang=yue-Latn-fonipa} | [/yː/]{lang=yue-Latn-fonipa} | 特殊 |
-| :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- |
-| 家 aa [/aː/]{lang=yue-Latn-fonipa} | | 遮 e [/ɛː/]{lang=yue-Latn-fonipa} | 科 o [/ɔː/]{lang=yue-Latn-fonipa} | | | | 幾 i [/iː/]{lang=yue-Latn-fonipa} | 師 ii [/ɿː/]{lang=yue-Latn-fonipa} | 孤 u [/uː/]{lang=yue-Latn-fonipa} | 諸 yu [/yː/]{lang=yue-Latn-fonipa} | 吾 &empty; |
+| [/aː/]{lang=yue-Latn-fonipa} | [/ɐ/]{lang=yue-Latn-fonipa} | [/ɛː/]{lang=yue-Latn-fonipa} | [/ɔː/]{lang=yue-Latn-fonipa} | [/o/]{lang=yue-Latn-fonipa} | [/œː/]{lang=yue-Latn-fonipa} | [/ɵ/]{lang=yue-Latn-fonipa} | [/iː/]{lang=yue-Latn-fonipa} | [/ɿː/]{lang=yue-Latn-fonipa} | [/uː/]{lang=yue-Latn-fonipa} | [/yː/]{lang=yue-Latn-fonipa} |
+| :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- |
+| 家 aa [/aː/]{lang=yue-Latn-fonipa} | | 遮 e [/ɛː/]{lang=yue-Latn-fonipa} | 科 o [/ɔː/]{lang=yue-Latn-fonipa} | | | | 幾 i [/iː/]{lang=yue-Latn-fonipa} | 師 ii [/ɿː/]{lang=yue-Latn-fonipa} | 孤 u [/uː/]{lang=yue-Latn-fonipa} | 諸 yu [/yː/]{lang=yue-Latn-fonipa} |
 | 皆 aai [/aːj/]{lang=yue-Latn-fonipa} | 威 ai [/ɐj/]{lang=yue-Latn-fonipa} | | 栽 oi [/ɔːj/]{lang=yue-Latn-fonipa} | | | 雖 eoi [/ɵɥ/]{lang=yue-Latn-fonipa} | | | 魁 ui [/uːj/]{lang=yue-Latn-fonipa} |
-| 交 aau [/aːw/]{lang=yue-Latn-fonipa} | 修 au [/ɐw/]{lang=yue-Latn-fonipa} | | | | | | 朝 iu [/iːw/]{lang=yue-Latn-fonipa} | |
-| 緘 aam [/aːm/]{lang=yue-Latn-fonipa} | 金 am [/ɐm/]{lang=yue-Latn-fonipa} | | 甘 om [/ɔːm/]{lang=yue-Latn-fonipa} | | | | 兼 im [/iːm/]{lang=yue-Latn-fonipa} | |
+| 交 aau [/aːw/]{lang=yue-Latn-fonipa} | 修 au [/ɐw/]{lang=yue-Latn-fonipa} | | | | | | 朝 iu [/iːw/]{lang=yue-Latn-fonipa} |
+| 緘 aam [/aːm/]{lang=yue-Latn-fonipa} | 金 am [/ɐm/]{lang=yue-Latn-fonipa} | | 甘 om [/ɔːm/]{lang=yue-Latn-fonipa} | | | | 兼 im [/iːm/]{lang=yue-Latn-fonipa} |
 | 翻 aan [/aːn/]{lang=yue-Latn-fonipa} | 賓 an [/ɐn/]{lang=yue-Latn-fonipa} | | 干 on [/ɔːn/]{lang=yue-Latn-fonipa} | | | 津 eon [/ɵn/]{lang=yue-Latn-fonipa} | 先 in [/iːn/]{lang=yue-Latn-fonipa} | | 官 un [/uːn/]{lang=yue-Latn-fonipa} | 鴛 yun [/yːn/]{lang=yue-Latn-fonipa} |
-| 彭 aang [/aːŋ/]{lang=yue-Latn-fonipa} | 登 ang [/ɐŋ/]{lang=yue-Latn-fonipa} | (石) eng [/ɛːŋ/]{lang=yue-Latn-fonipa} | 剛 ong [/ɔːŋ/]{lang=yue-Latn-fonipa} | 東 ung [/oŋ/]{lang=yue-Latn-fonipa} | 張 oeng [/œːŋ/]{lang=yue-Latn-fonipa} | | 英 ing [/iːŋ/]{lang=yue-Latn-fonipa} | | |
+| 彭 aang [/aːŋ/]{lang=yue-Latn-fonipa} | 登 ang [/ɐŋ/]{lang=yue-Latn-fonipa} | (石) eng [/ɛːŋ/]{lang=yue-Latn-fonipa} | 剛 ong [/ɔːŋ/]{lang=yue-Latn-fonipa} | 東 ung [/oŋ/]{lang=yue-Latn-fonipa} | 張 oeng [/œːŋ/]{lang=yue-Latn-fonipa} | | 英 ing [/iːŋ/]{lang=yue-Latn-fonipa} | |
 
-註：入聲韻與陽聲韻相配。
+註：
+
+1. 入聲韻與陽聲韻相配，為節省篇幅，未在表中列出。
+1. 吾韻讀 ng [/ŋ/]{lang=yue-Latn-fonipa}，沒有韻母，未在表中列出。
+1. 有研究認為，跖、尺、石三個小韻為寄入英韻的 ek [/ɛːk/]{lang=yue-Latn-fonipa} 韻母。但由於字少，無論是否考慮該觀點，均不會對歸納對應關係產生影響。
 
 ## 聲調
 
@@ -101,46 +103,45 @@ math: |-
 | 陽平 | 4 |
 | 陽上 | 5 |
 | 陽去 | 6 |
-| 上陰入 | 1 |
-| 下陰入 | 3 |
+| 陰入 | 1 |
 | 陽入 | 6 |
 
-其中，下陰入僅出現於「石」等字。
+註：此處將陰入一律設為 1，不影響對應關係的歸納。
 
 # 對應關係
 
 ## 聲母
 
-聲紐 | 對應《分韻撮要》聲母
+聲紐 | 對應聲母
 :- | :-
-幫母 | 輕脣韻 f _ b
-滂母 | 輕脣韻 f _ p
-並母 | 輕脣韻 f 平聲 p _ b
+幫母 | 輕脣韻 f 其餘 b
+滂母 | 輕脣韻 f 其餘 p
+並母 | 輕脣韻 f 平聲 p 其餘 b
 明母 | m
 端母 | d
 透母 | t
-定母 | 平聲 t _ d
+定母 | 平聲 t 其餘 d
 泥母 | n
 來母 | l
 知母 | zh
 徹母 | ch
-澄母 | 平聲 ch _ zh
+澄母 | 平聲 ch 其餘 zh
 孃母 | n
 精母 | z
 清母 | c
-從母 | 平聲 c _ z
+從母 | 平聲 c 其餘 z
 心母 | s
-邪母 | 平聲 c _ z
+邪母 | 平聲 c 其餘 z
 莊母 二等 | zh
 初母 二等 | ch
-崇母 二等 | 平聲 ch _ zh
+崇母 二等 | 平聲 ch 其餘 zh
 生母 二等 | sh
-俟母 二等 | 平聲 ch _ zh
+俟母 二等 | 平聲 ch 其餘 zh
 莊母 三等 | z
 初母 三等 | c
-崇母 三等 | 平聲 c _ z
+崇母 三等 | 平聲 c 其餘 z
 生母 三等 | s
-俟母 三等 | 平聲 c _ z
+俟母 三等 | 平聲 c 其餘 z
 章母 | zh
 昌母 | ch
 常母 | sh
@@ -149,22 +150,19 @@ math: |-
 日母 | nj
 見母 | g
 溪母 | h
-羣母 | 平聲 k _ g
-疑母 | 細音 nj _ ng 
+羣母 | 平聲 k 其餘 g
+疑母 | 細音 nj 其餘 ng 
 曉母 | h
-匣母 | 合口或模韻（非 yu 前 w _ j）_ h
-影云以母 | 三四等（非 yu 前 w _ j）_ &empty;
+匣母 | 合口或模韻（非 yu 前 w 其餘 j）其餘 h
+影云以母 | 三四等（非 yu 前 w 其餘 j）其餘 &empty;
 
-註：
-
-- 輕脣韻：東三、鍾微虞廢文元陽尤凡
-- 莊組三等平翹音規律不明確
+註：莊組三等的平翹音對應關係不明確。
 
 ## 韻母
 
 <table>
 <thead>
-<tr><th>攝</th><th style="white-space: nowrap;">切韻音系韻母</th><th>分化條件</th><th>對應《分韻撮要》韻母</th><th>例字</th><th>例外字</th></tr>
+<tr><th>攝</th><th style="white-space: nowrap;">切韻音系韻母</th><th>分化條件</th><th style="white-space: nowrap;">對應韻母</th><th>例字</th><th>例外字</th></tr>
 </thead>
 <tbody>
 <tr><td>通</td><td colspan="2">東冬鍾韻</td><td>ung</td><td>中 zhung1/zhung3 用 jung6 動 dung6 同 tung4</td><td>疼 tang4</td></tr>
@@ -172,7 +170,7 @@ math: |-
 <tr><td>舌齒音</td><td>oeng</td><td>雙 shoeng1 捉 zhoek1 卓 choek1 琢 doek1</td><td>撞 zhong6 濁 zhuk6 樁 zhong1 朔 shok1/su3 濯 zhok6 擢 zhaak6 犖 lok1</td></tr>
 <tr><td>牙喉音</td><td>ong</td><td>學 hok6 角 gok1 確 kok1 江 gong1</td><td>握 ak1 渥 ak1</td></tr>
 <tr><td rowspan="4">止</td><td rowspan="4">支脂之微韻</td><td>幫組</td><td>i</td><td>比 bi2/bi6 被 pi1/pi5/bi6 美 mi5 非 fi1</td><td>沸 fai3</td></tr>
-<tr><td>開口</td><td>i</td><td>是 shi6 以 ji5 地 di6 時 shi4</td><td>使 shai2/sii2/sii3 裏 lyu5 值 zhai6/zhik6 篩 shai1 仔 zai2/zii2 毅 ngai6 徙 saai2 豈 hi2/hoi2 蟻 ngai5 舐 shaai5 璽 saai2 艤 ngai5</td></tr>
+<tr><td>開口</td><td>i（z/c/s 前為 ii）</td><td>是 shi6 以 ji5 地 di6 時 shi4</td><td>使 shai2/sii2/sii3 裏 lyu5 值 zhai6/zhik6 篩 shai1 仔 zai2/zii2 毅 ngai6 徙 saai2 豈 hi2/hoi2 蟻 ngai5 舐 shaai5 璽 saai2 艤 ngai5</td></tr>
 <tr><td>合口 舌齒音</td><td>eoi</td><td>水 sheoi2 類 leoi6 隨 ceoi4 雖 seoi1</td><td>纍 lui4 諉 wai2 羸 lui4 荽 sai1 懟 dui6 痿 wai2</td></tr>
 <tr><td>合口 牙喉音</td><td>ai</td><td>位 wai6 規 kwai1 委 wai2 維 wai4</td><td>彙 leoi5 洧 kwui2 虺 wai2/fui1 鮪 kwui2</td></tr>
 <tr><td rowspan="5">遇</td><td rowspan="3">魚虞韻</td><td>幫組</td><td>u</td><td>無 mu4/mu5 務 mu6 府 fu2 武 mu5</td><td></td></tr>
@@ -219,7 +217,7 @@ math: |-
 <tr><td>精組</td><td>yun</td><td>存 cyun4 村 cyun1 損 syun2 寸 cyun3</td><td>孫 syun1/seon3 尊 zyun1/zeon1 遜 seon3 樽 zyun2/zeon1</td></tr>
 <tr><td>牙喉音</td><td>an</td><td>溫 wan1 混 wan6 穩 wan2 困 kwan3</td><td></td></tr>
 <tr><td colspan="2">痕韻</td><td>an</td><td>根 gan1 跟 gan1 恩 jan1 恨 han6</td><td></td></tr>
-<tr><td rowspan="9">山</td><td rowspan="5">寒韻</td><td>幫組</td><td>un</td><td>半 bun3 滿 mun5 判 pun3 末 mut6</td><td>饅 man4/mun4</td></tr>
+<tr><td rowspan="9">山</td><td rowspan="5">寒韻</td><td>幫組</td><td>un</td><td>半 bun3 滿 mun5 判 pun3 末 mut6</td><td></td></tr>
 <tr><td>開口 舌齒音</td><td>aan</td><td>但 daan6 達 daat6 難 naan4/naan6 散 saan2/saan3</td><td></td></tr>
 <tr><td>開口 牙喉音</td><td>on</td><td>看 hon1/hon3 幹 gon3 安 on1 按 on3</td><td>奸 gaan1 遏 aat1</td></tr>
 <tr><td>合口 舌齒音</td><td>yun</td><td>段 dyun6 算 syun3 斷 dyun3/dyun6 團 tyun4</td><td></td></tr>
@@ -227,7 +225,7 @@ math: |-
 <tr><td colspan="2">刪山韻</td><td>aan</td><td>產 chaan2 關 gwaan1 山 shaan1 八 baat1</td><td>串 chyun3 帕 paa3 瞎 hat6</td></tr>
 <tr><td rowspan="3">仙先韻</td><td>幫組</td><td>in</td><td>面 min6 變 bin3 邊 bin1 別 bit6</td><td>駢 ping4 胼 ping4</td></tr>
 <tr><td>開口</td><td>in</td><td>年 nin4 電 din6 現 jin6 然 njin4</td><td>這 zhe3 捏 nip6 桔 gat1 涅 nip6 蚕 caam4 輦 lim6</td></tr>
-<tr><td>合口</td><td>yun</td><td>全 cyun4 員 jyun4 決 kwyut1 權 kwyun4</td><td>拴 syun4/shaan1 雋 zeon3</td></tr>
+<tr><td>合口</td><td>yun</td><td>全 cyun4 員 jyun4 決 kyut1 權 kyun4</td><td>拴 syun4/shaan1 雋 zeon3</td></tr>
 <tr><td rowspan="3">效</td><td colspan="2">蕭宵韻</td><td>iu</td><td>了 liu5 要 jiu1/jiu3 小 siu2 表 biu2</td><td>饒 njiu4/naau4 哨 shaau3 皎 gaau2</td></tr>
 <tr><td colspan="2">肴韻</td><td>aau</td><td>交 gaau1 教 gaau1/gaau3 效 haau6 包 baau1</td><td></td></tr>
 <tr><td colspan="2">豪韻</td><td>u</td><td>到 du3 高 gu1 好 hu2/hu3 道 du6</td><td>考 haau2 栲 haau2</td></tr>
@@ -247,7 +245,7 @@ math: |-
 <tr><td rowspan="2">曾</td><td colspan="2">蒸韻</td><td>ing</td><td>力 lik6 應 jing1/jing3 直 zhik6 式 shik1</td><td>測 chak1 域 waak6 側 chak1 憑 pang4 孕 jan6 惻 chak1 閾 waak6 仄 zhak1 愎 fuk1</td></tr>
 <tr><td colspan="2">登韻</td><td>ang</td><td>能 nang4 得 dak1 等 dang2 特 dak6</td><td>國 gwok1 或 waak6 惑 waak6 楞 ling4 蔔 baak6</td></tr>
 <tr><td>流</td><td colspan="2">尤侯幽韻</td><td>au</td><td>有 jau5 就 zau6 後 hau6 由 jau4</td><td>負 fu6 富 fu3 母 mu5 矛 maau4 婦 fu5 姆 mu5 戊 mu6 漱 sau3/cuk1</td></tr>
-<tr><td>深</td><td colspan="2">侵韻</td><td>am</td><td>十 shap6 心 sam1 立 lap6 入 njap6</td><td>闖 chong2 稟 lam2 揖 jap1/zip1 蕈 din6 蟄 zhat6</td></tr>
+<tr><td>深</td><td colspan="2">侵韻</td><td>am（脣音為 -n，下同）</td><td>十 shap6 心 sam1 立 lap6 入 njap6</td><td>闖 chong2 稟 lam2 揖 jap1/zip1 蕈 din6 蟄 zhat6</td></tr>
 <tr><td rowspan="7">咸</td><td rowspan="2">覃韻</td><td>舌齒音</td><td>aam</td><td>南 naam4 答 daap1 探 taam3 納 naap6</td><td>拉 lap1 雜 zap6/zaap6 覃 cam4/taam4</td></tr>
 <tr><td>牙喉音</td><td>om</td><td>合 gop1/hop6 感 gom2 含 hom4 暗 om3</td><td>涵 haam4 菡 haam2</td></tr>
 <tr><td rowspan="3">談韻</td><td>幫組</td><td>aam</td><td></td><td></td></tr>
@@ -257,11 +255,6 @@ math: |-
 <tr><td colspan="2">咸銜凡韻</td><td>aam</td><td>法 faat1 減 gaam2 犯 faan6 範 faan6</td><td>壓 aat1 站 zhaan6 恰 hap1 凹 aau3 摻 cim1/caam2 蘸 ziu3/zhaam3 黯 om2</td></tr>
 </tbody>
 </table>
-
-註：
-
-- i 在 z/c/s 前為 ii
-- m 韻尾在聲母為脣音時為 n
 
 ## 聲調
 
@@ -273,10 +266,9 @@ math: |-
 | 陽平 | 4 | 平聲（濁） |
 | 陽上 | 5 | 上聲（次濁） |
 | 陽去 | 6 | 上聲（全濁）、去聲（濁） |
-| 上陰入 | 1 | 入聲（清） |
-| 下陰入 | 3 | （僅出現於「石」等字） |
+| 陰入 | 1 | 入聲（清） |
 | 陽入 | 6 | 入聲（濁） |
 
-# 推導程式
+# 程式碼實現
 
 見 [qieyun-examples](https://github.com/nk2028/qieyun-examples/blob/main/fanwan.js)。
