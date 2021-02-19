@@ -45,7 +45,7 @@ math: |-
   </style>
 ---
 
-> The main reference of this article is [User:Amisiara/希顶语](https://yuyan.fandom.com/zh/wiki/User:Amisiara/%E5%B8%8C%E9%A1%B6%E8%AF%AD){lang=zh-CN}.
+> The reference of this article is [User:Amisiara/希顶语](https://yuyan.fandom.com/zh/wiki/User:Amisiara/%E5%B8%8C%E9%A1%B6%E8%AF%AD){lang=zh-CN}.
 
 The Shidinn language (Shidinn: [xdi8 aho]{lang=art-x-xdi8}, IPA: [/ɕitjẽɪ̃ axo/]{lang=art-Latn-fonipa-x-xdi8}) is an artificial language based on Chinese, widely used in songs, prose and other artistic creations.
 
