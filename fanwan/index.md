@@ -15,6 +15,8 @@ math: |-
   <style>th{text-align:left;}</style>
 ---
 
+> 同時發佈於知乎：[《分韻撮要》音系與中古音對應關係 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/350603210)
+
 # 目的
 
 本文得出《分韻撮要》音系與中古音的對應關係，以便與現代粵語與中古音的對應關係對比，從而系統性地把握粵語的演變規律。
@@ -34,7 +36,7 @@ math: |-
 <td>明 m [/m/]{lang=yue-Latn-fonipa}</td>
 </tr>
 <tr>
-<td>端 d [/d/]{lang=yue-Latn-fonipa}</td>
+<td>端 d [/t/]{lang=yue-Latn-fonipa}</td>
 <td>透 t [/tʰ/]{lang=yue-Latn-fonipa}</td>
 <td>來 l [/l/]{lang=yue-Latn-fonipa}</td>
 <td>泥 n [/n/]{lang=yue-Latn-fonipa}</td>
@@ -89,7 +91,7 @@ math: |-
 
 1. 入聲韻與陽聲韻相配，為節省篇幅，未在表中列出。
 1. 吾韻擬音 ng [/ŋ/]{lang=yue-Latn-fonipa}，無韻母，未在表中列出。
-1. 有研究認為，跖、尺、石三個小韻為寄入英韻的 ek [/ɛːk/]{lang=yue-Latn-fonipa} 韻母。但由於字少，無論是否考慮該觀點，均不會對歸納對應關係產生影響。
+1. 有研究認為，跖、尺、石三個小韻為寄入英韻的 ek [/ɛːk/]{lang=yue-Latn-fonipa} 韻母。但由於字少，無論是否考慮，均不會對歸納對應關係產生影響。
 
 ## 聲調
 
@@ -156,7 +158,11 @@ math: |-
 | 匣母 | 合口或模韻（非 yu 前 w 其餘 j）其餘 h |
 | 影云以母 | 三四等（非 yu 前 w 其餘 j）其餘 &empty; |
 
-註：莊組三等的平翹音對應關係不明確。
+註：
+
+1. 莊組三等的平翹音對應關係不明確。
+1. 粵語全濁清化的規律是「平上送，去入不送」，但此處只針對文讀音，全濁上聲變去聲，因此按照「平送仄不送」處理。
+1. 牙喉音合口字的變化詳見下文。
 
 ## 韻母
 
