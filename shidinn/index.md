@@ -1,6 +1,6 @@
 ---
 title: The Shidinn Language
-lang: en-UK
+lang: en-GB
 math: |-
   <style>
   @font-face {
