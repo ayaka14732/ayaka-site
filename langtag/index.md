@@ -138,7 +138,7 @@ math: |-
 
 这是因为土耳其文有带点与不带点两种 i 字母，带点的小写 i 对应的是带点的大写 İ。
 
-# `lang="en-UK"` 与 `lang="en-US"` 的差异
+# `lang="en-GB"` 与 `lang="en-US"` 的差异
 
 ```html
 <textarea lang="en-GB">center centre</textarea>
