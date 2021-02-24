@@ -60,6 +60,7 @@ should be after 我的個人思考用語簡介
 
 - [Coelacanthus](https://blog.coelacanthus.moe/){lang=en-HK hreflang=zh-CN}
 - [mes ames](https://rain.moimo.me/){lang=en-HK hreflang=zh-CN}
+- [茨月](https://zcy.moe/){hreflang=zh-CN}
 
 # 授權條款
 
