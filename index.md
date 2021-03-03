@@ -56,7 +56,7 @@ should be after 方言生僻字讀音的推導問題
 should be after 我的個人思考用語簡介
 -->
 
-# 友好連結
+# 好友
 
 - [Coelacanthus](https://blog.coelacanthus.moe/){lang=en-HK hreflang=zh-CN}
 - [mes ames](https://rain.moimo.me/){lang=en-HK hreflang=zh-CN}
