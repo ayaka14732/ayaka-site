@@ -18,9 +18,11 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@de1d7f3/csslib/serif.css" />
   <style>
+  .hidden { display: none; }
   #TOC { display: none; }
-  body > h1 { font-size: 1.17em; } /* same as h3 */
-  .icon > img { width: 1em; }
+  #title-block-header > h1 { margin-bottom: 0; }
+  nav + p { padding-bottom: 0.2em; }
+  body h1 { font-size: 1.17em; } /* the same as h3 */
   li > a, li > a:hover { border-bottom: none; }
   </style>
   <script>
@@ -54,21 +56,18 @@
 <nav id="TOC" role="doc-toc">
 <ul>
 <li><a href="#文章">文章</a></li>
+<li><a href="#隨筆">隨筆</a></li>
 <li><a href="#好友">好友</a></li>
-<li><a href="#授權條款">授權條款</a></li>
 </ul>
 </nav>
-<p><span lang="en-HK">MtX~F</span> - <a href="about/" lang="en-HK" hreflang="zh-HK">About</a></p>
-<p><a href="https://space.bilibili.com/6769569" class="icon"><img src="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/bilibili-tv.svg" alt="bilibili" /></a> <a href="https://twitter.com/ayaka14732" class="icon"><img src="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/twitter.svg" alt="推特" /></a> <a href="https://example.org/" id="gategdinzijau" class="icon"><img src="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/mail.svg" alt="電郵" /></a> <a href="https://www.codewars.com/users/ayaka14732" class="icon"><img src="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/codewars.svg" lang="en-HK" alt="Codewars" /></a> <a href="https://github.com/ayaka14732" class="icon"><img src="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/github.svg" lang="en-HK" alt="GitHub" /></a> <a href="https://www.zhihu.com/people/.ayaka" class="icon"><img src="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/zhihu.svg" alt="知乎" /></a> <a href="https://music.163.com/#/user/home?id=338500484" class="icon"><img src="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/music.svg" alt="網頁雲音樂" /></a></p>
+<p><a href="about/" lang="en-HK" hreflang="zh-HK">About me</a></p>
 <h1 id="文章">文章</h1>
 <ol type="1">
 <li><a href="1041/" lang="zh-CN" hreflang="zh-CN">日语笔记</a></li>
 <li><a href="learnshell/" lang="zh-CN" hreflang="zh-CN">记一次学习 Shell 的经历</a></li>
 <li><a href="live/" lang="zh-CN" hreflang="zh-CN">直播服务器搭建记录</a></li>
 <li><a href="ccf-201403-3/" lang="zh-CN" hreflang="zh-CN">CCF 201403-3 命令行选项</a></li>
-<li><a href="nushu-everywhere/" lang="en-US" hreflang="en-US">Nushu Everywhere</a></li>
 <li><a href="wlansniff/" lang="zh-CN" hreflang="zh-CN">抓包登录大学教务系统</a></li>
-<li><a href="antihask/" lang="zh-CN" hreflang="zh-CN">不再推荐 Haskell</a></li>
 <li><a href="cppregex/" lang="zh-CN" hreflang="zh-CN">C++ 正则表达式速查手册</a></li>
 <li><a href="v8/">我的個人思考用語簡介</a>（未定稿）</li>
 <li><a href="opentype/" lang="zh-CN" hreflang="zh-CN">体验 OpenType 的 locl/smpl/trad/ss01-ss20 特性</a></li>
@@ -86,8 +85,15 @@
 <li><a href="tyongdiu/">日語漢音的重紐對立</a></li>
 <li><a href="btq/" lang="en-GB" hreflang="en-GB">Bantian Railway Station</a></li>
 <li><a href="fanwan/">《分韻撮要》音系與中古音對應關係</a></li>
+</ol>
+<section id="隨筆" class="hidden">
+<h1>隨筆</h1>
+<ol type="1">
+<li><a href="nushu-everywhere/" lang="en-US" hreflang="en-US">Nushu Everywhere</a></li>
+<li><a href="antihask/" lang="zh-CN" hreflang="zh-CN">不再推荐 Haskell</a></li>
 <li><a href="shidinn/" lang="en-GB" hreflang="en-GB">The Shidinn Language</a></li>
 </ol>
+</section>
 <!--
 nomtopyoh is the page for testing the typesetting.
 1. [南都賦（漢・張衡）](nomtopyoh/){lang=zh-Hant hreflang=lzh}
@@ -104,7 +110,5 @@ should be after 我的個人思考用語簡介
 <li><a href="https://rain.moimo.me/" lang="en-HK" hreflang="zh-CN">mes ames</a></li>
 <li><a href="https://zcy.moe/" hreflang="zh-CN">茨月</a></li>
 </ul>
-<h1 id="授權條款">授權條款</h1>
-<p>本站點內容係採用<a href="http://creativecommons.org/licenses/by/4.0/" rel="license">創用 CC 姓名標示 4.0 國際 授權條款</a>授權。</p>
 </body>
 </html>
