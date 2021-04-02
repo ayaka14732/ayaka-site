@@ -15,7 +15,7 @@ math: |-
   </script>
 ---
 
-[About me](about/){lang=en-HK hreflang=zh-HK}
+[About](about/){lang=en-HK hreflang=zh-HK}
 
 # 文章
 
