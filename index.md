@@ -3,9 +3,11 @@ title: 三日月綾香
 lang: zh-HK
 math: |-
   <style>
+  .hidden { display: none; }
   #TOC { display: none; }
-  body > h1 { font-size: 1.17em; } /* same as h3 */
-  .icon > img { width: 1em; }
+  #title-block-header > h1 { margin-bottom: 0; }
+  nav + p { padding-bottom: 0.2em; }
+  body h1 { font-size: 1.17em; } /* the same as h3 */
   li > a, li > a:hover { border-bottom: none; }
   </style>
   <script>
@@ -13,9 +15,7 @@ math: |-
   </script>
 ---
 
-[MtX~F]{lang=en-HK} - [About](about/){lang=en-HK hreflang=zh-HK}
-
-[![bilibili](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/bilibili-tv.svg)](https://space.bilibili.com/6769569){.icon} [![推特](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/twitter.svg)](https://twitter.com/ayaka14732){.icon} [![電郵](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/mail.svg)](https://example.org/){.icon #gategdinzijau} [![Codewars](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/codewars.svg){lang=en-HK}](https://www.codewars.com/users/ayaka14732){.icon} [![GitHub](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/github.svg){lang=en-HK}](https://github.com/ayaka14732){.icon} [![知乎](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/zhihu.svg)](https://www.zhihu.com/people/.ayaka){.icon} [![網頁雲音樂](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/music.svg)](https://music.163.com/#/user/home?id=338500484){.icon}
+[About me](about/){lang=en-HK hreflang=zh-HK}
 
 # 文章
 
@@ -23,9 +23,7 @@ math: |-
 1. [记一次学习 Shell 的经历](learnshell/){lang=zh-CN hreflang=zh-CN}
 1. [直播服务器搭建记录](live/){lang=zh-CN hreflang=zh-CN}
 1. [CCF 201403-3 命令行选项](ccf-201403-3/){lang=zh-CN hreflang=zh-CN}
-1. [Nushu Everywhere](nushu-everywhere/){lang=en-US hreflang=en-US}
 1. [抓包登录大学教务系统](wlansniff/){lang=zh-CN hreflang=zh-CN}
-1. [不再推荐 Haskell](antihask/){lang=zh-CN hreflang=zh-CN}
 1. [C++ 正则表达式速查手册](cppregex/){lang=zh-CN hreflang=zh-CN}
 1. [我的個人思考用語簡介](v8/)（未定稿）
 1. [体验 OpenType 的 locl/smpl/trad/ss01-ss20 特性](opentype/){lang=zh-CN hreflang=zh-CN}
@@ -43,7 +41,14 @@ math: |-
 1. [日語漢音的重紐對立](tyongdiu/)
 1. [Bantian Railway Station](btq/){lang=en-GB hreflang=en-GB}
 1. [《分韻撮要》音系與中古音對應關係](fanwan/)
+
+:::{.hidden}
+# 隨筆
+
+1. [Nushu Everywhere](nushu-everywhere/){lang=en-US hreflang=en-US}
+1. [不再推荐 Haskell](antihask/){lang=zh-CN hreflang=zh-CN}
 1. [The Shidinn Language](shidinn/){lang=en-GB hreflang=en-GB}
+:::
 
 <!--
 nomtopyoh is the page for testing the typesetting.
@@ -61,7 +66,3 @@ should be after 我的個人思考用語簡介
 - [Coelacanthus](https://blog.coelacanthus.moe/){lang=en-HK hreflang=zh-CN}
 - [mes ames](https://rain.moimo.me/){lang=en-HK hreflang=zh-CN}
 - [茨月](https://zcy.moe/){hreflang=zh-CN}
-
-# 授權條款
-
-本站點內容係採用[創用 CC 姓名標示 4.0 國際 授權條款](http://creativecommons.org/licenses/by/4.0/){rel=license}授權。
