@@ -17,13 +17,13 @@ I took a video of train No. K256 stopping at Bantian station at 17:20 on 19 Augu
 
 The original video was taken with an old mobile phone and is in AVI format. To adapt to modern devices, I converted it to MP4 format. Both versions are available here.
 
-- [AVI format](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@e0f74db/20120819-1720%E5%9D%82%E7%94%B0%E7%AB%99.avi) (Original)
-- [MP4 format](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@dd34250/20120819-1720%E5%9D%82%E7%94%B0%E7%AB%99.mp4)
+- [AVI format](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@large-files/20120819-1720%E5%9D%82%E7%94%B0%E7%AB%99.avi) (Original)
+- [MP4 format](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@large-files/20120819-1720%E5%9D%82%E7%94%B0%E7%AB%99.mp4)
 
 Watch online:
 
 <video id="my-video" class="video-js" controls preload="auto" width="480" height="360" style="max-width: 100%;" poster="poster.jpg" data-setup="{}">
-<source src="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@dd34250/20120819-1720%E5%9D%82%E7%94%B0%E7%AB%99.mp4" type="video/mp4"/>
+<source src="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@large-files/20120819-1720%E5%9D%82%E7%94%B0%E7%AB%99.mp4" type="video/mp4"/>
 <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>.</p>
 </video>
 <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
