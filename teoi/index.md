@@ -210,10 +210,10 @@ math: |-
 <tr><td>舌齒 </td><td>yun</td><td>臀 tyun4 突 dat6 嫩 nyun6 <u>論 leon6 又諄韻平聲</u> 尊 zyun1 <u>樽 zeon1</u> 村 cyun1 猝 cyut3 存 cyun4 巽 seon3 <u>窣 seot1 讀入率</u></td></tr>
 <tr><td>牙喉</td><td>an</td><td>昆 kwan1 骨 gwat1 坤 kwan1 兀 ngat6 溫 wan1 忽 fat1</td></tr>
 <tr><td rowspan="8">開三眞[^11]</td><td>脣音</td><td>an</td><td>賓 ban1 <u>必 bit1[^1]</u> 彬 ban1 匹 pat1 弼 bat6</td></tr>
-<tr><td>端組</td><td>eon</td><td>〔無字，據鄰近韻補〕</td></tr>
-<tr><td>來母</td><td>eon</td><td>鱗 leon4 栗 leot6</td></tr>
+<tr><td>端組</td><td><del>eon</del>an</td><td>〔無字，據鄰近韻補〕</td></tr>
+<tr><td>來母</td><td><del>eon</del>an</td><td>鱗 leon4 栗 leot6</td></tr>
 <tr><td>知組</td><td>an</td><td>珍 zan1 塵 can4 陣 zan6 <u>帙 dit6</u> <u>暱 nik1</u></td></tr>
-<tr><td>精組</td><td>eon</td><td>津 zeon1 晉 zeon3 進 zeon3 <u>七 cat1</u> <u>漆 cat1</u> 秦 ceon4 <u>疾 zat6</u> <u>辛 san1</u> 信 seon3 <u>悉 sik1[^2]</u></td></tr>
+<tr><td>精組</td><td><del>eon</del>an</td><td>津 zeon1 晉 zeon3 進 zeon3 <u>七 cat1</u> <u>漆 cat1</u> 秦 ceon4 <u>疾 zat6</u> <u>辛 san1</u> 信 seon3 <u>悉 sik1[^2]</u></td></tr>
 <tr><td>莊組</td><td>an</td><td>〔無字，據鄰近韻補〕</td></tr>
 <tr><td>章日</td><td>an</td><td><u>脣 seon4</u> 真 zan1 疹 can2 侄 zat6 <u>叱 cik1</u> 晨 san4 臣 san4 申 san1 身 san1 失 sat1 室 sat1 實 sat6 人 jan4 日 jat6</td></tr>
 <tr><td>牙喉</td><td>an</td><td>緊 gan2 吉 gat1 <u>詰 kit3</u> 僅 gan2 銀 ngan4 因 jan1 印 jan3 一 jat1 <u>乙 jyut6</u> 釁 jan6 引 jan5 逸 jat6</td></tr>
