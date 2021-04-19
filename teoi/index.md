@@ -306,7 +306,7 @@ math: |-
 <tr><td>舌齒</td><td>〔無字，據鄰近韻補〕</td></tr>
 <tr><td>牙喉</td><td>摑 gwaak3 宏 wang4</td></tr>
 <tr><td rowspan="3">開三庚</td><td>脣音</td><td rowspan="18">ing</td><td>兵 bing1 丙 bing2 秉 bing2 碧 bik1 病 beng6 明 ming4 命 ming6文/meng6白</td></tr>
-<tr><td>舌齒</td><td>〔無常用字，據鄰近韻補。生僻字：䜺 caak3 眚 saang2〕</td></tr>
+<tr><td>舌齒</td><td>莊組為 ang，其餘為 ing。生僻字：䜺 caak3 眚 saang2</td></tr>
 <tr><td>牙喉</td><td>京 ging1 景 ging2 敬 ging3 鏡 geng3 戟 gik1 慶 hing3 綌 gwik1 隙 kwik1/gwik1[^4] 劇 kek6 逆 jik6/ngaak6逆水 英 jing</td></tr>
 <tr><td rowspan="3">開三清</td><td>脣音</td><td>璧 bik1 聘 ping3 名 ming4文/meng4白</td></tr>
 <tr><td>舌齒</td><td>貞 zing1 彳 cik1 鄭 zeng6 擲 zaak6 晶 zing1 井 zeng2 昔 sik1 夕 zik6 席 zik6 隻 zek3 聲 sing1文/seng1白 石 sek6</td></tr>

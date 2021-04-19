@@ -238,8 +238,9 @@ math: |-
 <tr><td>開口</td><td>oeng</td><td>上 shoeng5/shoeng6 長 choeng4/zhoeng2 量 loeng4/loeng6 兩 loeng2/loeng5</td><td>爍 lik1 昶 chong2</td></tr>
 <tr><td>合口</td><td>ong</td><td>況 fong3 往 wong5 王 wong4/wong6 狂 kwong4</td><td></td></tr>
 <tr><td colspan="2">唐韻</td><td>ong</td><td>作 zok1 當 dong1/dong3 各 gok1 黨 dong2</td><td></td></tr>
-<tr><td rowspan="4">梗</td><td rowspan="2">庚韻</td><td>二等</td><td>ang</td><td>生 shang1 更 gang1 盟 mang4 赫 hak1</td><td>百 baak1 白 baak6 礦 gung2 客 haak1 伯 baa3/baak1 迫 bik1 衡 hang4/wang4/waang4 額 ngaak6 澤 zhaak6 擇 zhaak6 坑 haang1 膨 paang4 彭 paang4 舶 bok6 窄 zhaak1 盲 maang4 宅 zhaak6 骼 gaak1 帛 baak6 瞠 tong2 虢 gwik1</td></tr>
-<tr><td>三等</td><td>ing</td><td>平 ping4 明 ming4 命 ming6 影 jing2</td><td>眚 shang2</td></tr>
+<tr><td rowspan="5">梗</td><td rowspan="3">庚韻</td><td>二等</td><td>ang</td><td>更 gang1 盟 mang4 赫 hak1</td><td>百 baak1 白 baak6 礦 gung2 客 haak1 伯 baa3/baak1 迫 bik1 衡 hang4/wang4/waang4 額 ngaak6 澤 zhaak6 擇 zhaak6 坑 haang1 膨 paang4 彭 paang4 舶 bok6 窄 zhaak1 盲 maang4 宅 zhaak6 骼 gaak1 帛 baak6 瞠 tong2 虢 gwik1</td></tr>
+<tr><td>三等 莊組</td><td>ang</td><td>生 shang1 眚 shang2</td><td></td></tr>
+<tr><td>三等</td><td>ing</td><td>平 ping4 明 ming4 命 ming6 影 jing2</td><td></td></tr>
 <tr><td colspan="2">耕韻</td><td>ang</td><td>爭 zhang1 責 zhak1 麥 mak6 耕 gang1</td><td>革 gaak1 劃 waak6 策 chaak1 核 hat6/goi1 獲 wok1 硬 ngaang6 隔 gaak1 冊 chaak1 氓 man4 櫻 jing1 迸 bing2 蟈 gwik1/gwok1 怦 ping4 鸚 jing1 擘 paak1 罌 ang1/aang1</td></tr>
 <tr><td colspan="2">清青韻</td><td>ing</td><td>的 dik1 成 shing4 定 ding6 經 ging1</td><td>適 shik1/zhaak6 液 jat6 辟 pi3/pik1 擲 zhaak6 檄 hat6 腋 jat6 躑 zhaak6 逕 ging3/gaang3</td></tr>
 <tr><td rowspan="2">曾</td><td colspan="2">蒸韻</td><td>ing</td><td>力 lik6 應 jing1/jing3 直 zhik6 式 shik1</td><td>測 chak1 域 waak6 側 chak1 憑 pang4 孕 jan6 惻 chak1 閾 waak6 仄 zhak1 愎 fuk1</td></tr>
