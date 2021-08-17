@@ -15,7 +15,7 @@ math: |-
   </script>
 ---
 
-[About](about/){lang=en-HK hreflang=zh-HK}
+[About](about/){lang=en hreflang=zh-HK}
 
 # 文章
 
@@ -63,6 +63,7 @@ should be after 我的個人思考用語簡介
 
 # 好友
 
-- [Coelacanthus](https://blog.coelacanthus.moe/){lang=en-HK hreflang=zh-CN}
-- [mes ames](https://rain.moimo.me/){lang=en-HK hreflang=zh-CN}
-- [茨月](https://zcy.moe/){hreflang=zh-CN}
+- [Coelacanthus](https://blog.coelacanthus.moe/){lang=en hreflang=zh-CN}
+- [mes ames](https://rain.moimo.me/){lang=en hreflang=zh-CN}
+- [茨月](https://zcy.moe/){lang=zh-CN hreflang=zh-CN}
+- [凌莞](https://nyac.at/){lang=zh-CN hreflang=zh-CN}
