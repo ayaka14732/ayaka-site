@@ -1,5 +1,5 @@
 ---
-title: 深圳蛇口口岸至香港国际机场航线行记
+title: 深圳蛇口口岸至香港国际机场航线纪录
 lang: zh-Hans
 keywords:
 - 深圳蛇口口岸
@@ -9,7 +9,7 @@ keywords:
 - 快船转驳
 - COVID-19 疫情
 math: |-
-  <meta name="description" content="在 COVID-19 疫情下由蛇口口岸乘船前往香港机场"/>
+  <meta name="description" content="COVID-19 疫情下由深圳蛇口口岸乘船前往香港国际机场纪录"/>
 ---
 
 > [繁體中文版《[深圳蛇口口岸至香港國際機場航線行記](../){hreflang=zh-HK}]{lang=zh-HK}》

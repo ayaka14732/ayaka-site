@@ -42,7 +42,7 @@ math: |-
 1. [日語漢音的重紐對立](tyongdiu/)
 1. [Bantian Railway Station](btq/){lang=en hreflang=en}
 1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿）
-1. [深圳蛇口口岸至香港國際機場航線行記](zyk/)
+1. [深圳蛇口口岸至香港國際機場航線紀錄](zyk/)
 
 :::{.hidden}
 # 隨筆
