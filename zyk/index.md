@@ -11,7 +11,7 @@ math: |-
   <meta name="description" content="COVID-19 疫情下由深圳蛇口口岸乘船前往香港國際機場紀錄"/>
 ---
 
-> [简体中文版《[深圳蛇口口岸至香港国际机场航线行记](hans/){hreflang=zh-Hans}]{lang=zh-Hans}》
+> [简体中文版《[深圳蛇口口岸至香港国际机场航线纪录](hans/){hreflang=zh-Hans}]{lang=zh-Hans}》
 
 2021&#8239;年&#8239;7&#8239;月&#8239;20&#8239;日，在 COVID-19 疫情下，我由蛇口口岸乘船前往香港機場，以在香港機場轉機。
 
