@@ -1,6 +1,6 @@
 ---
 title: Bantian Railway Station
-lang: en-GB
+lang: en
 keywords:
 - Bantian railway station
 - railway station in Shenzhen

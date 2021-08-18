@@ -12,6 +12,8 @@ math: |-
 ---
 
 > [繁體中文版《[正確實現簡轉繁字型](hant/){hreflang=zh-HK}]{lang=zh-HK}》，同时发布于知乎：[正确实现简转繁字体 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/166089642){hreflang=zh-CN}
+>
+> [点击此处](https://github.com/ayaka14732/FanWunMing/releases)下载简转繁字体「繁媛明朝」
 
 # 简介
 

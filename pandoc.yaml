@@ -2,7 +2,7 @@ dir: ltr
 author: 三日月綾香
 documentclass: ctexart
 css:
-  - https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css
+  - /pandoc.css
   - /serif.css
 colorlinks: true
 classoption:

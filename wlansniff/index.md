@@ -21,7 +21,7 @@ lang: zh-CN
 sudo iwlist wlan0 scanning
 ```
 
-![Get channel](scr3.png)
+![获取信道](scr3.png)
 
 由输出可知，WHU-STU 工作在信道 5。
 
@@ -44,7 +44,7 @@ sudo iwconfig wlan0mon channel 5
 
 输入学号、密码与验证码并点击提交，此时 Wireshark 中抓取到 POST 请求，包含 `id`，`pwd` 与 `xdvfb` 三个字段。容易判断 `id` 是学号，`pwd` 是密码，`xdvfb` 是验证码。其中，学号与验证码通过明文传输，密码通过密文传输。
 
-![Capture result](scr2.png)
+![抓包结果](scr2.png)
 
 关闭 Wireshark。关闭无线网卡的监控模式，恢复正常连接：
 
@@ -56,9 +56,9 @@ sudo ifconfig wlan0 up
 
 在浏览器中退出登录后，关闭浏览器的 JavaScript 功能。因为在登录前，网页会使用 JavaScript 对密码进行加密，再向服务器发送登录信息。若关闭 JavaScript 功能，使用抓取获得的密码的密文登录，网页将不会对密码进行处理。这与原来输入密码明文，并使用经过 JavaScript 加密后生成的密文登录等效。
 
-![Log in page](mob1.jpg)
+![登录页面](mob1.jpg)
 
-![Log in result](mob2.png)
+![登录结果](mob2.png)
 
 输入学号、抓取获得的密码的密文和新的验证码并点击提交，可以成功登录教务系统。此时页面内容显示不完全，这是由于教务系统页面的部分内容通过 Ajax 动态加载，只需重新启用浏览器的 JavaScript 功能即可。
 

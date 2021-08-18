@@ -1,0 +1,285 @@
+/* Originally https://gist.github.com/killercup/5917178 */
+
+/* Global style */
+
+body > table {
+	overflow: auto hidden;
+}
+
+body > h1 {
+	font-size: 1.7em;
+}
+
+body {
+	font-family: sans-serif;
+	font-size: 110%;
+	line-height: 1.7;
+	padding: 1em;
+	margin: auto;
+	max-width: 55em;
+}
+
+p {
+	margin: 0.6em 0;
+}
+
+u {
+	border-bottom:1px solid #a4a4a4;
+	text-decoration: none;
+}
+
+a {
+	color: inherit;
+	border-bottom: 1px solid #a4a4a4;
+	padding-bottom: 1px;
+	text-decoration: none;
+}
+
+a.icon, a.footnote-back, a.footnote-ref, .sourceCode a, nav a {
+	border-bottom: none;
+	margin: initial;
+}
+
+a:active, a:visited {
+	color: inherit;
+}
+
+a:hover {
+	border-bottom: 1px solid black;
+	color: initial;
+	transition: 0.5s;
+}
+
+a.icon:hover, a.footnote-back:hover, a.footnote-ref:hover, .sourceCode a:hover, nav a:hover {
+	border-bottom: none;
+}
+
+.author { display: none; }
+
+img {
+	max-width: 100%;
+}
+
+header > h1.title {
+	font-size: xx-large;
+}
+
+blockquote {
+	margin: 0;
+	padding-left: 1em;
+	border-left: 1px solid black;
+}
+
+hr {
+	display: block;
+	height: 2px;
+	border: 0;
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #eee;
+	margin: 1em 0;
+	padding: 0;
+}
+
+pre, code, kbd, samp {
+	font-family: monospace, monospace;
+}
+
+pre {
+	font-size: 95%;
+	white-space: pre;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+pre > code.sourceCode {
+	white-space: pre-wrap !important;
+}
+
+pre > code.sourceCode > span {
+	text-indent: -5em;
+	padding-left: 5em;
+	line-height: 1.4;
+	margin-right: -3em;
+}
+
+pre > code.sourceCode > span > a:first-child::before {
+	text-decoration: none;
+}
+
+b, strong {
+	font-weight: bold;
+}
+
+dfn {
+	font-style: italic;
+}
+
+ins {
+	background: #ff9;
+	color: #000;
+	text-decoration: none;
+}
+
+mark {
+	background: #ff0;
+	color: #000;
+	font-style: italic;
+	font-weight: bold;
+}
+
+sub, sup {
+	font-size: 75%;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+
+sup {
+	top: -0.5em;
+}
+
+sub {
+	bottom: -0.25em;
+}
+
+ul, ol {
+	padding: 0 0 0 2em;
+	line-height: 1.75;
+}
+
+li p:last-child {
+	margin-bottom: 0;
+}
+
+dl {
+	margin-bottom: 1em;
+}
+
+dt {
+	font-weight: bold;
+	margin-bottom: .8em;
+}
+
+dd {
+	margin: 0 0 .8em 2em;
+}
+
+dd:last-child {
+	margin-bottom: 0;
+}
+
+img {
+	border: 0;
+	-ms-interpolation-mode: bicubic;
+	vertical-align: middle;
+}
+
+figure {
+	display: block;
+	text-align: center;
+	margin: 1em 0;
+}
+
+figure embed {
+	max-width: 80%;
+}
+
+figure img {
+	border: none;
+	margin: 0 auto;
+	max-height: 100vh;
+	max-width: 80%;
+}
+
+figcaption {
+	font-size: 0.9em;
+	margin: .8em 0;
+}
+
+table {
+	display: block;
+	margin-bottom: 1em;
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+table td {
+	vertical-align: top;
+}
+
+table th, table td {
+	border: 1px solid;
+	padding: 2px 10px;
+}
+
+.footnotes {
+	font-size: 85%;
+}
+
+.footnotes p {
+	margin: 0;
+}
+
+.footnote-back {
+	padding-left: 2px;
+}
+
+a.footnote-ref > sup::before { content: "["; }
+a.footnote-ref > sup::after { content: "]"; }
+
+@media print {
+	* {
+		background: transparent !important;
+		color: black !important;
+		filter: none !important;
+		-ms-filter: none !important;
+	}
+
+	body {
+		font-size: 10.5pt;
+		max-width: 100%;
+	}
+
+	hr {
+		height: 1px;
+		border: 0;
+		border-bottom: 1px solid black;
+	}
+
+	a[href]:after {
+		content: " (" attr(href) ")";
+	}
+
+	abbr[title]:after {
+		content: " (" attr(title) ")";
+	}
+
+	.ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+		content: "";
+	}
+
+	pre, blockquote {
+		page-break-inside: avoid;
+	}
+
+	tr, img {
+		page-break-inside: avoid;
+	}
+
+	@page :left {
+		margin: 15mm 20mm 15mm 10mm;
+	}
+
+	@page :right {
+		margin: 15mm 10mm 15mm 20mm;
+	}
+
+	p, h2, h3 {
+		orphans: 3;
+		widows: 3;
+	}
+
+	h2, h3 {
+		page-break-after: avoid;
+	}
+}

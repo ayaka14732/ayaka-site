@@ -24,6 +24,7 @@ math: |-
 1. [直播服务器搭建记录](live/){lang=zh-CN hreflang=zh-CN}
 1. [CCF 201403-3 命令行选项](ccf-201403-3/){lang=zh-CN hreflang=zh-CN}
 1. [抓包登录大学教务系统](wlansniff/){lang=zh-CN hreflang=zh-CN}
+1. [不再推荐 Haskell](antihask/){lang=zh-CN hreflang=zh-CN}
 1. [C++ 正则表达式速查手册](cppregex/){lang=zh-CN hreflang=zh-CN}
 1. [我的個人思考用語簡介](v8/)（未定稿）
 1. [体验 OpenType 的 locl/smpl/trad/ss01-ss20 特性](opentype/){lang=zh-CN hreflang=zh-CN}
@@ -39,21 +40,18 @@ math: |-
 1. [粵語（廣州音）與中古音對應關係](teoi/)（未定稿）
 1. [漢字的單音化現象](guan/)
 1. [日語漢音的重紐對立](tyongdiu/)
-1. [Bantian Railway Station](btq/){lang=en-GB hreflang=en-GB}
-1. [《分韻撮要》音系與中古音對應關係](fanwan/)
+1. [Bantian Railway Station](btq/){lang=en hreflang=en}
+1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿）
+1. [深圳蛇口口岸至香港國際機場航線行記](zyk/)
 
 :::{.hidden}
 # 隨筆
 
 1. [Nushu Everywhere](nushu-everywhere/){lang=en-US hreflang=en-US}
-1. [不再推荐 Haskell](antihask/){lang=zh-CN hreflang=zh-CN}
-1. [The Shidinn Language](shidinn/){lang=en-GB hreflang=en-GB}
+1. [The Shidinn Language](shidinn/){lang=en hreflang=en}
 :::
 
 <!--
-nomtopyoh is the page for testing the typesetting.
-1. [南都賦（漢・張衡）](nomtopyoh/){lang=zh-Hant hreflang=lzh}
-
 1. [普通話-粵語特殊字音對照表](poujyut/)（未定稿）
 should be after 方言生僻字讀音的推導問題
 

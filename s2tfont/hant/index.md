@@ -12,6 +12,8 @@ math: |-
 ---
 
 > [简体中文版《[正确实现简转繁字体](../){hreflang=zh-CN}]{lang=zh-CN}》，同時發佈於知乎：[正确实现简转繁字体 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/166089642){lang=zh-CN hreflang=zh-CN}
+>
+> [按此](https://github.com/ayaka14732/FanWunMing/releases)下載簡轉繁字型「繁媛明朝」
 
 # 簡介
 
