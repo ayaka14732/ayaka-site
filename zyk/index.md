@@ -8,6 +8,8 @@ keywords:
 - 香港國際機場
 - 快船轉駁
 - COVID-19 疫情
+math: |-
+  <meta name="description" content="在 COVID-19 疫情下由蛇口口岸乘船前往香港機場"/>
 ---
 
 > [简体中文版《[深圳蛇口口岸至香港国际机场航线行记](hans/){hreflang=zh-Hans}]{lang=zh-Hans}》
