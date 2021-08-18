@@ -14,7 +14,6 @@ https://ayaka.shn.hk/kanji-periodic-table/
 https://ayaka.shn.hk/langtag/
 https://ayaka.shn.hk/learnshell/
 https://ayaka.shn.hk/live/
-https://ayaka.shn.hk/nushu-everywhere/
 https://ayaka.shn.hk/opentype/
 https://ayaka.shn.hk/pyanxvsdrik/
 https://ayaka.shn.hk/radix16/
@@ -30,3 +29,5 @@ https://ayaka.shn.hk/wlansniff/
 https://ayaka.shn.hk/yatngiox/
 https://ayaka.shn.hk/yueseg/
 https://ayaka.shn.hk/yueseg/hant/
+https://ayaka.shn.hk/zyk/
+https://ayaka.shn.hk/zyk/hans/

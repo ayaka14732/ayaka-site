@@ -78,7 +78,7 @@
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="/pandoc.css" />
   <link rel="stylesheet" href="/serif.css" />
   <style>
   .sample {
@@ -125,8 +125,7 @@
 <p>注：本文中的示例需要安装相应的字体才能显示。</p>
 </blockquote>
 <h1 id="简介">简介</h1>
-<p>现在的字体有一类特性，可以在不改变字符的情况下改变显示出来的样子。</p>
-<p>在浏览器中，可以通过设置 CSS 简单地实现。</p>
+<p>OpenType 字体有一类字体特性，可以在不改变字符码位的情况下改变显示出的字形。要在浏览器中使用这类 OpenType 字体特性，可以通过设置 CSS 简单地实现。</p>
 <h1 id="locl-特性">locl 特性</h1>
 <p>locl 特性可以根据地区的不同自动改变字形。这一特性是默认启用的。</p>
 <p>比如下面的 HTML：</p>
@@ -166,10 +165,10 @@
 </p>
 </div>
 <p>但是，更精确的转换在技术上是可行的。（注：见我的新文章《<a href="https://ayaka.shn.hk/s2tfont/">正确实现简转繁字体</a>》）</p>
-<p>虽然 trad 特性在日文字体中已经得到支持，但是我还没有找到支持 smpl 特性的字体。当然，等我有空也可以自己开发一个。</p>
+<p>虽然 trad 特性在日文字体中已经得到支持，但目前我还没有找到支持 smpl 特性的字体。当然，我也可以自己开发一个这样的字体。</p>
 <h1 id="ss01-ss20-特性">ss01-ss20 特性</h1>
-<p>虽然我还没有找到支持 smpl 特性的字体，但有一个字体也可以达到把繁体字转为简体字的效果，而且它甚至可以转换为二简字等七种写法！这就是 <a href="https://github.com/ButTaiwan/evilsung">Evil Sung</a>。</p>
-<p>ss01-ss20 特性可以定义字符的 stylistic alternatives。OpenType 预留了 20 种 stylistic alternatives，这个字体一口气用了 7 种，定义了汉字的各种写法，分别是 1935 第一批 KMT、1964 简化字总表、1969 新加坡简体、1974 新加坡简体、1977 二简第一表、1977 二简第二表和 1986 简体字总表。</p>
+<p>虽然目前我还没有找到支持 smpl 特性的字体，但有一个字体也可以达到把繁体字转为简体字的效果，而且它甚至可以转换为二简字等七种写法，这就是 <a href="https://github.com/ButTaiwan/evilsung">Evil Sung</a> 字体。</p>
+<p>ss01-ss20 特性可以定义字符的 stylistic alternatives。OpenType 预留了 20 种 stylistic alternatives，这个字体一下就用了 7 种，定义了汉字的各种写法，分别是 1935 第一批 KMT、1964 简化字总表、1969 新加坡简体、1974 新加坡简体、1977 二简第一表、1977 二简第二表和 1986 简体字总表。</p>
 <p>比如下面的 HTML：</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> style=</span><span class="st">&quot;font-family: &#39;Evil Sung&#39;, serif; font-feature-settings: &#39;ss01&#39;;&quot;</span><span class="kw">&gt;</span>寻梦？撑一支长篙。<span class="kw">&lt;/p&gt;</span></span>
@@ -205,13 +204,12 @@
 寻梦？撑一支长篙。
 </p>
 </div>
-<p>要在 Google Chrome 中使用，首先安装 Custom CSS 这一拓展，然后找一个充满繁体字的页面。</p>
-<p>添加 Custom CSS 即可：</p>
+<p>要在 Google Chrome 中使用，首先安装 Custom CSS 这一拓展，然后打开一个使用繁体字的页面，添加 Custom CSS 即可：</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">*</span> {</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">&quot;Evil Sung&quot;</span><span class="op">,</span> <span class="dv">serif</span><span class="op">;</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-feature-settings</span>: <span class="st">&quot;ss06&quot;</span><span class="op">;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>类似地，在 Mozilla Firefox 中也可以通过 Stylus 这一拓展解决。</p>
-<p>（作于 2020 年 2 月 24 日，更新于 2020 年 8 月 14 日）</p>
+<p>（作于 2020 年 2 月 24 日，更新于 2020 年 8 月 14 日与 2021 年 8 月 18 日）</p>
 </body>
 </html>

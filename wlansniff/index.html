@@ -78,7 +78,7 @@
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="/pandoc.css" />
   <link rel="stylesheet" href="/serif.css" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -121,7 +121,7 @@
 <p>在 Kali Linux 中获取 WHU-STU 使用的信道：</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> iwlist wlan0 scanning</span></code></pre></div>
 <figure>
-<img src="scr3.png" alt="Get channel" /><figcaption aria-hidden="true">Get channel</figcaption>
+<img src="scr3.png" alt="获取信道" /><figcaption aria-hidden="true">获取信道</figcaption>
 </figure>
 <p>由输出可知，WHU-STU 工作在信道 5。</p>
 <p>使无线网卡工作在监控模式下：</p>
@@ -133,7 +133,7 @@
 <p>使用智能手机的浏览器打开大学教务系统 <a href="http://218.197.150.140/" class="uri">http://218.197.150.140/</a>，此时 Wireshark 中抓取到相应 IP 地址的 HTTP 数据包。</p>
 <p>输入学号、密码与验证码并点击提交，此时 Wireshark 中抓取到 POST 请求，包含 <code>id</code>，<code>pwd</code> 与 <code>xdvfb</code> 三个字段。容易判断 <code>id</code> 是学号，<code>pwd</code> 是密码，<code>xdvfb</code> 是验证码。其中，学号与验证码通过明文传输，密码通过密文传输。</p>
 <figure>
-<img src="scr2.png" alt="Capture result" /><figcaption aria-hidden="true">Capture result</figcaption>
+<img src="scr2.png" alt="抓包结果" /><figcaption aria-hidden="true">抓包结果</figcaption>
 </figure>
 <p>关闭 Wireshark。关闭无线网卡的监控模式，恢复正常连接：</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> airmon-ng stop wlan0mon</span>
@@ -141,10 +141,10 @@
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ifconfig wlan0 up</span></code></pre></div>
 <p>在浏览器中退出登录后，关闭浏览器的 JavaScript 功能。因为在登录前，网页会使用 JavaScript 对密码进行加密，再向服务器发送登录信息。若关闭 JavaScript 功能，使用抓取获得的密码的密文登录，网页将不会对密码进行处理。这与原来输入密码明文，并使用经过 JavaScript 加密后生成的密文登录等效。</p>
 <figure>
-<img src="mob1.jpg" alt="Log in page" /><figcaption aria-hidden="true">Log in page</figcaption>
+<img src="mob1.jpg" alt="登录页面" /><figcaption aria-hidden="true">登录页面</figcaption>
 </figure>
 <figure>
-<img src="mob2.png" alt="Log in result" /><figcaption aria-hidden="true">Log in result</figcaption>
+<img src="mob2.png" alt="登录结果" /><figcaption aria-hidden="true">登录结果</figcaption>
 </figure>
 <p>输入学号、抓取获得的密码的密文和新的验证码并点击提交，可以成功登录教务系统。此时页面内容显示不完全，这是由于教务系统页面的部分内容通过 Ajax 动态加载，只需重新启用浏览器的 JavaScript 功能即可。</p>
 <h1 id="实验总结">实验总结</h1>

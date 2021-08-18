@@ -78,7 +78,7 @@
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/csslib/pandoc.css" />
+  <link rel="stylesheet" href="/pandoc.css" />
   <link rel="stylesheet" href="/serif.css" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -133,7 +133,7 @@
 </nav>
 <h1 id="概述">概述</h1>
 <p>C++ 中正则表达式通常使用 <code>R"(...)"</code> 的形式，相当于 Python 中的 <code>r"..."</code>，保证字符串内部的 \ 等字符不被转义。</p>
-<p>但是，<code>R"(...)"</code> 中的 <code>()</code> 是语法的一部分，一定不要当成字符串里面的内容。例如，<code>R"(1234)"</code> 表示字符串 <code>"1234"</code>，而不是，<code>"(1234)"</code>。</p>
+<p>但是，<code>R"(...)"</code> 中的 <code>()</code> 是语法的一部分，一定不要当成字符串里面的内容。例如，<code>R"(1234)"</code> 表示字符串 <code>"1234"</code>，而不是 <code>"(1234)"</code>。</p>
 <p>创建正则表达式使用如下形式：</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(\S+)&quot;</span> };</span></code></pre></div>
 <p>如果要指定忽略大小写， 则使用如下形式：</p>
