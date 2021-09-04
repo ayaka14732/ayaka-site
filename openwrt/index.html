@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <title>Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="/pandoc.css" />
+  <link rel="stylesheet" href="/serif.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#背景">背景</a></li>
+<li><a href="#下载固件">下载固件</a></li>
+<li><a href="#下载-openwrtinvasion-程序">下载 OpenWRTInvasion 程序</a></li>
+<li><a href="#电脑连接路由器">电脑连接路由器</a></li>
+<li><a href="#运行-openwrtinvasion-程序">运行 OpenWRTInvasion 程序</a></li>
+<li><a href="#刷入-openwrt-固件">刷入 OpenWrt 固件</a></li>
+<li><a href="#安装-luci-管理界面">安装 LuCI 管理界面</a></li>
+<li><a href="#打开-luci-管理界面">打开 LuCI 管理界面</a></li>
+</ul>
+</nav>
+<blockquote>
+<p>本文主要参考 YouTube 视频 <a href="https://youtu.be/VxzEvdDWU_s">Installing OpenWrt on the Xiaomi 4A, 4C, 3Gv2, 4Q, miWifi 3C and debrick method</a>。</p>
+<p>在网上看到与本文非常类似的 <a href="https://www.cnblogs.com/flytree/p/14812133.html">Win10 下小米路由器 4A 百兆版刷 Openwrt 固件</a>，但后面的步骤几乎完全不同，读者可以比较参考。</p>
+</blockquote>
+<h1 id="背景">背景</h1>
+<p>为了学习 OpenWrt 购买了小米路由器 4A 百兆版。购买前事先确认了这款路由器可以刷入 OpenWrt 固件，而且可以在不拆机的情况下进行：</p>
+<ul>
+<li>可以刷入 OpenWrt 固件的路由器：<a href="https://openwrt.org/toh/start">Table of Hardware</a></li>
+<li>小米路由器 4A 百兆版不拆机刷入 OpenWrt 的方法：<a href="https://github.com/acecilia/OpenWRTInvasion">acecilia/OpenWRTInvasion</a></li>
+</ul>
+<h1 id="下载固件">下载固件</h1>
+<p>在小米路由器 4A 百兆版对应的官方页面 <a href="https://openwrt.org/toh/hwdata/xiaomi/xiaomi_mi_router_4a_100m">Techdata: Xiaomi Mi Router 4A (MIR4A) 100M</a> 找到固件的下载链接。可以看到网页上有两个下载链接，分别对应稳定版和 snapshot 版，我使用的是 snapshot 版。</p>
+<p>这里需要注意 OpenWrt 的稳定版和 snapshot 版的区别：稳定版默认自带 LuCI 管理界面；而 snapshot 版默认不自带 LuCI 管理界面，需要在刷入 OpenWrt 固件后使用 opkg 包管理器安装 LuCI 管理界面后才可以使用。</p>
+<p>此外，官方页面上 snapshot 版的下载链接其实是错误的，打开后会显示 404 Not Found。这时将 URL 结尾的文件名去掉，进入上一级目录，就可以发现文件名并不是 <code>openwrt-ramips-mt76x8-xiaomi_mir4a-100m-squashfs-sysupgrade.bin</code>，而是 <code>xiaomi_mi-router-4a-100m-squashfs-sysupgrade.bin</code>，这样就可以下载了。另外进入上一级目录还有一个原因，就是进入上一级目录后可以看到文件对应的 sha256sum，以便在刷入前对固件进行校验。如果不进行校验而刷入了损坏的文件，会导致路由器变砖。</p>
+<h1 id="下载-openwrtinvasion-程序">下载 OpenWRTInvasion 程序</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--depth</span><span class="op">=</span>1 https://github.com/acecilia/OpenWRTInvasion.git</span></code></pre></div>
+<h1 id="电脑连接路由器">电脑连接路由器</h1>
+<p>使用网线连接电脑和路由器。</p>
+<p>然后，根据 OpenWRTInvasion 官方页面 <a href="https://github.com/acecilia/OpenWRTInvasion">acecilia/OpenWRTInvasion</a> 的描述可知，该程序的 0.0.2 版需要路由器能访问互联网才可以正常运行，所以我在小米路由器 4A 百兆版的管理界面 192.168.31.1 配置了路由器上网。</p>
+<h1 id="运行-openwrtinvasion-程序">运行 OpenWRTInvasion 程序</h1>
+<p>根据 OpenWRTInvasion 官方页面的描述，执行以下命令：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> OpenWRTInvasion</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> remote_command_execution_vulnerability.py</span></code></pre></div>
+<p>在程序运行时需要输入以下内容：</p>
+<p>输入路由器的 IP 地址：192.168.31.1。</p>
+<p>输入路由器的 stok（在登录小米路由器 4A 百兆版的管理界面后可以看到）。</p>
+<figure>
+<img src="https://raw.githubusercontent.com/acecilia/OpenWRTInvasion/f1aa864fb5da06e834cee47c8f50a34e1d676bd0/readme/readme-001.png" alt="查看 stok 的方法" /><figcaption aria-hidden="true">查看 stok 的方法</figcaption>
+</figure>
+<p>运行成功后，OpenWRTInvasion 程序会得到 root 权限，并在路由器上开启 telnet 和 ftp 服务器，供下面的步骤使用。登录路由器的用户名和密码均为 root。</p>
+<h1 id="刷入-openwrt-固件">刷入 OpenWrt 固件</h1>
+<p>使用 telnet 登录路由器：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">telnet</span> 192.168.31.1</span></code></pre></div>
+<p>使用 ftp 命令行工具上传 OpenWrt 固件（也可以使用 ftp 客户端上传）：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ftp</span> 192.168.31.1</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">put</span> xiaomi_mi-router-4a-100m-squashfs-sysupgrade.bin</span></code></pre></div>
+<p>在 telnet 中校验并刷入固件：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./busybox</span> sha256sum xiaomi_mi-router-4a-100m-squashfs-sysupgrade.bin <span class="co"># 校验</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">mtd</span> <span class="at">-e</span> OS1 <span class="at">-r</span> write xiaomi_mi-router-4a-100m-squashfs-sysupgrade.bin OS1 <span class="co"># 刷入</span></span></code></pre></div>
+<p>注意此处校验的结果必须与官方页面上显示的 sha256sum 一致才可以刷入。如果不一致，需要重新下载固件再进行刷入。</p>
+<p>等待路由器指示灯重新变蓝，表示刷入完成。</p>
+<h1 id="安装-luci-管理界面">安装 LuCI 管理界面</h1>
+<p>如上文所述，由于我使用的是 OpenWrt 的 snapshot 版本，不自带 LuCI 管理界面，因此无法直接通过浏览器进入 LuCI 管理界面。此时需要先使用 ssh 登录路由器，使用 opkg 包管理器安装 LuCI 后，方可进入 LuCI 管理界面。</p>
+<p>OpenWrt 默认的 IP 地址是 192.168.1.1。</p>
+<p>使用 ssh 登录路由器：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> root@192.168.1.1</span></code></pre></div>
+<p>OpenWrt 默认没有密码，所以不需要输入密码。</p>
+<p>更新软件列表并安装 LuCI：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">opkg</span> update</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">opkg</span> install luci</span></code></pre></div>
+<p>此时出现下载错误，这是因为我的路由器还没有连接互联网。但是，我是使用 Wi-Fi 连接互联网，配置较为复杂，所以我希望在 LuCI 管理界面中配置，而安装 LuCI 却又需要互联网连接，就出现了「鸡生蛋还是蛋生鸡」的问题。</p>
+<p>对此，我的解决方法是：首先在电脑上使用 Wi-Fi 连接互联网，然后在电脑上运行 HTTP 代理服务器，接下来再配置路由器上的 opkg 使用电脑上的 HTTP 代理服务器连接互联网，就可以正常下载了。</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">&quot;s/https/http/&quot;</span> /etc/opkg/distfeeds.conf</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> option http_proxy http://192.168.1.130:3128/ <span class="op">&gt;&gt;</span> /etc/opkg.conf</span></code></pre></div>
+<p>其中，192.168.1.130 是用网线连接 OpenWrt 路由器和电脑后，电脑获得的 IP 地址；3128 是在电脑上运行的 HTTP 代理服务器的端口号。</p>
+<h1 id="打开-luci-管理界面">打开 LuCI 管理界面</h1>
+<p>使用浏览器打开 192.168.1.1 即可进入 LuCI 管理界面。</p>
+<figure>
+<img src="1.png" alt="进入 LuCI 管理界面" /><figcaption aria-hidden="true">进入 LuCI 管理界面</figcaption>
+</figure>
+<p>（2021 年 9 月 4 日）</p>
+</body>
+</html>

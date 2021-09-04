@@ -15,6 +15,7 @@ https://ayaka.shn.hk/langtag/
 https://ayaka.shn.hk/learnshell/
 https://ayaka.shn.hk/live/
 https://ayaka.shn.hk/opentype/
+https://ayaka.shn.hk/openwrt/
 https://ayaka.shn.hk/pyanxvsdrik/
 https://ayaka.shn.hk/radix16/
 https://ayaka.shn.hk/s2tfont/
