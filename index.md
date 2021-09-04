@@ -43,6 +43,7 @@ math: |-
 1. [Bantian Railway Station](btq/){lang=en hreflang=en}
 1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿）
 1. [深圳蛇口口岸至香港國際機場航線紀錄](zyk/)
+1. [Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件](openwrt/){lang=zh-CN hreflang=zh-CN}
 
 :::{.hidden}
 # 隨筆
@@ -65,3 +66,4 @@ should be after 我的個人思考用語簡介
 - [mes ames](https://rain.moimo.me/){lang=en hreflang=zh-CN}
 - [茨月](https://zcy.moe/){lang=zh-CN hreflang=zh-CN}
 - [凌莞](https://nyac.at/){lang=zh-CN hreflang=zh-CN}
+- [skylee](https://skylee.xyz/){lang=en}
