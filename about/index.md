@@ -11,19 +11,17 @@ math: |-
 
 # 关于我
 
-[MtX~F]{lang=en-HK}。爱好语言学、音韵学。思考时除了用普通话和粤语，还使用[自己的人造语言](../v8/)。
+爱好语言学、音韵学。思考时除了用普通话和粤语，还使用[自己的人造语言](../v8/)。
 
 Arch Linux 用户。最熟悉的编程语言是 Python、Haskell、JavaScript 和 C++。
 
-喜欢古风歌曲，唱古风歌曲的时候会感到安心。
-
-经常感到孤单。
+喜欢古风歌曲，因為唱古风歌曲的时候会感到安心。
 
 # 关于本站
 
 本站使用 pandoc 将 Markdown 转换为 HTML，然后部署于 GitHub Pages。
 
-（请珍惜身边不用 blog framework 的人，比如我。）
+（请珍惜身边不用 blog framework 的人，比如我 x）
 
 本站点是[开源的](https://github.com/ayaka14732/ayaka-site){hreflang=en}，如有错误，请赐示。
 
