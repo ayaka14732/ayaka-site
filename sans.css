@@ -4,32 +4,32 @@
 @import url("https://cdn.jsdelivr.net/gh/nushu-script/NotoTraditionalNushu@woff-v1.0/index.css");
 /* ZHS (1) */
 :lang(zh), :lang(cmn) {
-	font-family: "Roboto", "Source Han Serif SC", "Noto Serif CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif, HanaMin, sans-serif;
+	font-family: "Roboto", "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif, HanaMin, sans-serif;
 	font-language-override: "ZHS";
 }
 /* ZHH (1) */
 :lang(yue), :lang(lzh), :lang(ltc), :lang(och) {
-	font-family: "Roboto", "Source Han Serif K", "Noto Serif CJK KR", "PingFang HK", "PingFang TC", "Microsoft Jhenghei", sans-serif, HanaMin, sans-serif;
+	font-family: "Roboto", "Source Han Sans K", "Noto Sans CJK KR", "PingFang HK", "PingFang TC", "Microsoft Jhenghei", sans-serif, HanaMin, sans-serif;
 	font-language-override: "KOR";
 }
 /* JAN (1) */
 :lang(ja) {
-	font-family: "Roboto", "Source Han Serif", "Noto Serif CJK JP", "Hiragino Sans", "Meiryo", sans-serif, HanaMin, sans-serif;
+	font-family: "Roboto", "Source Han Sans", "Noto Sans CJK JP", "Hiragino Sans", "Meiryo", sans-serif, HanaMin, sans-serif;
 	font-language-override: "JAN";
 }
 /* KOR (1) */
 :lang(ko) {
-	font-family: "Roboto", "Source Han Serif K", "Noto Serif CJK KR", "PingFang HK", "PingFang TC", "Microsoft Jhenghei", sans-serif, HanaMin, sans-serif;
+	font-family: "Roboto", "Source Han Sans K", "Noto Sans CJK KR", "PingFang HK", "PingFang TC", "Microsoft Jhenghei", sans-serif, HanaMin, sans-serif;
 	font-language-override: "KOR";
 }
 /* ZHS (2) */
 :lang(yue-Hans) {
-	font-family: "Roboto", "Source Han Serif SC", "Noto Serif CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, HanaMin, sans-serif;
+	font-family: "Roboto", "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, HanaMin, sans-serif;
 	font-language-override: "ZHS";
 }
 /* ZHH (2) */
 :lang(zh-HK), :lang(zh-TW), :lang(zh-Hant), :lang(cmn-Hant) {
-	font-family: "Roboto", "Source Han Serif K", "Noto Serif CJK KR", "PingFang HK", "PingFang TC", "Microsoft Jhenghei", sans-serif, HanaMin, sans-serif;
+	font-family: "Roboto", "Source Han Sans K", "Noto Sans CJK KR", "PingFang HK", "PingFang TC", "Microsoft Jhenghei", sans-serif, HanaMin, sans-serif;
 	font-language-override: "KOR";
 }
 /* Others */
@@ -45,7 +45,7 @@
 	font-family: sans-serif, sans-serif;
 }
 :lang(en-x-code) {
-	font-family: monospace, monospace, CharisSILW, "Roboto", "Source Han Serif K", "Noto Serif CJK KR", "PingFang HK", "PingFang TC", "Microsoft Jhenghei", HanaMin, monospace, monospace;
+	font-family: monospace, monospace, CharisSILW, "Roboto", "Source Han Sans K", "Noto Sans CJK KR", "PingFang HK", "PingFang TC", "Microsoft Jhenghei", HanaMin, monospace, monospace;
 	font-language-override: "KOR";
 }
 :lang(en-fonipa),

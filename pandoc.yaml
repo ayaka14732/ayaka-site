@@ -3,7 +3,7 @@ author: 三日月綾香
 documentclass: ctexart
 css:
   - /pandoc.css
-  - /serif.css
+  - /sans.css
 colorlinks: true
 classoption:
   - UTF8
