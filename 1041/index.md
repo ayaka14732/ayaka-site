@@ -52,6 +52,8 @@ math: |-
 
 补充：现在用回 GitHub Pages 了
 
+补充：因为 GitHub Pages 没有 IPv6，所以现在用回自己的服务器 + Cloudflare 了
+
 # 也谁も谁一把
 
 （新编日语 p27）

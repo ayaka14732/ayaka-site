@@ -39,7 +39,7 @@ jobs:
 
         # Switch branch
         git fetch
-        git checkout gh-pages
+        git checkout build
         )
 
         # Build
@@ -65,5 +65,5 @@ jobs:
         git add .
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Publish `TZ='Asia/Hong_Kong' date`"
-          git push -f origin gh-pages
+          git push -f origin build
         fi

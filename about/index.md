@@ -7,7 +7,7 @@ math: |-
   </style>
 ---
 
-[![bilibili](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/bilibili-tv.svg)](https://space.bilibili.com/6769569){.icon} [![推特](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/twitter.svg)](https://twitter.com/ayaka14732){.icon} [![邮箱](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/mail.svg)](https://example.org/){.icon #gategdinzijau} [![Codewars](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/codewars.svg){lang=en-HK}](https://www.codewars.com/users/ayaka14732){.icon} [![GitHub](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/github.svg){lang=en-HK}](https://github.com/ayaka14732){.icon} [![知乎](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/zhihu.svg)](https://www.zhihu.com/people/.ayaka){.icon} [![网易云音乐](https://cdn.jsdelivr.net/gh/ayaka14732/syyon-vencie@a4c9a00/icons/music.svg)](https://music.163.com/#/user/home?id=338500484){.icon}
+[![bilibili](bilibili-tv.svg)](https://space.bilibili.com/6769569){.icon} [![Twitter](twitter.svg)](https://twitter.com/ayaka14732){.icon} [![邮箱](mail.svg)](https://example.org/){.icon #gategdinzijau} [![Codewars](codewars.svg){lang=en-HK}](https://www.codewars.com/users/ayaka14732){.icon} [![GitHub](github.svg){lang=en-HK}](https://github.com/ayaka14732){.icon} [![知乎](zhihu.svg)](https://www.zhihu.com/people/.ayaka){.icon} [![网易云音乐](music.svg)](https://music.163.com/#/user/home?id=338500484){.icon}
 
 # 关于我
 
@@ -19,7 +19,7 @@ Arch Linux 用户。最熟悉的编程语言是 Python、Haskell、JavaScript �
 
 # 关于本站
 
-本站使用 pandoc 将 Markdown 转换为 HTML，然后部署于 GitHub Pages。
+本站使用 pandoc 将 Markdown 转换为 HTML，然后部署于服务器。
 
 （请珍惜身边不用 blog framework 的人，比如我 x）
 
