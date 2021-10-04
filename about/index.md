@@ -5,6 +5,9 @@ math: |-
   <style>
   .icon > img { width: 1em; }
   </style>
+  <script>
+  window.addEventListener('DOMContentLoaded', function() { var _h='&#x73;&#x68;&#x6E;&#x2E;&#x68;&#x6B;';var _a='&#x40;&#x6D;&#x61;&#x69;&#x6C;&#x2E;';var _n='&#x61;&#x79;&#x61;&#x6b;&#x61;';var _e=_n+_a+_h;_a=document.createElement('span');_a.innerHTML=_e;document.getElementById('gategdinzijau').href='m'+'a'+'ilto'+':'+_a.innerText; /* Console log */ console.log('Welcome!'); });
+  </script>
 ---
 
 [![bilibili](bilibili-tv.svg)](https://space.bilibili.com/6769569){.icon} [![Twitter](twitter.svg)](https://twitter.com/ayaka14732){.icon} [![邮箱](mail.svg)](https://example.org/){.icon #gategdinzijau} [![Codewars](codewars.svg){lang=en-HK}](https://www.codewars.com/users/ayaka14732){.icon} [![GitHub](github.svg){lang=en-HK}](https://github.com/ayaka14732){.icon} [![知乎](zhihu.svg)](https://www.zhihu.com/people/.ayaka){.icon} [![网易云音乐](music.svg)](https://music.163.com/#/user/home?id=338500484){.icon}

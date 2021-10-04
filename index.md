@@ -10,9 +10,6 @@ math: |-
   body h1 { font-size: 1.17em; } /* the same as h3 */
   li > a, li > a:hover { border-bottom: none; }
   </style>
-  <script>
-  window.addEventListener('DOMContentLoaded', function() { var _h='&#x73;&#x68;&#x6E;&#x2E;&#x68;&#x6B;';var _a='&#x40;&#x6D;&#x61;&#x69;&#x6C;&#x2E;';var _n='&#x61;&#x79;&#x61;&#x6b;&#x61;';var _e=_n+_a+_h;_a=document.createElement('span');_a.innerHTML=_e;document.getElementById('gategdinzijau').href='m'+'a'+'ilto'+':'+_a.innerText; /* Console log */ console.log('Welcome!'); });
-  </script>
 ---
 
 [About](about/){lang=en hreflang=zh-HK}
