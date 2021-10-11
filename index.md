@@ -41,6 +41,7 @@ math: |-
 1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿）
 1. [深圳蛇口口岸至香港國際機場航線紀錄](zyk/)
 1. [Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件](openwrt/){lang=zh-CN hreflang=zh-CN}
+1. [在 FreeBSD 上使用 Fcitx5](fcitx5-freebsd/)
 
 :::{.hidden}
 # 隨筆
