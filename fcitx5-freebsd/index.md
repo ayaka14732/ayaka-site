@@ -29,7 +29,7 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 ```
 
-重新啓動系統後，在輸入法圖標上點按右鍵，開啓 Fcitx5 配置，然後添加 rime，即可輸入中文。
+重啓系統後，在輸入法圖標上點按右鍵，開啓 Fcitx5 配置，然後添加 rime，即可輸入中文。
 
 注：要使用廣東話輸入法，請參考 [rime-cantonese](https://github.com/rime/rime-cantonese) 的 [FreeBSD 安裝教程](https://github.com/rime/rime-cantonese/wiki/FreeBSD-%E5%AE%89%E8%A3%9D%E6%95%99%E7%A8%8B)。
 
