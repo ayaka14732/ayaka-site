@@ -17,6 +17,7 @@ https://ayaka.shn.hk/learnshell/
 https://ayaka.shn.hk/live/
 https://ayaka.shn.hk/opentype/
 https://ayaka.shn.hk/openwrt/
+https://ayaka.shn.hk/pgm/
 https://ayaka.shn.hk/pyanxvsdrik/
 https://ayaka.shn.hk/radix16/
 https://ayaka.shn.hk/s2tfont/
@@ -25,6 +26,7 @@ https://ayaka.shn.hk/shidinn/
 https://ayaka.shn.hk/suzuha/
 https://ayaka.shn.hk/suzuha/generator/
 https://ayaka.shn.hk/teoi/
+https://ayaka.shn.hk/tinype/
 https://ayaka.shn.hk/tyongdiu/
 https://ayaka.shn.hk/v8/
 https://ayaka.shn.hk/wlansniff/

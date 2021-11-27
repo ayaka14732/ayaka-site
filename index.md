@@ -23,6 +23,7 @@ math: |-
 1. [抓包登录大学教务系统](wlansniff/){lang=zh-CN hreflang=zh-CN}
 1. [不再推荐 Haskell](antihask/){lang=zh-CN hreflang=zh-CN}
 1. [C++ 正则表达式速查手册](cppregex/){lang=zh-CN hreflang=zh-CN}
+1. [Windows 10 下的最小 64 位 PE 文件](tinype/){lang=zh-CN hreflang=zh-CN}
 1. [我的個人思考用語簡介](v8/)（未定稿）
 1. [体验 OpenType 的 locl/smpl/trad/ss01-ss20 特性](opentype/){lang=zh-CN hreflang=zh-CN}
 1. [HTML 设置 `lang` 属性的意义](langtag/){lang=zh-CN hreflang=zh-CN}
@@ -42,6 +43,7 @@ math: |-
 1. [深圳蛇口口岸至香港國際機場航線紀錄](zyk/)
 1. [Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件](openwrt/){lang=zh-CN hreflang=zh-CN}
 1. [在 FreeBSD 上使用 Fcitx5](fcitx5-freebsd/)
+1. [概率图模型课程学习感想](pgm/){lang=zh-CN hreflang=zh-CN}
 
 :::{.hidden}
 # 隨筆
