@@ -16,7 +16,7 @@ math: |-
 
 爱好语言学、音韵学。思考时除了用普通话和粤语，还使用[自己的人造语言](../v8/)。
 
-Arch Linux 用户。最熟悉的编程语言是 Python、Haskell、JavaScript 和 C++。
+Arch Linux 用户。喜欢十多种编程语言，最熟悉 Python、JavaScript 和 Haskell。
 
 喜欢古风歌曲，因為唱古风歌曲的时候会感到安心。
 
