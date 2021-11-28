@@ -16,10 +16,8 @@ jobs:
         # Create directory
         mkdir -p ~/pandoc
         cd ~/pandoc
-
         # Download installer
         curl -LsSo pandoc.deb https://github.com/jgm/pandoc/releases/download/2.16.2/pandoc-2.16.2-1-amd64.deb
-
         # Extract pandoc binary
         ar x pandoc.deb data.tar.gz && rm -f pandoc.deb
         tar xvf data.tar.gz ./usr/bin/pandoc && rm -f data.tar.gz
@@ -28,14 +26,10 @@ jobs:
       run: |
         # Add pandoc to PATH
         export PATH=$PATH:~/pandoc
-
         # Build
         python3 build.py
-
-        # Remove source files and README
+        # Remove source files
         find . -name index.md -exec rm -rf {} +
-        rm -rf README.md build.py pandoc.yaml
-
         # Remove all dot files except . and .git
         find . -mindepth 1 -path './.git' -prune -o -name '.*' -exec rm -rf {} +
     - name: Publish
@@ -45,4 +39,4 @@ jobs:
         publish_dir: .
         user_name: 'github-actions[bot]'
         user_email: '41898282+github-actions[bot]@users.noreply.github.com'
-        publish_branch: build
+        exclude_assets: '.github,README.md,build.py,pandoc.yaml'

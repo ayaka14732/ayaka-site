@@ -22,7 +22,7 @@ Arch Linux 用户。喜欢十多种编程语言，最熟悉 Python、JavaScript 
 
 # 关于本站
 
-本站使用 pandoc 将 Markdown 转换为 HTML，然后部署于服务器。
+本站使用 pandoc 将 Markdown 转换为 HTML，然后部署于 GitHub Pages。
 
 （请珍惜身边不用 blog framework 的人，比如我 x）
 
