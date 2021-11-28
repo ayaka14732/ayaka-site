@@ -170,7 +170,7 @@
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>yes <span class="op">|</span> sh <span class="op">-</span>c <span class="st">&quot;$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&quot;</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Customize zsh theme</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>wget <span class="op">-</span>q <span class="op">-</span>P <span class="op">/</span>root<span class="op">/</span>.oh<span class="op">-</span>my<span class="op">-</span>zsh<span class="op">/</span>custom<span class="op">/</span>themes https:<span class="op">//</span>gist.githubusercontent.com<span class="op">/</span>ayaka14732<span class="op">/</span>d15e5a583de03a3b310019f869cc2302<span class="op">/</span>raw<span class="op">/</span><span class="dv">118</span>b7b46ffcf560bf85a35460d7df8343abc62c1<span class="op">/</span>af<span class="op">-</span>magic<span class="op">-%</span><span class="fl">25E7</span><span class="op">%</span><span class="dv">25</span>B6<span class="op">%</span><span class="dv">25</span>BE.zsh<span class="op">-</span>theme</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>wget <span class="op">-</span>q <span class="op">-</span>P <span class="op">/</span>root<span class="op">/</span>.oh<span class="op">-</span>my<span class="op">-</span>zsh<span class="op">/</span>custom<span class="op">/</span>themes https:<span class="op">//</span>gist.githubusercontent.com<span class="op">/</span>ayaka14732<span class="op">/</span>d15e5a583de03a3b310019f869cc2302<span class="op">/</span>raw<span class="op">/</span><span class="dv">118</span><span class="er">b7b46ffcf560bf85a35460d7df8343abc62c1</span><span class="op">/</span>af<span class="op">-</span>magic<span class="op">-%</span><span class="fl">25E7</span><span class="op">%</span><span class="dv">25</span><span class="er">B6</span><span class="op">%</span><span class="dv">25</span><span class="er">BE</span>.zsh<span class="op">-</span>theme</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>sed <span class="op">-</span>r <span class="op">-</span>i <span class="st">&#39;s/robbyrussell/af-magic-綾/&#39;</span> <span class="op">~/</span>.zshrc</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Install pip for Python 3.8</span></span>
@@ -183,7 +183,7 @@
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Set alias</span></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>echo <span class="st">&#39;alias python=python3.8</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="st">alias pip=&quot;python3.8 -m pip&quot;&#39;</span> <span class="op">&gt;&gt;</span> <span class="op">~/</span>.zshrc</span></code></pre></div>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="er">alias pip=&quot;python3.8 -m pip&quot;&#39; &gt;&gt; ~/.zshrc</span></span></code></pre></div>
 <h2 id="将-google-colab-服务器的公钥加入中转服务器">将 Google Colab 服务器的公钥加入中转服务器</h2>
 <p>在 Google Colab 单元格中运行以下命令：</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat <span class="op">~/</span>.ssh<span class="op">/</span>id_rsa.pub</span></code></pre></div>
@@ -214,7 +214,7 @@
 <h2 id="查看系统信息">查看系统信息</h2>
 <div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">neofetch</span></span></code></pre></div>
 <h2 id="查看-gpu-使用情况">查看 GPU 使用情况</h2>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="va">LD_LIBRARY_PATH=</span>/usr/lib64-nvidia <span class="ex">watch</span> <span class="at">-n</span> 1 nvidia-smi</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="va">LD_LIBRARY_PATH</span><span class="op">=</span>/usr/lib64-nvidia <span class="ex">watch</span> <span class="at">-n</span> 1 nvidia-smi</span></code></pre></div>
 <p>不能直接使用 <code>export LD_LIBRARY_PATH=/usr/lib64-nvidia</code>，这样会导致某些程序不能使用 GPU。</p>
 <h2 id="保持-ssh-连接">保持 ssh 连接</h2>
 <p>为了防止 ssh 连接一段时间后就中断，可以在 ssh 选项中加入：</p>

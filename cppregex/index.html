@@ -135,28 +135,28 @@
 <p>C++ 中正则表达式通常使用 <code>R"(...)"</code> 的形式，相当于 Python 中的 <code>r"..."</code>，保证字符串内部的 \ 等字符不被转义。</p>
 <p>但是，<code>R"(...)"</code> 中的 <code>()</code> 是语法的一部分，一定不要当成字符串里面的内容。例如，<code>R"(1234)"</code> 表示字符串 <code>"1234"</code>，而不是 <code>"(1234)"</code>。</p>
 <p>创建正则表达式使用如下形式：</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(\S+)&quot;</span> };</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">\S+</span><span class="st">)&quot;</span> <span class="op">};</span></span></code></pre></div>
 <p>如果要指定忽略大小写， 则使用如下形式：</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(\S+)&quot;</span>, <span class="bu">std::</span>regex<span class="bu">::</span>icase };</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">\S+</span><span class="st">)&quot;</span><span class="op">,</span> <span class="bu">std::</span>regex<span class="bu">::</span>icase<span class="op"> };</span></span></code></pre></div>
 <h1 id="查找">查找</h1>
 <h2 id="判断是否完全匹配">判断是否完全匹配</h2>
 <p>使用 <a href="https://en.cppreference.com/w/cpp/regex/regex_match"><code>std::regex_match</code></a> 函数，第一个参数为字符串，第二个参数为正则表达式，返回值为 <code>bool</code>。</p>
 <p><strong>示例：验证电话号码</strong></p>
 <p>假设电话号码为 xxx-xxxxx 的形式</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iostream&gt;;</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;regex&gt;;</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iostream<span class="op">&gt;;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>regex<span class="op">&gt;;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(\d{3}-\d{5})&quot;</span> };</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">\d{3}-\d{5}</span><span class="st">)&quot;</span> <span class="op">};</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str1 = <span class="st">&quot;123-12345&quot;</span>;</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="dt">bool</span> matched1 = <span class="bu">std::</span>regex_match(str1, re);</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout &lt;&lt; (matched1 ? <span class="st">&quot;Yes&quot;</span> : <span class="st">&quot;No&quot;</span>) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str1 <span class="op">=</span> <span class="st">&quot;123-12345&quot;</span><span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="dt">bool</span> matched1 <span class="op">=</span> <span class="bu">std::</span>regex_match<span class="op">(</span>str1<span class="op">,</span> re<span class="op">);</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> <span class="op">(</span>matched1 <span class="op">?</span> <span class="st">&quot;Yes&quot;</span> <span class="op">:</span> <span class="st">&quot;No&quot;</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str2 = <span class="st">&quot;123-12345a&quot;</span>;</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="dt">bool</span> matched2 = <span class="bu">std::</span>regex_match(str2, re);</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout &lt;&lt; (matched2 ? <span class="st">&quot;Yes&quot;</span> : <span class="st">&quot;No&quot;</span>) &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str2 <span class="op">=</span> <span class="st">&quot;123-12345a&quot;</span><span class="op">;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="dt">bool</span> matched2 <span class="op">=</span> <span class="bu">std::</span>regex_match<span class="op">(</span>str2<span class="op">,</span> re<span class="op">);</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> <span class="op">(</span>matched2 <span class="op">?</span> <span class="st">&quot;Yes&quot;</span> <span class="op">:</span> <span class="st">&quot;No&quot;</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>输出：</p>
 <pre><code>Yes
 No</code></pre>
@@ -167,86 +167,86 @@ No</code></pre>
 <p>使用 <a href="https://en.cppreference.com/w/cpp/regex/regex_search"><code>std::regex_search</code></a> 函数，第一个参数为字符串，第二个参数为正则表达式，返回值为 <code>bool</code>。</p>
 <p>它与 <a href="https://en.cppreference.com/w/cpp/regex/regex_match"><code>std::regex_match</code></a> 的区别是，<code>std::regex_search</code> 只要局部匹配就返回 <code>true</code>，而 <code>std::regex_match</code> 必须完全匹配整个字符串。</p>
 <p><strong>示例：判断每行是否均在 20 字符以内</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iostream&gt;;</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;regex&gt;;</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iostream<span class="op">&gt;;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>regex<span class="op">&gt;;</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(^.{21,}$)&quot;</span> };</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str =</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">R&quot;(0123456789012345</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">012345678901234567</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">0123456789012345678901</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">0123456)&quot;</span>;</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="dt">bool</span> matched = <span class="bu">std::</span>regex_search(str, re);</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout &lt;&lt; (!matched ? <span class="st">&quot;Yes&quot;</span> : <span class="st">&quot;No&quot;</span>) &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">^.{21,}$</span><span class="st">)&quot;</span> <span class="op">};</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str <span class="op">=</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">R&quot;(</span><span class="vs">0123456789012345</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="vs">012345678901234567</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="vs">0123456789012345678901</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="vs">0123456</span><span class="st">)&quot;</span><span class="op">;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="dt">bool</span> matched <span class="op">=</span> <span class="bu">std::</span>regex_search<span class="op">(</span>str<span class="op">,</span> re<span class="op">);</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> <span class="op">(!</span>matched <span class="op">?</span> <span class="st">&quot;Yes&quot;</span> <span class="op">:</span> <span class="st">&quot;No&quot;</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>输出：</p>
 <pre><code>No</code></pre>
 <h2 id="统计匹配个数">统计匹配个数</h2>
 <p>使用 <code>&lt;iterator&gt;</code> 头文件的 <code>std::distance</code> 函数。</p>
 <p><strong>示例：统计词数</strong></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iostream&gt;;</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;regex&gt;;</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iterator&gt;;</span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iostream<span class="op">&gt;;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>regex<span class="op">&gt;;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iterator<span class="op">&gt;;</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(\S+)&quot;</span> };</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str = <span class="st">&quot;Lorem ipsum dolor sit amet, consectetur&quot;</span>;</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>sregex_iterator begin { str.cbegin(), str.cend(), re }, end;</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="kw">auto</span> count = <span class="bu">std::</span>distance(begin, end);</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout &lt;&lt; count &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">\S+</span><span class="st">)&quot;</span> <span class="op">};</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str <span class="op">=</span> <span class="st">&quot;Lorem ipsum dolor sit amet, consectetur&quot;</span><span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>sregex_iterator<span class="op"> </span>begin <span class="op">{</span> str<span class="op">.</span>cbegin<span class="op">(),</span> str<span class="op">.</span>cend<span class="op">(),</span> re <span class="op">},</span> end<span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="kw">auto</span> count <span class="op">=</span> <span class="bu">std::</span>distance<span class="op">(</span>begin<span class="op">,</span> end<span class="op">);</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> count <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>输出：</p>
 <pre><code>6</code></pre>
 <h1 id="提取">提取</h1>
 <h2 id="完全匹配并提取分组">完全匹配并提取分组</h2>
 <p>使用 <a href="https://en.cppreference.com/w/cpp/regex/regex_match"><code>std::regex_match</code></a> 函数，第一个参数为字符串，第二个参数为匹配结果，第三个参数为正则表达式。返回值为 <code>bool</code>，若匹配成功，则返回 <code>true</code>，且匹配结果存入第二个参数中。</p>
 <p><strong>示例：匹配字母加数字</strong></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iostream&gt;;</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;regex&gt;;</span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iostream<span class="op">&gt;;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>regex<span class="op">&gt;;</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(([A-Za-z]+)([0-9]+))&quot;</span> };</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str = <span class="st">&quot;ABC9876543&quot;</span>;</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>smatch match;</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="bu">std::</span>regex_match(str, match, re)) {</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="bu">std::</span>ssub_match match_1 = match[<span class="dv">1</span>];</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="bu">std::</span>ssub_match match_2 = match[<span class="dv">2</span>];</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout &lt;&lt; match_1.str() &lt;&lt; <span class="ch">&#39; &#39;</span> &lt;&lt; match_2.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">([A-Za-z]+)([0-9]+)</span><span class="st">)&quot;</span> <span class="op">};</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str <span class="op">=</span> <span class="st">&quot;ABC9876543&quot;</span><span class="op">;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>smatch<span class="op"> </span>match<span class="op">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span><span class="bu">std::</span>regex_match<span class="op">(</span>str<span class="op">,</span> match<span class="op">,</span> re<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="bu">std::</span>ssub_match<span class="op"> </span>match_1 <span class="op">=</span> match<span class="op">[</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="bu">std::</span>ssub_match<span class="op"> </span>match_2 <span class="op">=</span> match<span class="op">[</span><span class="dv">2</span><span class="op">];</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> match_1<span class="op">.</span>str<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="ch">&#39; &#39;</span> <span class="op">&lt;&lt;</span> match_2<span class="op">.</span>str<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>输出：</p>
 <pre><code>ABC 9876543</code></pre>
 <h2 id="局部匹配并提取分组">局部匹配并提取分组</h2>
 <p>使用 <a href="https://en.cppreference.com/w/cpp/regex/regex_search"><code>std::regex_search</code></a> 函数，第一个参数为字符串，第二个参数为匹配结果，第三个参数为正则表达式。返回值为 <code>bool</code>，若匹配成功，则返回 <code>true</code>，且匹配结果存入第二个参数中。</p>
 <p>它与 <a href="https://en.cppreference.com/w/cpp/regex/regex_match"><code>std::regex_match</code></a> 的区别是，<code>std::regex_search</code> 只要局部匹配就返回 <code>true</code>，而 <code>std::regex_match</code> 必须完全匹配整个字符串。</p>
 <p><strong>示例：匹配长度为 5 的单词的前两个字母</strong></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iostream&gt;;</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;regex&gt;;</span>
+<div class="sourceCode" id="cb11"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iostream<span class="op">&gt;;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>regex<span class="op">&gt;;</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(\b([a-z]{2})[a-z]{3}\b)&quot;</span> };</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str = <span class="st">&quot;thread look welcome high merit cup&quot;</span>;</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>smatch match;</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="bu">std::</span>regex_search(str, match, re)) {</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="bu">std::</span>ssub_match match_1 = match[<span class="dv">1</span>];</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout &lt;&lt; match_1.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">\b([a-z]{2})[a-z]{3}\b</span><span class="st">)&quot;</span> <span class="op">};</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str <span class="op">=</span> <span class="st">&quot;thread look welcome high merit cup&quot;</span><span class="op">;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>smatch<span class="op"> </span>match<span class="op">;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span><span class="bu">std::</span>regex_search<span class="op">(</span>str<span class="op">,</span> match<span class="op">,</span> re<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="bu">std::</span>ssub_match<span class="op"> </span>match_1 <span class="op">=</span> match<span class="op">[</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> match_1<span class="op">.</span>str<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>输出：</p>
 <pre><code>me</code></pre>
 <h2 id="获取所有匹配">获取所有匹配</h2>
 <p>使用 <a href="https://en.cppreference.com/w/cpp/regex/regex_iterator"><code>std::sregex_iterator</code></a>，然后对迭代器使用 <code>it-&gt;str()</code>。</p>
 <p><strong>示例：逐行输出所有单词</strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iostream&gt;;</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;regex&gt;;</span>
+<div class="sourceCode" id="cb13"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iostream<span class="op">&gt;;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>regex<span class="op">&gt;;</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(\S+)&quot;</span> };</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str = <span class="st">&quot;Lorem ipsum dolor sit amet, consectetur&quot;</span>;</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="bu">std::</span>sregex_iterator it { str.cbegin(), str.cend(), re }, end; it != end; ++it)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout &lt;&lt; it-&gt;str() &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">\S+</span><span class="st">)&quot;</span> <span class="op">};</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str <span class="op">=</span> <span class="st">&quot;Lorem ipsum dolor sit amet, consectetur&quot;</span><span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="bu">std::</span>sregex_iterator<span class="op"> </span>it <span class="op">{</span> str<span class="op">.</span>cbegin<span class="op">(),</span> str<span class="op">.</span>cend<span class="op">(),</span> re <span class="op">},</span> end<span class="op">;</span> it <span class="op">!=</span> end<span class="op">;</span> <span class="op">++</span>it<span class="op">)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> it<span class="op">-&gt;</span>str<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>输出：</p>
 <pre><code>Lorem
 ipsum
@@ -257,15 +257,15 @@ consectetur</code></pre>
 <h2 id="从所有匹配中提取分组">从所有匹配中提取分组</h2>
 <p>使用 <a href="https://en.cppreference.com/w/cpp/regex/regex_iterator"><code>std::sregex_iterator</code></a>，然后对迭代器使用 <code>(*it)[1]</code>。</p>
 <p><strong>示例：匹配十六进制数的数字部分</strong></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iostream&gt;;</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;regex&gt;;</span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iostream<span class="op">&gt;;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>regex<span class="op">&gt;;</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(0x([0-9a-f]+))&quot;</span> };</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str = <span class="st">&quot;  0x1d782 0x86fa1  0x54b67 &quot;</span>;</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="bu">std::</span>sregex_iterator it { str.cbegin(), str.cend(), re }, end; it != end; ++it)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout &lt;&lt; (*it)[<span class="dv">1</span>] &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">0x([0-9a-f]+)</span><span class="st">)&quot;</span> <span class="op">};</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str <span class="op">=</span> <span class="st">&quot;  0x1d782 0x86fa1  0x54b67 &quot;</span><span class="op">;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="bu">std::</span>sregex_iterator<span class="op"> </span>it <span class="op">{</span> str<span class="op">.</span>cbegin<span class="op">(),</span> str<span class="op">.</span>cend<span class="op">(),</span> re <span class="op">},</span> end<span class="op">;</span> it <span class="op">!=</span> end<span class="op">;</span> <span class="op">++</span>it<span class="op">)</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> <span class="op">(*</span>it<span class="op">)[</span><span class="dv">1</span><span class="op">]</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>输出：</p>
 <pre><code>1d782
 86fa1
@@ -273,23 +273,23 @@ consectetur</code></pre>
 <h1 id="分割">分割</h1>
 <h2 id="分割字符串">分割字符串</h2>
 <p><strong>示例：根据空白字符分割单词（类似 Python 中 <a href="https://docs.python.org/3/library/re.html#re.split"><code>re.split</code></a>）</strong></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iostream&gt;;</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;list&gt;;</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;regex&gt;;</span>
+<div class="sourceCode" id="cb17"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iostream<span class="op">&gt;;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>list<span class="op">&gt;;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>regex<span class="op">&gt;;</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>list&lt;<span class="bu">std::</span>string&gt; split(<span class="at">const</span> <span class="bu">std::</span>string&amp; str, <span class="at">const</span> <span class="bu">std::</span>regex&amp; delim) {</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>list<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;</span> split<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> str<span class="op">,</span> <span class="at">const</span> <span class="bu">std::</span>regex<span class="op">&amp;</span> delim<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>sregex_token_iterator</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        begin { str.cbegin(), str.cend(), delim, -<span class="dv">1</span> }, end;</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> { begin, end };</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="op"> </span>       begin <span class="op">{</span> str<span class="op">.</span>cbegin<span class="op">(),</span> str<span class="op">.</span>cend<span class="op">(),</span> delim<span class="op">,</span> <span class="op">-</span><span class="dv">1</span> <span class="op">},</span> end<span class="op">;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">{</span> begin<span class="op">,</span> end <span class="op">};</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str = <span class="st">&quot;  Lorem   ipsum </span><span class="sc">\n</span><span class="st"> dolor sit  </span><span class="sc">\t</span><span class="st"> amet,   consectetur  &quot;</span>;</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex delim { <span class="st">R&quot;(\s+)&quot;</span> };</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="kw">auto</span> tokens = split(str, delim);</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="at">const</span> <span class="bu">std::</span>string&amp; token : tokens)</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout &lt;&lt; token &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str <span class="op">=</span> <span class="st">&quot;  Lorem   ipsum </span><span class="sc">\n</span><span class="st"> dolor sit  </span><span class="sc">\t</span><span class="st"> amet,   consectetur  &quot;</span><span class="op">;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>delim <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">\s+</span><span class="st">)&quot;</span> <span class="op">};</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="kw">auto</span> tokens <span class="op">=</span> split<span class="op">(</span>str<span class="op">,</span> delim<span class="op">);</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> token <span class="op">:</span> tokens<span class="op">)</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> token <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>输出：</p>
 <pre><code>
 Lorem
@@ -306,16 +306,16 @@ consectetur</code></pre>
 <h2 id="替换字符串">替换字符串</h2>
 <p>使用 <a href="https://en.cppreference.com/w/cpp/regex/regex_replace"><code>std::regex_replace</code></a>。</p>
 <p><strong>示例：将所有 <code>&lt;h1&gt;</code> 替换为 <code>&lt;h2&gt;</code>，<code>&lt;/h1&gt;</code> 替换为 <code>&lt;/h2&gt;</code></strong></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;iostream&gt;;</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> &lt;regex&gt;;</span>
+<div class="sourceCode" id="cb19"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>iostream<span class="op">&gt;;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="op">&lt;</span>regex<span class="op">&gt;;</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main() {</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex re { <span class="st">R&quot;(&lt;(\/?)h1&gt;)&quot;</span> };</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string str = <span class="st">&quot;&lt;h1&gt;Apples&lt;/h1&gt;&lt;p&gt;I like apples.&lt;/p&gt;</span><span class="sc">\n</span><span class="st">&quot;</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;&lt;h1&gt;Bananas&lt;/h1&gt;&lt;p&gt;I also like bananas.&lt;/p&gt;&quot;</span>;</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string res = <span class="bu">std::</span>regex_replace(str, re, <span class="st">&quot;&lt;$1h2&gt;&quot;</span>);</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout &lt;&lt; res &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>regex<span class="op"> </span>re <span class="op">{</span> <span class="st">R&quot;(</span><span class="vs">&lt;(\/?)h1&gt;</span><span class="st">)&quot;</span> <span class="op">};</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>str <span class="op">=</span> <span class="st">&quot;&lt;h1&gt;Apples&lt;/h1&gt;&lt;p&gt;I like apples.&lt;/p&gt;</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;&lt;h1&gt;Bananas&lt;/h1&gt;&lt;p&gt;I also like bananas.&lt;/p&gt;&quot;</span><span class="op">;</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>res <span class="op">=</span> <span class="bu">std::</span>regex_replace<span class="op">(</span>str<span class="op">,</span> re<span class="op">,</span> <span class="st">&quot;&lt;$1h2&gt;&quot;</span><span class="op">);</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> res <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>输出：</p>
 <pre><code>&lt;h2&gt;Apples&lt;/h2&gt;&lt;p&gt;I like apples.&lt;/p&gt;
 &lt;h2&gt;Bananas&lt;/h2&gt;&lt;p&gt;I also like bananas.&lt;/p&gt;</code></pre>

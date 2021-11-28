@@ -137,7 +137,7 @@
 </blockquote>
 <h1 id="如果不设置-lang-属性">如果不设置 <code>lang</code> 属性…</h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>天<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span>天<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span>天<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>结果为：</p>
 <div class="sans" lang="ja">
 <p>
@@ -164,9 +164,9 @@
 <p>这种问题只需要在网页 <code>html</code> 标签添加属性 <code>lang="zh-CN"</code> 即可解决。</p>
 <p>有人会说，为什么会有人使用日文系统浏览中文网页呢？实际上，随着国际交流与合作日益密切，出于工作和学习的原因，不少中国人会使用日文系统，也有不少日本人会浏览中文网页。而且，上述字体问题不仅会在日语环境下出现，在其他外语环境下同样会出现。因此，考虑这一问题是很有必要的。</p>
 <h1 id="langzh-cn-langzh-hk-与-langzh-tw-的差异"><code>lang="zh-CN"</code>, <code>lang="zh-HK"</code> 与 <code>lang="zh-TW"</code> 的差异</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-HK&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-TW&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-HK&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-TW&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>结果为：</p>
 <div class="sans" lang="ja">
 <p lang="zh-CN">
@@ -184,8 +184,8 @@
 </figure>
 <p>这是因为中国大陆「骨」上方朝左，而香港、台湾朝右；大陆、香港「骨」下方作两横，而台湾作「点挑」。设置语言属性后，浏览器分别应用了三地的字体。</p>
 <h1 id="langzh-hans-与-langzh-hant-的差异"><code>lang="zh-Hans"</code> 与 <code>lang="zh-Hant"</code> 的差异</h1>
-<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-Hans&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-Hant&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-Hans&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-Hant&quot;</span><span class="kw">&gt;</span>骨<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>结果为：</p>
 <div class="sans" lang="ja">
 <p lang="zh-Hans">
@@ -202,8 +202,8 @@
 <h1 id="langzh-hk-与-langzh-hant-hk-有什么区别"><code>lang="zh-HK"</code> 与 <code>lang="zh-Hant-HK"</code> 有什么区别？</h1>
 <p>一般情况下没有区别，因为香港是使用繁体中文的地区，所以 <code>lang="zh-HK"</code> 就隐含了 <code>lang="zh-Hant-HK"</code>，二者的行为应该是等同的。</p>
 <p>但是，在目前最新版的 Mozilla Firefox 中二者行为不同：</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-HK&quot;</span><span class="kw">&gt;&lt;q&gt;</span>你好<span class="kw">&lt;/q&gt;&lt;/p&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-Hant-HK&quot;</span><span class="kw">&gt;&lt;q&gt;</span>你好<span class="kw">&lt;/q&gt;&lt;/p&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-HK&quot;</span><span class="kw">&gt;&lt;q&gt;</span>你好<span class="kw">&lt;/q&gt;&lt;/p&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-Hant-HK&quot;</span><span class="kw">&gt;&lt;q&gt;</span>你好<span class="kw">&lt;/q&gt;&lt;/p&gt;</span></span></code></pre></div>
 <p>结果为：</p>
 <div class="sans" lang="ja">
 <p lang="zh-HK">
@@ -219,8 +219,8 @@
 <p>这可能只是一个 bug。</p>
 <h1 id="lang-属性在西文中的差异"><code>lang</code> 属性在西文中的差异</h1>
 <div class="sourceCode" id="cb5"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;style&gt;</span><span class="fu">.upper</span> { <span class="kw">text-transform</span>: <span class="dv">uppercase</span><span class="op">;</span> }<span class="kw">&lt;/style&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;upper&quot;</span><span class="ot"> lang=</span><span class="st">&quot;en-US&quot;</span><span class="kw">&gt;</span>shipping<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;upper&quot;</span><span class="ot"> lang=</span><span class="st">&quot;tr&quot;</span><span class="kw">&gt;</span>shipping<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;upper&quot;</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;en-US&quot;</span><span class="kw">&gt;</span>shipping<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;upper&quot;</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;tr&quot;</span><span class="kw">&gt;</span>shipping<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>结果为：</p>
 <div class="sans" lang="ja">
 <style>.upper { text-transform: uppercase; }</style>
@@ -236,8 +236,8 @@ shipping
 </figure>
 <p>这是因为土耳其文有带点与不带点两种 i 字母，带点的小写 i 对应的是带点的大写 İ。</p>
 <h1 id="langen-gb-与-langen-us-的差异"><code>lang="en-GB"</code> 与 <code>lang="en-US"</code> 的差异</h1>
-<div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;textarea</span><span class="ot"> lang=</span><span class="st">&quot;en-GB&quot;</span><span class="kw">&gt;</span>center centre<span class="kw">&lt;/textarea&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;textarea</span><span class="ot"> lang=</span><span class="st">&quot;en-US&quot;</span><span class="kw">&gt;</span>center centre<span class="kw">&lt;/textarea&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;textarea</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;en-GB&quot;</span><span class="kw">&gt;</span>center centre<span class="kw">&lt;/textarea&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;textarea</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;en-US&quot;</span><span class="kw">&gt;</span>center centre<span class="kw">&lt;/textarea&gt;</span></span></code></pre></div>
 <p>结果为：</p>
 <div class="sans" lang="ja">
 <textarea lang="en-GB">center centre</textarea>
@@ -251,8 +251,8 @@ shipping
 <p>有人可能认为，既然 <code>lang</code> 属性会影响浏览器所使用的汉字字体，从而影响字形，那么只要用了相应地区的汉字字体，字形自然也就确定了，所以也就不必再指定 <code>lang</code> 属性了。</p>
 <p>这种想法是不正确的。因为现代字体具有 OpenType 的 locl 特性，会根据 <code>lang</code> 属性改变字形。</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;style&gt;</span><span class="fu">.font-k</span> { <span class="kw">font-family</span>: <span class="st">&#39;Source Han Sans SC&#39;</span><span class="op">,</span> <span class="dv">sans-serif</span><span class="op">;</span> }<span class="kw">&lt;/style&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;font-k&quot;</span><span class="kw">&gt;</span>天<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;font-k&quot;</span><span class="ot"> lang=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span>天<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;font-k&quot;</span><span class="kw">&gt;</span>天<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;font-k&quot;</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span>天<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>结果为：</p>
 <div class="sans" lang="ja">
 <style>.font-k { font-family: 'Source Han Sans SC', sans-serif; }</style>
@@ -269,9 +269,9 @@ shipping
 <p>这是因为外层设置了 <code>lang="ja"</code>，因此如果不设置 <code>lang</code> 属性，就会继承外层的设置，使浏览器默认使用日文字形。虽然 Source Han Sans SC 默认为中国大陆字形，但是由于 OpenType 的 locl 特性，也会自动变为日文字形。</p>
 <p>有人会说，我当然不会把页面外层设置为日文。但是，需要再次重申，如果页面没有设置 <code>lang</code> 属性，就会使用浏览器或操作系统设置的语言。用户的系统使用何种语言，是网页开发者无法控制的。</p>
 <p>还有一个更常见的现象是引号问题。</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span><span class="ot"> lang=</span><span class="st">&quot;en&quot;</span><span class="kw">&gt;</span></span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;en&quot;</span><span class="kw">&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>“你好”<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span>“你好”<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span>“你好”<span class="kw">&lt;/p&gt;</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
 <p>结果为：</p>
 <div class="sans" lang="ja">
@@ -310,12 +310,12 @@ shipping
 <h1 id="如何使-langzh-hant-使用香港或韩国字形">如何使 <code>lang="zh-Hant"</code> 使用香港或韩国字形？</h1>
 <p><code>zh-Hant</code> 默认使用台湾字形。但是有人会说，自己的页面就是需要设置 <code>lang="zh-Hant"</code>，但是又<a href="http://founder.acgvlyric.org/iu/doku.php/%E8%AA%AA%E6%96%87:%E8%87%BA%E6%A8%99%E4%B9%8B%E5%AE%B3">不想使用台湾字形</a>。这时可以使用 CSS 的 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-language-override" lang="en-x-code"><code>font-language-override</code></a> 属性。</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;style&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">.glyph-hk:lang</span>(zh-Hant) { <span class="kw">font-language-override</span>: <span class="st">&quot;ZHH&quot;</span><span class="op">;</span> }</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">.glyph-kr:lang</span>(zh-Hant) { <span class="kw">font-language-override</span>: <span class="st">&quot;KOR&quot;</span><span class="op">;</span> }</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">.glyph-hk</span><span class="in">:lang(zh-Hant)</span> { <span class="kw">font-language-override</span>: <span class="st">&quot;ZHH&quot;</span><span class="op">;</span> }</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">.glyph-kr</span><span class="in">:lang(zh-Hant)</span> { <span class="kw">font-language-override</span>: <span class="st">&quot;KOR&quot;</span><span class="op">;</span> }</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/style&gt;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-Hant&quot;</span><span class="kw">&gt;</span>霄<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;glyph-hk&quot;</span><span class="ot"> lang=</span><span class="st">&quot;zh-Hant&quot;</span><span class="kw">&gt;</span>霄<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;glyph-kr&quot;</span><span class="ot"> lang=</span><span class="st">&quot;zh-Hant&quot;</span><span class="kw">&gt;</span>霄<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-Hant&quot;</span><span class="kw">&gt;</span>霄<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;glyph-hk&quot;</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-Hant&quot;</span><span class="kw">&gt;</span>霄<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;glyph-kr&quot;</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-Hant&quot;</span><span class="kw">&gt;</span>霄<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>结果为：</p>
 <div class="sans" lang="ja">
 <style>

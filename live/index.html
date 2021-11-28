@@ -154,7 +154,7 @@
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-zxvf</span> nginx-1.15.5.tar.gz</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> dev.zip</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> nginx-1.15.1</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="va">CC=</span>clang <span class="ex">./configure</span> <span class="at">--with-http_ssl_module</span> <span class="at">--add-module</span><span class="op">=</span>../nginx-rtmp-module-dev</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="va">CC</span><span class="op">=</span>clang <span class="ex">./configure</span> <span class="at">--with-http_ssl_module</span> <span class="at">--add-module</span><span class="op">=</span>../nginx-rtmp-module-dev</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> <span class="at">-j8</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> make install</span></code></pre></div>
 <p>最初在使用 <code>configure</code> 命令时，没有指定 <code>CC=clang</code>，系统默认的编译器为 GCC 8.2.1，出现了一些编译错误，使得编译失败。我还没有能力通过解决修改源代码的方式解决这些错误，但是想到该错误可能与编译器有关，于是指定 <code>CC=clang</code>，将编译器改为 Clang 6.0.1，成功编译。</p>
@@ -223,17 +223,17 @@
 <h3 id="在-windows-上拉流">在 Windows 上拉流</h3>
 <p>新建文件 <code>video.html</code>，输入如下内容：</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-CN&quot;</span><span class="kw">&gt;</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;meta</span><span class="ot"> charset=</span><span class="st">&quot;utf-8&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;meta</span> <span class="er">charset</span><span class="ot">=</span><span class="st">&quot;utf-8&quot;</span> <span class="kw">/&gt;</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;title&gt;</span>直播实验室<span class="kw">&lt;/title&gt;</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;https://unpkg.com/video.js/dist/video.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;link</span><span class="ot"> href=</span><span class="st">&quot;https://unpkg.com/video.js/dist/video-js.min.css&quot;</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;script</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;https://unpkg.com/video.js/dist/video.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;link</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;https://unpkg.com/video.js/dist/video-js.min.css&quot;</span> <span class="er">rel</span><span class="ot">=</span><span class="st">&quot;stylesheet&quot;</span> <span class="kw">/&gt;</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/head&gt;</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;body&gt;</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1&gt;</span>直播实验室<span class="kw">&lt;/h1&gt;</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;video</span><span class="ot"> class=</span><span class="st">&quot;video-js&quot;</span><span class="ot"> controls autoplay=</span><span class="st">&quot;true&quot;</span><span class="ot"> width=</span><span class="st">&quot;640&quot;</span><span class="ot"> data-setup=</span><span class="st">&quot;{}&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;source</span><span class="ot"> src=</span><span class="st">&quot;http://192.168.56.9:8080/hls/live.m3u8&quot;</span><span class="ot"> type=</span><span class="st">&quot;application/vnd.apple.mpegurl&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;video</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;video-js&quot;</span> <span class="er">controls</span> <span class="er">autoplay</span><span class="ot">=</span><span class="st">&quot;true&quot;</span> <span class="er">width</span><span class="ot">=</span><span class="st">&quot;640&quot;</span> <span class="er">data-setup</span><span class="ot">=</span><span class="st">&quot;{}&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;source</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;http://192.168.56.9:8080/hls/live.m3u8&quot;</span> <span class="er">type</span><span class="ot">=</span><span class="st">&quot;application/vnd.apple.mpegurl&quot;</span> <span class="kw">/&gt;</span></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/video&gt;</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/body&gt;</span></span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
@@ -344,7 +344,7 @@ prista/hls/30088402/output009.ts</code></pre>
 <img src="Screenshot_2018-11-15-16-47-26.png" alt="hls-simple on mobile" /><figcaption aria-hidden="true">hls-simple on mobile</figcaption>
 </figure>
 <p><a href="https://github.com/ayaka14732/hls-simple">源代码</a></p>
-<section class="footnotes" role="doc-endnotes">
+<section class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
 <li id="fn1" role="doc-endnote"><p>Zac波. RTMP HLS HTTP 直播协议一次看个够[EB/OL]. https://www.jianshu.com/p/4c89b2c83e59.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

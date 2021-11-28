@@ -142,8 +142,8 @@
 <p>locl 特性可以根据地区的不同自动改变字形。这一特性是默认启用的。</p>
 <p>比如下面的 HTML：</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;style&gt;</span><span class="fu">.test1</span> { <span class="kw">font-family</span>: <span class="st">&#39;Source Han Serif K&#39;</span><span class="op">,</span> <span class="dv">serif</span><span class="op">;</span> }<span class="kw">&lt;/style&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;ko-KR&quot;</span><span class="ot"> class=</span><span class="st">&quot;test1&quot;</span><span class="kw">&gt;</span>羽<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> lang=</span><span class="st">&quot;zh-CN&quot;</span><span class="ot"> class=</span><span class="st">&quot;test1&quot;</span><span class="kw">&gt;</span>羽<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;ko-KR&quot;</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test1&quot;</span><span class="kw">&gt;</span>羽<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">lang</span><span class="ot">=</span><span class="st">&quot;zh-CN&quot;</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test1&quot;</span><span class="kw">&gt;</span>羽<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>显示效果为：</p>
 <div class="sample">
 <p lang="ko-KR" class="test1">
@@ -161,8 +161,8 @@
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.test2</span> { <span class="kw">font-family</span>: <span class="st">&#39;Yu Mincho&#39;</span><span class="op">,</span> <span class="dv">serif</span><span class="op">;</span> }</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.trad</span> { <span class="kw">font-feature-settings</span>: <span class="st">&#39;trad&#39;</span><span class="op">;</span> }</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/style&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test2&quot;</span><span class="kw">&gt;</span>国家<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test2 trad&quot;</span><span class="kw">&gt;</span>国家<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test2&quot;</span><span class="kw">&gt;</span>国家<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test2 trad&quot;</span><span class="kw">&gt;</span>国家<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>显示效果为：</p>
 <div class="sample">
 <p class="test2">
@@ -173,8 +173,8 @@
 </p>
 </div>
 <p>当然，这一字体的转换规则并不完善：</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test2&quot;</span><span class="kw">&gt;</span>花弁<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test2 trad&quot;</span><span class="kw">&gt;</span>花弁<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test2&quot;</span><span class="kw">&gt;</span>花弁<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test2 trad&quot;</span><span class="kw">&gt;</span>花弁<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>显示效果为：</p>
 <div class="sample">
 <p class="test2">
@@ -200,14 +200,14 @@
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.ss06</span> { <span class="kw">font-feature-settings</span>: <span class="st">&#39;ss06&#39;</span><span class="op">;</span> }</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.ss07</span> { <span class="kw">font-feature-settings</span>: <span class="st">&#39;ss07&#39;</span><span class="op">;</span> }</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/style&gt;</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test3&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test3 ss01&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test3 ss02&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test3 ss03&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test3 ss04&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test3 ss05&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test3 ss06&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;test3 ss07&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test3&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test3 ss01&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test3 ss02&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test3 ss03&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test3 ss04&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test3 ss05&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test3 ss06&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;test3 ss07&quot;</span><span class="kw">&gt;</span>晚來天欲雪，能飲一杯無<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
 <p>显示效果为：</p>
 <div class="sample">
 <p class="test3">
