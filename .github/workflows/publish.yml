@@ -33,11 +33,11 @@ jobs:
         python3 build.py
 
         # Remove source files and README
-        find . -name index.md -delete
+        find . -name index.md -exec rm -rf {} +
         rm -rf README.md build.py pandoc.yaml
 
         # Remove all dot files except . and .git
-        find . -mindepth 1 -path './.git' -prune -o -name '.*' -delete
+        find . -mindepth 1 -path './.git' -prune -o -name '.*' -exec rm -rf {} +
     - name: Publish
       uses: peaceiris/actions-gh-pages@v3
       with:
