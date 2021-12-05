@@ -50,6 +50,7 @@ math: |-
 
 1. [Nushu Everywhere](nushu-everywhere/){lang=en-US hreflang=en-US}
 1. [The Shidinn Language](shidinn/){lang=en hreflang=en}
+1. [如何正确学习青年大学习](daxuexi/){lang=zh-CN hreflang=zh-CN}
 :::
 
 <!--
