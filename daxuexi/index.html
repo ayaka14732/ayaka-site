@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <title>如何正确学习青年大学习</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="/pandoc.css" />
+  <link rel="stylesheet" href="/sans.css" />
+  <style>img { border: 1px solid #ccc; max-height: 100vh; max-width: 80%; }</style>
+  <meta name="description" content="你已经是一个成熟的程序员了，要学会自己 Debug"/>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">如何正确学习青年大学习</h1>
+<p class="author">三日月綾香</p>
+</header>
+<p>“学习新思想，争做新青年”。今天准备学习青年大学习的时候，却发现网页加载不出来了：</p>
+<p><img src="0.jpg" /></p>
+<p>首先想到的是可能是自己的网络问题，于是切换了 Wi-Fi 和手机流量，把各种能想到的办法都尝试了一遍，发现网页还是加载不出来。</p>
+<p>这时经过思考，想到网页既然能够显示，说明至少网页本身已经被成功加载了，只是有一部分资源不能被成功加载。点击右上角“复制链接”，粘贴到电脑浏览器中打开，就可以找出不能被成功加载的资源：</p>
+<p><img src="1.png" /></p>
+<p>原来罪魁祸首是 <code>jquery.js</code>, <code>touch-0.2.14.min.js</code> 等几个文件。这时，首先想到可以用 <a href="https://addons.mozilla.org/en-US/firefox/addon/local-cdn-webextension/">Local CDN</a> 之类的浏览器拓展把缺失的文件补上，但是 <code>loader.js</code> 和 <code>area.js</code> 是网页本身的文件，所以这种方法不行。</p>
+<p>正当我一筹莫展之际，发现这个网页的链接是 http 协议，而不能加载的链接都是 https 协议，于是想到可能是协议的问题。将这几个链接的 https 协议改成 http 协议，在浏览器中打开，果然都能正确加载。于是，问题变成了如何使浏览器在加载原网页时就将网页中相应链接的 https 协议重写为 http 协议。</p>
+<p>由于原网页是 http 协议，很自然地想到可以利用 nginx 作为代理服务器，然后用 <code>ngx_http_sub_module</code> 修改网页中的内容。</p>
+<p>获取原网站的服务器 IP 地址：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dig +short A h5.cyol.com</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">103.42.78.169</span></span></code></pre></div>
+<p>安装 nginx，打开 nginx 的配置文件，在 server 块内加入以下内容，然后运行 nginx：</p>
+<pre class="conf"><code>location / {
+    proxy_pass http://103.42.78.169;
+    proxy_set_header Host $host;
+
+    sub_filter_once off;
+    sub_filter_types text/html;
+    sub_filter &quot;https://h5.cyol.com/special/daxuexi&quot; &quot;http://h5.cyol.com/special/daxuexi&quot;;
+}</code></pre>
+<p>其中，<code>proxy_pass</code> 指定了原网站的服务器 IP 地址，<code>proxy_set_header</code> 指定了访问原网站的 Host 字段。因为代理服务器是使用 IP 地址而不是域名访问原网站，所以必须手动指定 Host 字段，原网站的服务器才能知道代理服务器请求的是哪个域名的网页。<code>sub_filter</code> 是将相应链接的 https 协议重写为 http 协议。</p>
+<p>修改 hosts 文件，将原网站的域名指向代理服务器的 IP 地址：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">127.0.0.1 h5.cyol.com</span></span></code></pre></div>
+<p>在电脑浏览器中刷新，发现网页可以正常打开了。</p>
+<p>正当我以为大功告成之时，突然想起我还没有签到。这时再次刷新页面，可以看到“我要签到”按钮，但点击后却出现 <span lang="en-US">“Oops! Something went wrong:(”</span> 字样：</p>
+<p><img src="2.png" /></p>
+<p>这是微信的 OAuth 页面，说明要想签到，直接在电脑上打开是不行的，必须在微信中打开网页。为此，需要让手机能使用电脑的代理服务器。</p>
+<p>将原来在电脑上修改的 hosts 文件还原。然后，将电脑和手机连接到同一个路由器上，在路由器配置界面将原网站的域名指向电脑的 IP 地址：</p>
+<p><img src="3.png" /></p>
+<p>这时手机应该会使用电脑的代理服务器了，但是在微信刷新页面，结果却没有变化。</p>
+<p>查看 nginx 的日志，发现手机没有连接的记录；用 Wireshark 抓包，也发现手机没有向路由器发送解析原网站的域名的 DNS 请求。由此判断是微信缓存的问题。</p>
+<p>参考知乎专栏的文章<a href="https://zhuanlan.zhihu.com/p/71840735">《如何正确清理微信缓存？》</a>，依次点击「我」、「设置」、「通用」、「微信存储空间」、「清理微信缓存」，即可清理微信缓存。</p>
+<p>清理微信缓存之后，青年大学习的网页可以正常打开了，但点击“我要签到”按钮后，却显示“无法打开页面”：</p>
+<p><img src="4.jpg" /></p>
+<p>由于此时网页没有被正确加载，所以点击右上角时不会出现“复制链接”按钮，也就无从分析问题产生的原因。这时，发现持续快速点击屏幕时，屏幕上有时会闪过网页的网址，但由于速度太快不能看清楚。为此，使用手机的录屏功能录下这一画面，然后找出对应的那一帧：</p>
+<p><img src="5.png" /></p>
+<p>由此可以发现又是 https 的问题。原来在原网页中定义了 OAuth 的回调 URL，而回调 URL 是经过 URL 编码的，所以没有被 nginx 修改。</p>
+<p>在 nginx 的配置文件中加入：</p>
+<pre class="conf"><code>    sub_filter &quot;https%3A%2F%2Fh5.cyol.com%2Fspecial%2Fdaxuexi&quot; &quot;http%3A%2F%2Fh5.cyol.com%2Fspecial%2Fdaxuexi&quot;;</code></pre>
+<p>再清除缓存，就可以正常学习青年大学习了：</p>
+<p><img src="6.jpg" /></p>
+<p>这次学习青年大学习，我感到非常有意义。不但因为这是我经过不断分析、调试才成功打开的，所以学习得特别认真；而且，这次实践经历加深了我对 Web 技术的理解，对我今后的学习和工作而言都是一笔宝贵的财富。</p>
+<p>（2021 年 12 月 5 日）</p>
+</body>
+</html>
