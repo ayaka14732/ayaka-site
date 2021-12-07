@@ -40,7 +40,7 @@ keywords:
 
 # JavaScript Example
 
-If you can use ES6 [Unicode point escapes](https://caniuse.com/mdn-javascript_grammar_unicode_point_escapes) (`\u{...}`):
+If you can use ES6 [RegExp: Unicode](https://caniuse.com/mdn-javascript_builtins_regexp_unicode):
 
 ```javascript
 > const isHan = (c) => /^[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{3134f}]$/u.test(c);
