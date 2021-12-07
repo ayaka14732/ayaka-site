@@ -48,6 +48,14 @@ If you can use ES6 [Unicode point escapes](https://caniuse.com/mdn-javascript_gr
 [ false, false, true, true, true, true ]
 ```
 
+If your target browsers do not support ES6 Unicode point escapes, but support ES6 [RegExp: unicode](https://caniuse.com/mdn-javascript_builtins_regexp_unicode), you can also use the unescaped characters directly:
+
+```javascript
+> const isHan = (c) => /^[〆〇一-鿿㐀-䶿𠀀-𪛟𪜀-𮯯𰀀-𱍏]$/u.test(c);
+> console.log([...'m！文𦫖〇〆'].map(isHan));
+[ false, false, true, true, true, true ]
+```
+
 If you cannot use ES6, you have to use [surrogate pairs](http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm):
 
 ```javascript
