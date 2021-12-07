@@ -29,7 +29,7 @@ math: |-
 1. [HTML 设置 `lang` 属性的意义](langtag/){lang=zh-CN hreflang=zh-CN}
 1. [铃羽系统在汉语数制拓展表示中的应用](suzuha/){lang=zh-CN hreflang=zh-CN}
 1. [方言生僻字讀音的推導問題](yatngiox/){lang=zh-Hant hreflang=zh-Hant}
-1. [正則表達式匹配漢字](hanregex/)
+1. [How to Properly Match Chinese Characters With Regular Expression](hanregex/){lang=en hreflang=en}
 1. [漢字化的日文元素名稱是什麼樣子](kanji-periodic-table/){lang=zh-Hant hreflang=zh-Hant}
 1. [結巴分詞處理粵語](yueseg/hant/)
 1. [論直音、反切與其他註音方式的優劣](pyanxvsdrik/){lang=zh-Hant hreflang=zh-Hant}
