@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" dir="ltr">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="三日月綾香" />
-  <meta name="keywords" content="regular expression, Chinese character, regex, CJK ideograph, Unicode" />
-  <title>How to Properly Match Chinese Characters With Regular Expression</title>
+  <meta name="keywords" content="正则表达式, 汉字, 中日韩越统一表意文字, Unicode" />
+  <title>如何正确使用正则表达式匹配汉字</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -103,25 +103,26 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">How to Properly Match Chinese Characters With Regular Expression</h1>
+<h1 class="title">如何正确使用正则表达式匹配汉字</h1>
 <p class="author">三日月綾香</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
 <li><a href="#tldr">tl;dr</a></li>
-<li><a href="#explanation">Explanation</a></li>
-<li><a href="#python-example">Python Example</a></li>
-<li><a href="#javascript-example">JavaScript Example</a></li>
-<li><a href="#why-does-pschan-not-work">Why Does <code>\p{sc=Han}</code> Not Work</a></li>
-<li><a href="#why-does-pideo-not-work">Why Does <code>\p{Ideo}</code> Not Work</a></li>
+<li><a href="#解释">解释</a></li>
+<li><a href="#python-示例">Python 示例</a></li>
+<li><a href="#javascript-示例">JavaScript 示例</a></li>
+<li><a href="#为什么不能用-pschan">为什么不能用 <code>\p{sc=Han}</code></a></li>
+<li><a href="#为什么不能用-pideo">为什么不能用 <code>\p{Ideo}</code></a></li>
 </ul>
 </nav>
 <blockquote>
-<p><span lang="zh-CN">简体中文版《<a href="zh-CN/" hreflang="zh-CN">如何正确使用正则表达式匹配汉字</a>》</span></p>
+<p><span lang="en">English Version: <a href="../" hreflang="en"><em>How to Properly Match Chinese Characters With Regular Expression</em></a></span></p>
 </blockquote>
 <h1 id="tldr">tl;dr</h1>
 <pre><code>[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U0003134f]</code></pre>
-<h1 id="explanation">Explanation</h1>
+<h1 id="解释">解释</h1>
+<div lang="en-HK">
 <ul>
 <li><code>U+3006</code>: Character 〆 (often regarded as a Chinese character)</li>
 <li><code>U+3007</code>: Character 〇 (often regarded as a Chinese character)</li>
@@ -134,24 +135,25 @@
 <li><code>U+2CEB0-U+2EBEF</code>: CJK Unified Ideographs Extension F</li>
 <li><code>U+30000-U+3134F</code>: CJK Unified Ideographs Extension G</li>
 </ul>
-<h1 id="python-example">Python Example</h1>
+</div>
+<h1 id="python-示例">Python 示例</h1>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> re</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> han_regex <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r&#39;[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U0003134f]&#39;</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> is_han <span class="op">=</span> <span class="kw">lambda</span> c: <span class="bu">bool</span>(han_regex.fullmatch(c))</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>([is_han(c) <span class="cf">for</span> c <span class="kw">in</span> <span class="st">&#39;m！文𦫖〇〆&#39;</span>])</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>[<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>]</span></code></pre></div>
-<h1 id="javascript-example">JavaScript Example</h1>
-<p>If you can use ES6 <a href="https://caniuse.com/mdn-javascript_builtins_regexp_unicode">RegExp: Unicode</a>:</p>
+<h1 id="javascript-示例">JavaScript 示例</h1>
+<p>如果可以用 ES6 的 <a href="https://caniuse.com/mdn-javascript_grammar_unicode_point_escapes">Unicode point escapes</a> (<code>\u{...}</code>)：</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">const</span> isHan <span class="op">=</span> (c) <span class="kw">=&gt;</span> <span class="ss">/</span><span class="sc">^[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{3134f}]$</span><span class="ss">/u</span><span class="op">.</span><span class="fu">test</span>(c)<span class="op">;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>([<span class="op">...</span><span class="st">&#39;m！文𦫖〇〆&#39;</span>]<span class="op">.</span><span class="fu">map</span>(isHan))<span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>[ <span class="kw">false</span><span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span> ]</span></code></pre></div>
-<p>If you cannot use ES6, you have to use <a href="http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm">surrogate pairs</a>:</p>
+<p>如果不能用 ES6，就必须使用<a href="http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm">代理对</a>：</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">const</span> isHan <span class="op">=</span> (c) <span class="kw">=&gt;</span> <span class="ss">/</span><span class="sc">^[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud883][\udc00-\udfff]|\u</span><span class="ss">d869</span><span class="sc">[\udc00-\udedf\udf00-\udfff]|\u</span><span class="ss">d87a</span><span class="sc">[\udc00-\udfef]|\u</span><span class="ss">d884</span><span class="sc">[\udc00-\udf4f]$</span><span class="ss">/</span><span class="op">.</span><span class="fu">test</span>(c)<span class="op">;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>([<span class="op">...</span><span class="st">&#39;m！文𦫖〇〆&#39;</span>]<span class="op">.</span><span class="fu">map</span>(isHan))<span class="op">;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>[ <span class="kw">false</span><span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span> ]</span></code></pre></div>
-<h1 id="why-does-pschan-not-work">Why Does <code>\p{sc=Han}</code> Not Work</h1>
-<p>The syntax <code>\p{...}</code> is called <a href="https://tc39.es/proposal-regexp-unicode-property-escapes/">Unicode property escapes</a>. The first part <code>sc</code> is the Unicode property name meaning ‘script’, while the second part <code>Han</code> is the Unicode property value.</p>
-<p>To determine which characters are associated with the Han script, you can check <a href="https://www.unicode.org/Public/UCD/latest/ucd/Scripts.txt"><code>Scripts.txt</code></a> in UCD.</p>
+<h1 id="为什么不能用-pschan">为什么不能用 <code>\p{sc=Han}</code></h1>
+<p><code>\p{...}</code> 这种语法称为 <a href="https://tc39.es/proposal-regexp-unicode-property-escapes/">Unicode property escapes</a>。第一部分是 Unicode property name，<code>sc</code> 表示 script；第二部分 <code>Han</code> 是 Unicode property value。</p>
+<p>要查看哪些字符属于 Han script，可以查看 UCD 中的 <a href="https://www.unicode.org/Public/UCD/latest/ucd/Scripts.txt"><code>Scripts.txt</code></a>。</p>
 <ul>
 <li><code>U+2E80-U+2E99</code>: CJK Radicals</li>
 <li><code>U+2E9B-U+2EF3</code>: CJK Radicals</li>
@@ -176,9 +178,9 @@
 <li><code>U+2F800-U+2FA1D</code>: CJK Compatibility Ideographs Supplements</li>
 <li><code>U+30000-U+3134A</code>: <strong>CJK Unified Ideographs Extension G</strong></li>
 </ul>
-<p>You can see that it covers more than just Chinese characters.</p>
-<h1 id="why-does-pideo-not-work">Why Does <code>\p{Ideo}</code> Not Work</h1>
-<p>Similarly, <code>Ideo</code> here is an abbreviation for ‘Ideograph’. To determine which characters are associated with the Ideograph property, you can check <a href="https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt"><code>PropList.txt</code></a> in UCD.</p>
+<p>可以看出它不只包括汉字。</p>
+<h1 id="为什么不能用-pideo">为什么不能用 <code>\p{Ideo}</code></h1>
+<p>类似地，这里的 <code>Ideo</code> 是 Ideograph 的缩写。要查看哪些字符属于 Ideograph，可以查看 UCD 中的 <a href="https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt"><code>PropList.txt</code></a>。</p>
 <ul>
 <li><code>U+3006</code>: Ideographic Closing Mark</li>
 <li><code>U+3007</code>: Ideographic Number Zero</li>
@@ -202,6 +204,6 @@
 <li><code>U+2F800-U+2FA1D</code>: CJK Compatibility Ideographs Supplements</li>
 <li><code>U+30000-U+3134A</code>: <strong>CJK Unified Ideographs Extension G</strong></li>
 </ul>
-<p>Like the previous one, you can see that it covers more than just Chinese characters.</p>
+<p>可以看出它不只包括汉字。</p>
 </body>
 </html>
