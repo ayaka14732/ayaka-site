@@ -1,15 +1,14 @@
 ---
-title: How to Properly Match Chinese Characters With Regular Expression
-lang: en
+title: 如何正确使用正则表达式匹配汉字
+lang: zh-CN
 keywords:
-- regular expression
-- Chinese character
-- regex
-- CJK ideograph
+- 正则表达式
+- 汉字
+- 中日韩越统一表意文字
 - Unicode
 ---
 
-> [简体中文版《[如何正确使用正则表达式匹配汉字](zh-CN/){hreflang=zh-CN}》]{lang=zh-CN}
+> [English Version: [_How to Properly Match Chinese Characters With Regular Expression_](../){hreflang=en}]{lang=en}
 
 # tl;dr
 
@@ -17,8 +16,9 @@ keywords:
 [\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U0003134f]
 ```
 
-# Explanation
+# 解释
 
+:::{lang=en-HK}
 - `U+3006`: Character 〆 (often regarded as a Chinese character)
 - `U+3007`: Character 〇 (often regarded as a Chinese character)
 - `U+4E00-U+9FFF`: CJK Unified Ideographs
@@ -29,8 +29,9 @@ keywords:
 - `U+2B820-U+2CEAF`: CJK Unified Ideographs Extension E
 - `U+2CEB0-U+2EBEF`: CJK Unified Ideographs Extension F
 - `U+30000-U+3134F`: CJK Unified Ideographs Extension G
+:::
 
-# Python Example
+# Python 示例
 
 ```python
 >>> import re
@@ -40,9 +41,9 @@ keywords:
 [False, False, True, True, True, True]
 ```
 
-# JavaScript Example
+# JavaScript 示例
 
-If you can use ES6 [RegExp: Unicode](https://caniuse.com/mdn-javascript_builtins_regexp_unicode):
+如果可以用 ES6 的 [Unicode point escapes](https://caniuse.com/mdn-javascript_grammar_unicode_point_escapes) (`\u{...}`)：
 
 ```javascript
 > const isHan = (c) => /^[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{3134f}]$/u.test(c);
@@ -50,7 +51,7 @@ If you can use ES6 [RegExp: Unicode](https://caniuse.com/mdn-javascript_builtins
 [ false, false, true, true, true, true ]
 ```
 
-If you cannot use ES6, you have to use [surrogate pairs](http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm):
+如果不能用 ES6，就必须使用[代理对](http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm)：
 
 ```javascript
 > const isHan = (c) => /^[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud883][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud884[\udc00-\udf4f]$/.test(c);
@@ -58,11 +59,11 @@ If you cannot use ES6, you have to use [surrogate pairs](http://russellcottrell.
 [ false, false, true, true, true, true ]
 ```
 
-# Why Does `\p{sc=Han}` Not Work
+# 为什么不能用 `\p{sc=Han}`
 
-The syntax `\p{...}` is called [Unicode property escapes](https://tc39.es/proposal-regexp-unicode-property-escapes/). The first part `sc` is the Unicode property name meaning 'script', while the second part `Han` is the Unicode property value.
+`\p{...}` 这种语法称为 [Unicode property escapes](https://tc39.es/proposal-regexp-unicode-property-escapes/)。第一部分是 Unicode property name，`sc` 表示 script；第二部分 `Han` 是 Unicode property value。
 
-To determine which characters are associated with the Han script, you can check [`Scripts.txt`](https://www.unicode.org/Public/UCD/latest/ucd/Scripts.txt) in UCD.
+要查看哪些字符属于 Han script，可以查看 UCD 中的 [`Scripts.txt`](https://www.unicode.org/Public/UCD/latest/ucd/Scripts.txt)。
 
 - `U+2E80-U+2E99`: CJK Radicals
 - `U+2E9B-U+2EF3`: CJK Radicals
@@ -87,11 +88,11 @@ To determine which characters are associated with the Han script, you can check 
 - `U+2F800-U+2FA1D`: CJK Compatibility Ideographs Supplements
 - `U+30000-U+3134A`: **CJK Unified Ideographs Extension G**
 
-You can see that it covers more than just Chinese characters.
+可以看出它不只包括汉字。
 
-# Why Does `\p{Ideo}` Not Work
+# 为什么不能用 `\p{Ideo}`
 
-Similarly, `Ideo` here is an abbreviation for 'Ideograph'. To determine which characters are associated with the Ideograph property, you can check [`PropList.txt`](https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt) in UCD.
+类似地，这里的 `Ideo` 是 Ideograph 的缩写。要查看哪些字符属于 Ideograph，可以查看 UCD 中的 [`PropList.txt`](https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt)。
 
 - `U+3006`: Ideographic Closing Mark
 - `U+3007`: Ideographic Number Zero
@@ -115,4 +116,4 @@ Similarly, `Ideo` here is an abbreviation for 'Ideograph'. To determine which ch
 - `U+2F800-U+2FA1D`: CJK Compatibility Ideographs Supplements
 - `U+30000-U+3134A`: **CJK Unified Ideographs Extension G**
 
-Like the previous one, you can see that it covers more than just Chinese characters.
+可以看出它不只包括汉字。
