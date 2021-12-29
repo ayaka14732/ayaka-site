@@ -9,7 +9,7 @@ keywords:
 - Unicode
 ---
 
-> [简体中文版《[如何正确使用正则表达式匹配汉字](zh-CN/){hreflang=zh-CN}》]{lang=zh-CN}
+> [简体中文](zh-CN/){lang=zh-CN hreflang=zh-CN}
 
 # tl;dr
 

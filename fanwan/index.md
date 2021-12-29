@@ -15,7 +15,7 @@ math: |-
   <style>th{text-align:left;}</style>
 ---
 
-> 同時發佈於知乎：[《分韻撮要》音系與中古音對應關係 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/350603210)
+> 同時發佈於[知乎](https://zhuanlan.zhihu.com/p/350603210)
 
 # 目的
 

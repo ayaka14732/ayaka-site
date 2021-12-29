@@ -11,7 +11,7 @@ math: |-
   <link rel="alternate" hreflang="zh-CN" href="../"/>
 ---
 
-> [简体中文版《[结巴分词处理粤语](../){hreflang=zh-CN}》]{lang=zh-CN}
+> [简体中文](../){lang=zh-CN hreflang=zh-CN}
 
 # 方法
 

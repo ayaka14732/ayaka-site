@@ -11,9 +11,9 @@ math: |-
   <link rel="alternate" hreflang="zh-CN" href="../"/>
 ---
 
-> [简体中文版《[正确实现简转繁字体](../){hreflang=zh-CN}》]{lang=zh-CN}，同時發佈於知乎：[正确实现简转繁字体 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/166089642){lang=zh-CN hreflang=zh-CN}
+> 簡轉繁字型下載頁：[繁媛明朝](https://github.com/ayaka14732/FanWunMing/releases)、[繁媛黑體](https://github.com/ayaka14732/FanWunHak/releases)
 >
-> 簡轉繁字型下載頁面：[繁媛明朝](https://github.com/ayaka14732/FanWunMing/releases)、[繁媛黑體](https://github.com/ayaka14732/FanWunHak/releases)
+> [简体中文](../){lang=zh-CN hreflang=zh-CN}
 
 # 簡介
 

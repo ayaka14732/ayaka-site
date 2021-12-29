@@ -8,7 +8,7 @@ math: |-
   </style>
 ---
 
-> 同時發佈於知乎：[繁简中文转换概说 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/104314323)
+> 同時發佈於[知乎](https://zhuanlan.zhihu.com/p/104314323)
 
 # 预备知识
 

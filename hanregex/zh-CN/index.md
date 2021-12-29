@@ -8,7 +8,7 @@ keywords:
 - Unicode
 ---
 
-> [English Version: [_How to Properly Match Chinese Characters With Regular Expression_](../){hreflang=en}]{lang=en}
+> [English](../){lang=en hreflang=en}
 
 # tl;dr
 

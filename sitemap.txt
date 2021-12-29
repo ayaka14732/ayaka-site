@@ -7,6 +7,7 @@ https://ayaka.shn.hk/btq/
 https://ayaka.shn.hk/ccf-201403-3/
 https://ayaka.shn.hk/colab/
 https://ayaka.shn.hk/cppregex/
+https://ayaka.shn.hk/daxuexi/
 https://ayaka.shn.hk/fanwan/
 https://ayaka.shn.hk/fcitx5-freebsd/
 https://ayaka.shn.hk/guan/
@@ -16,9 +17,11 @@ https://ayaka.shn.hk/kanji-periodic-table/
 https://ayaka.shn.hk/langtag/
 https://ayaka.shn.hk/learnshell/
 https://ayaka.shn.hk/live/
+https://ayaka.shn.hk/nushu-everywhere/
 https://ayaka.shn.hk/opentype/
 https://ayaka.shn.hk/openwrt/
 https://ayaka.shn.hk/pgm/
+https://ayaka.shn.hk/pgm/en-GB/
 https://ayaka.shn.hk/pyanxvsdrik/
 https://ayaka.shn.hk/radix16/
 https://ayaka.shn.hk/s2tfont/
