@@ -44,6 +44,7 @@ math: |-
 1. [Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件](openwrt/){lang=zh-CN hreflang=zh-CN}
 1. [在 FreeBSD 上使用 Fcitx5](fcitx5-freebsd/)
 1. [概率图模型课程学习感想](pgm/){lang=zh-CN hreflang=zh-CN}
+1. [Arch Linux 连接 Pulse Secure VPN 记录](archpulse/){lang=zh-CN hreflang=zh-CN}
 
 :::{.hidden}
 # 隨筆
