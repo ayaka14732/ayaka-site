@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="Arch Linux, Pulse Secure VPN, Bliss OS, Termux" />
+  <title>Arch Linux 连接 Pulse Secure VPN 记录</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="/pandoc.css" />
+  <link rel="stylesheet" href="/sans.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Arch Linux 连接 Pulse Secure VPN 记录</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#使用手机作为中转服务器">使用手机作为中转服务器</a>
+<ul>
+<li><a href="#安装-termux">安装 Termux</a></li>
+<li><a href="#将电脑的-ssh-公钥加入-termux">将电脑的 ssh 公钥加入 Termux</a></li>
+<li><a href="#电脑连接手机-ssh-服务器">电脑连接手机 ssh 服务器</a></li>
+<li><a href="#使用手机作为中转服务器连接学校服务器">使用手机作为中转服务器连接学校服务器</a></li>
+<li><a href="#出现问题">出现问题</a></li>
+</ul></li>
+<li><a href="#使用-bliss-os-虚拟机作为中转服务器">使用 Bliss OS 虚拟机作为中转服务器</a>
+<ul>
+<li><a href="#安装-bliss-os-虚拟机">安装 Bliss OS 虚拟机</a></li>
+<li><a href="#配置和连接">配置和连接</a></li>
+</ul></li>
+</ul>
+</nav>
+<p>学校的高性能计算中心的服务器上安装了 Mathematica 软件，但要想连接到学校的服务器，必须使用学校 VPN。学校 VPN 使用的是 Pulse Secure VPN，因此我尝试在 Arch Linux 上连接 Pulse Secure VPN。</p>
+<p>ArchWiki 的 <a href="https://wiki.archlinux.org/title/Pulse_Connect_Secure">Pulse Connect Secure</a> 页面上介绍了两种在 Arch Linux 上连接 Pulse Secure VPN 的方法，分别是从 AUR 安装 <a href="https://aur.archlinux.org/packages/pulse-secure/"><code>pulse-secure</code></a> 包和使用 OpenConnect VPN。但经过尝试，这两种方法都不能正常连接学校 VPN，说明 Pulse Secure VPN 对 Arch Linux 的支持不够好，必须另想其他方法。</p>
+<h1 id="使用手机作为中转服务器">使用手机作为中转服务器</h1>
+<p>在安卓手机上可以正常连接学校 VPN，所以可以想办法让电脑使用手机的 VPN 网络。换言之，如果在手机上运行 ssh 服务器，那么就可以将手机作为中转服务器，然后连接到学校服务器。</p>
+<h2 id="安装-termux">安装 Termux</h2>
+<p>要在手机上运行 ssh 服务器，可以使用 Termux。</p>
+<p>安装 Termux 时，不能直接从 Google Play 安装，<a href="https://wiki.termux.com/wiki/Termux_Google_Play">因为 Google Play 中的 Termux 是旧版</a>。正确的方法是按照 Termux 官网的介绍，从 <a href="https://f-droid.org/packages/com.termux/">F-Droid 的 Termux 页面</a>下载最新版的安装包。</p>
+<p>安装后执行如下命令安装 openssh：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pkg update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pkg install openssh</span></code></pre></div>
+<h2 id="将电脑的-ssh-公钥加入-termux">将电脑的 ssh 公钥加入 Termux</h2>
+<p>一般而言，手机和电脑连接同一个路由器，或者电脑使用手机的热点上网。不论是上述哪一种情况，手机和电脑都在同一个局域网内。经查看得知手机的局域网 IP 地址为 172.21.1.100。</p>
+<p>要将 ssh 公钥传到手机，可以使用 <code>nc</code> 命令。</p>
+<p>在 Termux 中安装 netcat：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pkg install netcat-openbsd</span></code></pre></div>
+<p>在 Termux 中运行：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> nc <span class="at">-l</span> 3444 <span class="op">&gt;&gt;</span> ~/.ssh/authorized_keys <span class="op">&lt;</span> /dev/null</span></code></pre></div>
+<p>在电脑上运行：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat ~/.ssh/id_rsa.pub <span class="kw">|</span> <span class="ex">nc</span> 172.21.1.100 3444</span></code></pre></div>
+<h2 id="电脑连接手机-ssh-服务器">电脑连接手机 ssh 服务器</h2>
+<p>在 Termux 中运行 ssh 服务器：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sshd</span></code></pre></div>
+<p>在电脑上编辑 <code>~/.ssh/config</code> 文件，加入如下内容：</p>
+<pre><code>Host phone
+    HostName 172.21.1.100
+    User u0_a41
+    Port 8022</code></pre>
+<p>其中，<code>u0_a41</code> 是 Termux 的用户名，可以在 Termux 中使用 <code>whoami</code> 命令查看。</p>
+<p>然后在电脑上运行：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ssh phone</span></code></pre></div>
+<p>即可连接到手机。</p>
+<h2 id="使用手机作为中转服务器连接学校服务器">使用手机作为中转服务器连接学校服务器</h2>
+<p>在手机上登录 Pulse Secure VPN，在电脑上编辑 <code>~/.ssh/config</code> 文件，加入如下内容：</p>
+<pre><code>Host hpc
+   Hostname ...
+   User ...
+   ProxyJump phone</code></pre>
+<p>其中，<code>Hostname</code> 是学校服务器的域名或 IP 地址，<code>User</code> 是登录学校服务器时使用的用户名，<code>ProxyJump phone</code> 表示将手机作为中转服务器。</p>
+<p>在电脑上运行：</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ssh hpc</span></code></pre></div>
+<p>即可连接到学校服务器。</p>
+<h2 id="出现问题">出现问题</h2>
+<p>正当我以为大功告成之际，却发现在 ssh 中输入几个字符后，ssh 程序就会失去响应。经过查找资料，看到了 Stack Overflow 上的<a href="https://stackoverflow.com/a/26028756">一个回答</a>，推测可能是 MTU 的问题。</p>
+<p>根据回答中的方法，使用 <code>netstat -i</code> 命令查看到 VPN 的 MTU 值为 1400：</p>
+<pre><code>$ netstat -i
+Kernel Interface table
+Iface             MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+...
+tun0             1400        6      0      0 0            16      0      0      0 PRU</code></pre>
+<p>要将 MTU 修改为 1000，是使用：</p>
+<pre><code>$ sudo ifconfig tun0 mtu 1000</code></pre>
+<p>但是，我的手机没有 root，所以不能使用 sudo 命令，也就没有办法修改 MTU。</p>
+<h1 id="使用-bliss-os-虚拟机作为中转服务器">使用 Bliss OS 虚拟机作为中转服务器</h1>
+<p>这时想到，可以在 VirtualBox 中安装 Bliss OS 虚拟机作为中转服务器。Bliss OS 是安卓系统，而且可以使用 root 权限。另外，使用虚拟机还有一个额外的好处，就是不需要经过手机中转，所以速度更快，而且连接更稳定。</p>
+<h2 id="安装-bliss-os-虚拟机">安装 Bliss OS 虚拟机</h2>
+<p>我安装的是 Bliss OS 15.0 Alpha 版本。安装 Bliss OS 虚拟机的方法与其他虚拟机大致相同，需要注意的是 Graphics Controller 一项必须选择 VBOXVGA，否则无法正常启动。</p>
+<p>另外，在 Network 中需要同时添加 NAT 和 Host-only Adapter 两个适配器，其中前者用于虚拟机连接互联网，后者用于虚拟机与主机连接。</p>
+<h2 id="配置和连接">配置和连接</h2>
+<p>Pulse Secure 可以从 Aurora Store 中下载，配置方法与安卓手机相同。</p>
+<p>修改 MTU 后，即可正常连接：</p>
+<p><img src="1.png" /></p>
+<p>（初稿作于 2021 年 12 月 17 日，定稿于 2022 年 1 月 14 日）</p>
+</body>
+</html>
