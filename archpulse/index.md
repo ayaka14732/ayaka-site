@@ -6,6 +6,8 @@ keywords:
 - Pulse Secure VPN
 - Bliss OS
 - Termux
+math: |-
+  <meta name="description" content="学校的高性能计算中心的服务器上安装了 Mathematica 软件，但要想连接到学校的服务器，必须使用学校 VPN。学校 VPN 使用的是 Pulse Secure VPN，因此我尝试在 Arch Linux 上连接 Pulse Secure VPN。"/>
 ---
 
 学校的高性能计算中心的服务器上安装了 Mathematica 软件，但要想连接到学校的服务器，必须使用学校 VPN。学校 VPN 使用的是 Pulse Secure VPN，因此我尝试在 Arch Linux 上连接 Pulse Secure VPN。
