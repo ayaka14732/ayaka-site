@@ -14,7 +14,7 @@ math: |-
 
 # 关于我
 
-爱好语言学、音韵学。思考时除了用普通话和粤语，还使用[自己的人造语言](../v8/)。
+爱好语言学、音韵学。思考时除了用普通话和粤语，还使用[自己的人造语言](../v8/){lang=zh-Hant hreflang=zh-Hant}。
 
 Arch Linux 用户。喜欢十多种编程语言，最熟悉 Python、JavaScript 和 Haskell。
 

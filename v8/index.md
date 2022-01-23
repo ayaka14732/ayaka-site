@@ -1,12 +1,11 @@
 ---
 title: 我的個人思考用語簡介<x-biteinkou></x-biteinkou>
-lang: zh-HK
+lang: zh-Hant
 keywords:
 - 人造語言
 - 漢語方言
 - 《切韻》音系
 - 日語漢字音
-- 藝術設計
 - 綾香思考音系
 math: |-
   <style>
@@ -16,43 +15,37 @@ math: |-
   </style>
 ---
 
-**最近更新於 2020&#8239;年&#8239;12&#8239;月&#8239;19&#8239;日。TODO：增加朗讀示例。**
+**最近更新於 2022&#8239;年&#8239;1&#8239;月&#8239;23&#8239;日。TODO：增加朗讀示例。**
 
-> 相關連結：[音韵学爱好者们，你们有过人造一种汉语方言的想法吗？ - 浅夏青柠的回答](https://www.zhihu.com/question/381250756/answer/1096253779)
+> 相關連結：[音韵学爱好者们，你们有过人造一种汉语方言的想法吗？ - 浅夏青柠的回答](https://www.zhihu.com/question/381250756/answer/1096253779){lang=zh-CN hreflang=zh-CN}
 
 # 簡介
 
-綾香思考音系（lyounˇkyounˉ siˉkouˊ imˉkeiˇ）是我思考時使用的人造語言，亦可認為是一種漢語方言。其漢字音最初取自日譯漢音，但因自 2014 年經過數年使用，加之普通話、粵語等因素影響，發音與日譯漢音相比已產生一定出入。因此，我重新調查了我的個人思考用語音系，並記錄於此。
+綾香思考音系 (ryong kyāng sī káu īm kei) 是我思考時使用的人造語言，亦可認為是一種漢語方言。其漢字音最初取自日譯漢音，但因自 2014 年起經過數年使用，加之普通話、粵語影響，發音與日譯漢音已產生一定出入。因此，我重新調查了我的個人思考用語音系，並記錄於此。
 
-我的個人思考用語的使用場合主要包括日常生活、日記、提綱，古文、古詩詞的吟誦，以及古風歌曲與流行歌曲的歌唱；學習時通常並不使用。
+我的個人思考用語的使用場合主要包括日常生活、日記、提綱，古文、古詩詞的吟誦，以及古風歌曲與流行歌曲的歌唱。
 
 # 文字
 
-可以使用假名或拉丁字母書寫。
+可以使用拉丁字母或假名書寫。
 
-（TODO: 補充介紹使用假名書寫時的特殊寫法）
+使用拉丁字母書寫時，共計 19 個字母。與英文相比，不使用 cfhlqvx 這 7 個字母。
 
-使用拉丁字母書寫時，共計 20 個字母。與英文相比，不使用 cpqrvx 這 6 個字母。
+使用歷史假名書寫時，以小寫的「ィ」、「ゥ」表示 -ŋ 尾。
 
 # 聲母
 
 <table lang="zh-Latn" class="small-table"><tbody>
-<tr><td colspan="4"></td><td>b [/p/]{lang=zh-Latn-fonipa}</td><td>m</td></tr>
-<tr><td>l</td><td>s</td><td>z [/t͡s/]{lang=zh-Latn-fonipa}</td><td>t [/tʰ/]{lang=zh-Latn-fonipa}</td><td>d [/t/]{lang=zh-Latn-fonipa}</td><td>n</td></tr>
-<tr><td colspan="3"></td><td>k [/kʰ/]{lang=zh-Latn-fonipa}</td><td colspan="2">g [/k/]{lang=zh-Latn-fonipa}</td></tr>
-<tr><td colspan="3"></td><td colspan="3">h</td></tr>
+<tr><td colspan="3"></td><td>p</td><td>b</td><td>m</td></tr>
+<tr><td>r [/l/]{lang=zh-Latn-fonipa}</td><td>s</td><td>z</td><td>t</td><td>d</td><td>n</td></tr>
+<tr><td colspan="3"></td><td>k</td><td colspan="2">g</td></tr>
 </tbody></table>
-
-- s- 在 i 前的實際發音為 [[ɕ]]{lang=zh-Latn-fonipa}
-- t- 在 i, ya, yuu, yun 前的實際發音為 [[t͡ɕʰ]]{lang=zh-Latn-fonipa}，在 u 前的實際發音為 [[t͡sʰ]]{lang=zh-Latn-fonipa}，在 yo 前的實際發音為 [[t͡ʃʰ]]{lang=zh-Latn-fonipa}
-- d- 不變
-- h- 在 u 前的實際發音為 [[ɸ]]{lang=zh-Latn-fonipa}
 
 與中古漢語的對應關係如下：
 
 | 中古聲母 | 聲母拼音 |
 | -- | -- |
-| 幫滂並 | h |
+| 幫滂並 | p |
 | 明 | 梗攝（除庚耕青韻入聲） m _ b |
 | 端透定知徹澄 | t |
 | 泥孃 | 梗攝 n _ d |
@@ -65,18 +58,18 @@ math: |-
 
 # 韻母
 
-| -&empty; | -i | -u | -m | -n | -ng | -f | -s | -k |
+| -&empty; | -i | -u | -m | -n | -ŋ | -p | -t | -k |
 | -- | -- | -- | -- | -- | -- | -- | -- | -- |
-| a | ai | | am | an | | af | as | ak |
+| a | ai | | am | an | | ap | at | ak |
 | ya | | | | | | | | yak |
-| wa | wai | | | wan | | | was | wak |
+| wa | wai | | | wan | | | wat | wak |
 | | | | | | | | | wyak |
-| i | | | im | in | | if | is | ik |
-| wi | | | | win | | | wis | wik |
-| u | ui | | | un | | | us | uk |
-| | ei | | em | en | eng | ef | es | ek |
-| | wei | | | wen | weng | | wes | wek |
-| o | | ou | | on | ong | | os | ok |
+| i | | | im | in | | ip | it | ik |
+| wi | | | | win | | | wit | wik |
+| u | ui | | | un | | | ut | uk |
+| | ei | | em | en | eng | ep | et | ek |
+| | wei | | | wen | weng | | wet | wek |
+| o | | ou | | on | ong | | ot | ok |
 | yo | | you | | | yong | | | yok |
 | wo | | | | | wong | | | |
 | | | | | | wyong | | | wyok |
@@ -88,7 +81,7 @@ math: |-
 - a [/a/]{lang=zh-Latn-fonipa}
 - i [/i/]{lang=zh-Latn-fonipa}
 - u [/ɯ/]{lang=zh-Latn-fonipa}
-- e [/ɛ/]{lang=zh-Latn-fonipa} ~ [/e/]{lang=zh-Latn-fonipa}（-ng, -k 前）
+- e [/ɛ/]{lang=zh-Latn-fonipa} ~ [/e/]{lang=zh-Latn-fonipa}（-ŋ, -k 前）
 - o [/ɔ/]{lang=zh-Latn-fonipa}
 - [/y/]{lang=zh-Latn-fonipa}（出現於 yuu, yun 兩個韻）
 
@@ -152,30 +145,31 @@ math: |-
 
 與現代日語的區別主要有：
 
-- 入聲字讀閉音節。中古漢語 -p, -t, -k 分別對應 -f, -s, -k，如：接 (sefˇ)、實 (sisˇ)、積 (sekˉ)
-- 保留了 -m, -n 韻尾的對立，如：珊 (sanˉ)、三 (samˉ)
-- 保留了 -ŋ 韻尾，如：行 (kounˇ)、青 (seinˉ)。但韻母 -yun 併入 -n 尾的諄韻字，如：充 (synˉ)、春 (synˉ)
-- 保留了合口介音 -w-，如：闊 (kwasˇ)、玩 (gwanˇ)
+- 保留了入聲韻尾 -p, -t, -k，如：接 (sep)、實 (sit)、積 (sēk)
+- 保留了 -m, -n 韻尾的對立，如：珊 (sān)、三 (sām)
+- 保留了 -ŋ 韻尾，如：行 (kang)、青 (sēng)
+- 保留了合口介音 -w-，如：闊 (kwat)、玩 (gwan)
 
 # 聲調
 
-| 聲調 | 聲調號 | 聲調符號 | 參考調值 | 對應中古聲調 |
+| 聲調號 | 調型 | 調值 | 聲調符號 | 對應中古聲調 |
 | -- | -- | -- | -- | -- |
-| 高 | 1 | ˉ | 55~53 | 陰平、陰入（通梗曾深攝、眞諄臻文欣痕韻、魂韻牙喉音） |
-| 昇 | 2 | ˊ | 35 | 上聲（不含全濁） |
-| 低 | 3 | ˇ | 21~11 | 陽平、上聲（全濁）、陽去、陰入（其餘）、陽入 |
-| 降 | 4 | ˋ | 51 | 陰去 |
+| 1 | 高平 | 55 | ˉ | 陰平、陰入（通梗曾深攝、眞諄臻文欣痕韻、魂韻牙喉音） |
+| 2 | 高昇 | 35 | ˊ | 上聲（不含全濁） |
+| 3 | 低降 | 21 | _(無標記)_ | 陽平、上聲（全濁）、去聲、陰入（其餘）、陽入 |
 
 # 連讀
 
-若前一個音節以 -m, -n, -ng, -f, -s, -k 結尾，後一個音節以零聲母起始，會發生連讀。例如：
+若前一個音節以 -m, -n, -ŋ, -p, -t, -k 結尾，後一個音節以零聲母起始，會發生連讀。例如：
 
-- 答案 tafˇanˋ [[ta.fan]]{lang=zh-Latn-fonipa}
-- 血液 kwesˇekˇ [[kʷʰɛ.sɛk̚]]{lang=zh-Latn-fonipa}
-- 眼影 ganˊeinˊ [[kan.neŋ]]{lang=zh-Latn-fonipa}
-- 紅葉 kounˇefˇ [[kʰɔŋ.nɛf]]{lang=zh-Latn-fonipa}
+- 答案 tap an > tap pan
+- 血液 kwet ek > kwet tek
+- 倩影 sen éng > sen néng
+- 紅葉 kong ep > kong nep
+- 一夜 īt ya > īt tya
+- 谷雨 kōk ú > kōk kú
 
-注意當一個音節以 -ng 結尾時，後一個音節連讀為聲母 n-，而非 ng-。
+注意當一個音節以 -ŋ 結尾時，後一個音節連讀為聲母 n-，而非 ŋ-。
 
 # 學習資料
 
