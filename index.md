@@ -46,6 +46,7 @@ math: |-
 1. [概率图模型课程学习感想](pgm/){lang=zh-CN hreflang=zh-CN}
 1. [Arch Linux 连接 Pulse Secure VPN 记录](archpulse/){lang=zh-CN hreflang=zh-CN}
 1. [腾讯云 coscmd 通配符格式](cosignore/){lang=zh-CN hreflang=zh-CN}
+1. [How to Visualise Computational Graph of a JAX Program](jax-graph/){lang=en hreflang=en}
 
 :::{.hidden}
 # 隨筆
