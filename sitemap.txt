@@ -7,6 +7,7 @@ https://ayaka.shn.hk/archpulse/
 https://ayaka.shn.hk/btq/
 https://ayaka.shn.hk/ccf-201403-3/
 https://ayaka.shn.hk/colab/
+https://ayaka.shn.hk/cosignore/
 https://ayaka.shn.hk/cppregex/
 https://ayaka.shn.hk/daxuexi/
 https://ayaka.shn.hk/fanwan/
