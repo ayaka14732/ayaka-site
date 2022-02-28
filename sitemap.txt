@@ -15,6 +15,7 @@ https://ayaka.shn.hk/fcitx5-freebsd/
 https://ayaka.shn.hk/guan/
 https://ayaka.shn.hk/hanregex/
 https://ayaka.shn.hk/hanregex/zh-CN/
+https://ayaka.shn.hk/jax-graph/
 https://ayaka.shn.hk/kanji-periodic-table/
 https://ayaka.shn.hk/langtag/
 https://ayaka.shn.hk/learnshell/

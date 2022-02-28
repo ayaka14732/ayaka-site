@@ -84,6 +84,10 @@ pre, code, kbd, samp {
 	font-family: monospace, monospace;
 }
 
+code {
+	overflow-wrap: break-word;
+}
+
 pre {
 	font-size: 95%;
 	white-space: pre;
