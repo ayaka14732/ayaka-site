@@ -71,4 +71,4 @@ should be after 我的個人思考用語簡介
 - [茨月](https://zcy.moe/){lang=zh-CN hreflang=zh-CN}
 - [凌莞](https://nyac.at/){lang=zh-CN hreflang=zh-CN}
 - [skylee](https://skylee.xyz/){lang=en}
-- [山前](https://estela.moe/){lang=zh-CN hreflang=en}
+- [山前](https://estela.moe/){lang=zh-Hant hreflang=en}
