@@ -9,8 +9,6 @@ keywords:
 lang: zh-CN
 ---
 
-> 另见《[ssh 连接 AI Studio 服务器](/aistudio/)》
-
 # 简介
 
 Google Colab 提供了免费的服务器资源，可以使用 Google Colab 的 CPU，也可以使用 GPU 运行深度学习程序。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在真实的终端中输入命令。为此，本文提供一种借助中转服务器，使用 ssh 连接 Google Colab 服务器的方法。

@@ -31,7 +31,6 @@ math: |-
 1. [方言生僻字讀音的推導問題](yatngiox/){lang=zh-Hant hreflang=zh-Hant}
 1. [如何正确使用正则表达式匹配汉字](hanregex/zh-CN/){lang=zh-CN hreflang=zh-CN}
 1. [漢字化的日文元素名稱是什麼樣子](kanji-periodic-table/){lang=zh-Hant hreflang=zh-Hant}
-1. [結巴分詞處理粵語](yueseg/hant/)
 1. [論直音、反切與其他註音方式的優劣](pyanxvsdrik/){lang=zh-Hant hreflang=zh-Hant}
 1. [正確實現簡轉繁字型](s2tfont/hant/)
 1. [ssh 连接 Google Colab 服务器](colab/){lang=zh-CN hreflang=zh-CN}
@@ -46,7 +45,6 @@ math: |-
 1. [概率图模型课程学习感想](pgm/){lang=zh-CN hreflang=zh-CN}
 1. [Arch Linux 连接 Pulse Secure VPN 记录](archpulse/){lang=zh-CN hreflang=zh-CN}
 1. [腾讯云 coscmd 通配符格式](cosignore/){lang=zh-CN hreflang=zh-CN}
-1. [How to Visualise Computational Graph of a JAX Program](jax-graph/){lang=en hreflang=en}
 
 :::{.hidden}
 # 隨筆
@@ -62,6 +60,9 @@ should be after 方言生僻字讀音的推導問題
 
 1. [繁简中文转换概说](cc/){lang=zh-CN hreflang=zh-CN}（未更新）
 should be after 我的個人思考用語簡介
+
+1. [結巴分詞處理粵語](yueseg/hant/)（未更新）
+should be after 漢字化的日文元素名稱是什麼樣子
 -->
 
 # 好友

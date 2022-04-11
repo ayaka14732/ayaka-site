@@ -1,7 +1,6 @@
 https://ayaka.shn.hk/
 https://ayaka.shn.hk/1041/
 https://ayaka.shn.hk/about/
-https://ayaka.shn.hk/aistudio/
 https://ayaka.shn.hk/antihask/
 https://ayaka.shn.hk/archpulse/
 https://ayaka.shn.hk/btq/
@@ -15,7 +14,6 @@ https://ayaka.shn.hk/fcitx5-freebsd/
 https://ayaka.shn.hk/guan/
 https://ayaka.shn.hk/hanregex/
 https://ayaka.shn.hk/hanregex/zh-CN/
-https://ayaka.shn.hk/jax-graph/
 https://ayaka.shn.hk/kanji-periodic-table/
 https://ayaka.shn.hk/langtag/
 https://ayaka.shn.hk/learnshell/
