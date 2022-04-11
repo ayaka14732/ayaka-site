@@ -10,7 +10,7 @@ math: |-
   </script>
 ---
 
-[![bilibili](bilibili-tv.svg)](https://space.bilibili.com/6769569){.icon} [![Twitter](twitter.svg)](https://twitter.com/ayaka14732){.icon} [![邮箱](mail.svg)](https://example.org/){.icon #gategdinzijau} [![Codewars](codewars.svg){lang=en-HK}](https://www.codewars.com/users/ayaka14732){.icon} [![GitHub](github.svg){lang=en-HK}](https://github.com/ayaka14732){.icon} [![知乎](zhihu.svg)](https://www.zhihu.com/people/.ayaka){.icon} [![网易云音乐](music.svg)](https://music.163.com/#/user/home?id=338500484){.icon}
+[![bilibili](bilibili-tv.svg)](https://space.bilibili.com/6769569){.icon} [![Twitter](twitter.svg)](https://twitter.com/ayaka14732){.icon} [![邮箱](mail.svg)](https://example.org/){.icon #gategdinzijau} [![Codewars](codewars.svg){lang=en-HK}](https://www.codewars.com/users/ayaka14732){.icon} [![GitHub](github.svg){lang=en-HK}](https://github.com/ayaka14732){.icon} [![知乎](zhihu.svg)](https://www.zhihu.com/people/.ayaka){.icon} [![网易云音乐](music.svg)](https://music.163.com/#/user/home?id=338500484){.icon} [![Medium](medium.svg)](https://medium.com/@ayaka_45434){.icon}
 
 # 关于我
 
