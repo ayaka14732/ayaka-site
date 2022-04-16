@@ -1,19 +1,21 @@
 ---
-title: ssh 连接 Google Colab
+title: SSH 连接 Google Colab
 keywords:
-- ssh
+- SSH
 - Google Colab
 - 服务器
 lang: zh-CN
 math: |-
-  <meta name="description" content="Google Colab 提供了免费的服务器资源。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在真实的终端中输入命令。为此，以借助中转服务器，使用 ssh 连接 Google Colab"/>
+  <meta name="description" content="Google Colab 提供了免费的计算资源。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在真实的终端中输入命令。为此，以借助中转服务器，使用 SSH 连接 Google Colab"/>
 ---
 
-Google Colab 提供了免费的服务器资源。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在真实的终端中输入命令。为此，可以借助中转服务器，使用 ssh 连接 Google Colab。
+> 同时发布于 Medium: [Connect to Google Colab Using SSH](https://medium.com/@ayaka_45434/connect-to-google-colab-using-ssh-bb342e0d0fd2){lang=en hreflang=en}
+
+Google Colab 提供了免费的计算资源。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在终端中输入命令。为此，可以借助中转服务器，使用 SSH 连接 Google Colab。
 
 # 实现思路
 
-为了通过 ssh 连接 Google Colab，需要一个有公网 IP 的中转服务器。通过端口转发，将 Google Colab 的 ssh 端口转发到中转服务器上，然后在 PC 上通过中转服务器连接 Google Colab。
+为了通过 SSH 连接 Google Colab，需要一个有公网 IP 的中转服务器。通过端口转发，将 Google Colab 的 SSH 端口转发到中转服务器上，然后在 PC 上通过中转服务器连接 Google Colab。
 
 ![](1.png)
 
@@ -37,7 +39,7 @@ for k, v in os.environ.items():
 cat ~/.ssh/id_rsa.pub
 ```
 
-## 配置 Google Colab
+## 修改配置
 
 在 Google Colab 单元格中执行以下命令：
 
@@ -76,6 +78,8 @@ echo '<Google Colab 的 SSH 公钥>' >> ~/.ssh/authorized_keys
 
 ## 将 Google Colab 的 SSH 端口转发到中转服务器
 
+在 Google Colab 单元格中执行以下命令：
+
 ```sh
 !ssh -N -T -C -o StrictHostKeyChecking=no -R 127.0.0.1:28822:127.0.0.1:22 <user>@<hostname>
 ```
@@ -84,7 +88,7 @@ echo '<Google Colab 的 SSH 公钥>' >> ~/.ssh/authorized_keys
 
 ## 从 PC 登录 Google Colab
 
-修改 `~/.ssh/config`：
+修改 PC 的 `~/.ssh/config`：
 
 ```ini
 Host jumpserver
@@ -106,7 +110,7 @@ Host colab
 ssh colab
 ```
 
-当重新启动 Google Colab 运行环境时，Google Colab 的 host key 会发生变化，导致无法登录。解决方法是在 PC 执行以下命令，删除原来储存的 host key：
+当重新启动 Google Colab 运行环境时，Google Colab 的 host key 会发生变化，导致登录时出现错误。解决方法是在 PC 执行以下命令，删除原来储存的 host key：
 
 ```sh
 ssh-keygen -R "[127.0.0.1]:28822"
@@ -162,7 +166,7 @@ htop
 
 ## 挂载 Google Drive
 
-在启动 8 小时左右，服务器资源会被回收。为了防止数据丢失，可以定期将中间结果保存到 Google Drive 中。将 Google Drive 挂载到 Google Colab 的方法是在 Google Colab 单元格中执行：
+在启动 8 小时左右，服务器会被回收。为了防止数据丢失，可以定期将中间结果保存到 Google Drive 中。将 Google Drive 挂载到 Google Colab 的方法是在 Google Colab 单元格中执行：
 
 ```python
 from google.colab import drive
