@@ -33,7 +33,7 @@ math: |-
 1. [漢字化的日文元素名稱是什麼樣子](kanji-periodic-table/){lang=zh-Hant hreflang=zh-Hant}
 1. [論直音、反切與其他註音方式的優劣](pyanxvsdrik/){lang=zh-Hant hreflang=zh-Hant}
 1. [正確實現簡轉繁字型](s2tfont/hant/)
-1. [ssh 连接 Google Colab 服务器](colab/){lang=zh-CN hreflang=zh-CN}
+1. [ssh 连接 Google Colab](colab/){lang=zh-CN hreflang=zh-CN}
 1. [粵語（廣州音）與中古音對應關係](teoi/)（未定稿）
 1. [漢字的單音化現象](guan/)
 1. [日語漢音的重紐對立](tyongdiu/)

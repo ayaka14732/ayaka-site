@@ -19,6 +19,16 @@ Google Colab 提供了免费的服务器资源。然而，Google Colab 只提供
 
 # 实现步骤
 
+## 打印环境变量
+
+在 Google Colab 单元格中执行以下命令：
+
+```python
+import os
+for k, v in os.environ.items():
+    print(k, v)
+```
+
 ## 查看 PC 的 SSH 公钥
 
 在 PC 执行以下命令查看 SSH 公钥：
@@ -182,9 +192,25 @@ LD_LIBRARY_PATH=/usr/lib64-nvidia watch -n 1 nvidia-smi
 
 ## 配置 JAX 使用 TPU
 
+在 Shell 中执行：
+
+```sh
+export COLAB_TPU_ADDR=<COLAB_TPU_ADDR>
+```
+
+其中 `<COLAB_TPU_ADDR>` 需要替换为第一步中打印出的 `COLAB_TPU_ADDR` 环境变量的值。
+
+在 `import jax` 前执行：
+
 ```python
 from jax.tools.colab_tpu import setup_tpu
 setup_tpu()
+```
+
+然后 `import jax` 测试：
+
+```python
+import jax
 print(jax.devices())
 ```
 
