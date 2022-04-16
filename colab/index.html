@@ -112,6 +112,7 @@
 <li><a href="#实现思路">实现思路</a></li>
 <li><a href="#实现步骤">实现步骤</a>
 <ul>
+<li><a href="#打印环境变量">打印环境变量</a></li>
 <li><a href="#查看-pc-的-ssh-公钥">查看 PC 的 SSH 公钥</a></li>
 <li><a href="#配置-google-colab">配置 Google Colab</a></li>
 <li><a href="#查看-google-colab-的-ssh-公钥">查看 Google Colab 的 SSH 公钥</a></li>
@@ -142,84 +143,95 @@
 <p>为了通过 ssh 连接 Google Colab，需要一个有公网 IP 的中转服务器。通过端口转发，将 Google Colab 的 ssh 端口转发到中转服务器上，然后在 PC 上通过中转服务器连接 Google Colab。</p>
 <p><img src="1.png" /></p>
 <h1 id="实现步骤">实现步骤</h1>
+<h2 id="打印环境变量">打印环境变量</h2>
+<p>在 Google Colab 单元格中执行以下命令：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, v <span class="kw">in</span> os.environ.items():</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(k, v)</span></code></pre></div>
 <h2 id="查看-pc-的-ssh-公钥">查看 PC 的 SSH 公钥</h2>
 <p>在 PC 执行以下命令查看 SSH 公钥：</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_rsa.pub</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_rsa.pub</span></code></pre></div>
 <h2 id="配置-google-colab">配置 Google Colab</h2>
 <p>在 Google Colab 单元格中执行以下命令：</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>sh</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p <span class="op">~/</span>.ssh</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>echo <span class="st">&#39;&lt;PC 的 SSH 公钥&gt;&#39;</span> <span class="op">&gt;&gt;</span> <span class="op">~/</span>.ssh<span class="op">/</span>authorized_keys</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>apt update <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>yes <span class="op">|</span> unminimize <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>apt install <span class="op">-</span>qq <span class="op">-</span>o<span class="op">=</span>Dpkg::Use<span class="op">-</span>Pty<span class="op">=</span><span class="dv">0</span> openssh<span class="op">-</span>server pwgen net<span class="op">-</span>tools psmisc pciutils htop neofetch zsh nano byobu <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>ssh<span class="op">-</span>keygen <span class="op">-</span>t rsa <span class="op">-</span>N <span class="st">&quot;&quot;</span> <span class="op">-</span>f <span class="op">~/</span>.ssh<span class="op">/</span>id_rsa <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>echo ListenAddress <span class="fl">127.0.0.1</span> <span class="op">&gt;&gt;</span> <span class="op">/</span>etc<span class="op">/</span>ssh<span class="op">/</span>sshd_config</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p <span class="op">/</span>var<span class="op">/</span>run<span class="op">/</span>sshd</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="op">/</span>usr<span class="op">/</span>sbin<span class="op">/</span>sshd</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>sh</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p <span class="op">~/</span>.ssh</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>echo <span class="st">&#39;&lt;PC 的 SSH 公钥&gt;&#39;</span> <span class="op">&gt;&gt;</span> <span class="op">~/</span>.ssh<span class="op">/</span>authorized_keys</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>apt update <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>yes <span class="op">|</span> unminimize <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>apt install <span class="op">-</span>qq <span class="op">-</span>o<span class="op">=</span>Dpkg::Use<span class="op">-</span>Pty<span class="op">=</span><span class="dv">0</span> openssh<span class="op">-</span>server pwgen net<span class="op">-</span>tools psmisc pciutils htop neofetch zsh nano byobu <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ssh<span class="op">-</span>keygen <span class="op">-</span>t rsa <span class="op">-</span>N <span class="st">&quot;&quot;</span> <span class="op">-</span>f <span class="op">~/</span>.ssh<span class="op">/</span>id_rsa <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>echo ListenAddress <span class="fl">127.0.0.1</span> <span class="op">&gt;&gt;</span> <span class="op">/</span>etc<span class="op">/</span>ssh<span class="op">/</span>sshd_config</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p <span class="op">/</span>var<span class="op">/</span>run<span class="op">/</span>sshd</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="op">/</span>usr<span class="op">/</span>sbin<span class="op">/</span>sshd</span></code></pre></div>
 <p>其中，<code>&lt;PC 的 SSH 公钥&gt;</code> 需要替换为上一步查看的 SSH 公钥。</p>
 <h2 id="查看-google-colab-的-ssh-公钥">查看 Google Colab 的 SSH 公钥</h2>
 <p>在 Google Colab 单元格中执行以下命令查看 SSH 公钥：</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat <span class="op">~/</span>.ssh<span class="op">/</span>id_rsa.pub</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat <span class="op">~/</span>.ssh<span class="op">/</span>id_rsa.pub</span></code></pre></div>
 <h2 id="将-google-colab-的-ssh-公钥加入中转服务器">将 Google Colab 的 SSH 公钥加入中转服务器</h2>
 <p>在中转服务器执行：</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&#39;&lt;Google Colab 的 SSH 公钥&gt;&#39;</span> <span class="op">&gt;&gt;</span> ~/.ssh/authorized_keys</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&#39;&lt;Google Colab 的 SSH 公钥&gt;&#39;</span> <span class="op">&gt;&gt;</span> ~/.ssh/authorized_keys</span></code></pre></div>
 <p>其中，<code>&lt;Google Colab 的 SSH 公钥&gt;</code> 需要替换为上一步查看的 SSH 公钥。</p>
 <h2 id="将-google-colab-的-ssh-端口转发到中转服务器">将 Google Colab 的 SSH 端口转发到中转服务器</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!ssh</span> <span class="at">-N</span> <span class="at">-T</span> <span class="at">-C</span> <span class="at">-o</span> StrictHostKeyChecking=no <span class="at">-R</span> 127.0.0.1:28822:127.0.0.1:22 <span class="op">&lt;</span>user<span class="op">&gt;</span>@<span class="op">&lt;</span>hostname<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!ssh</span> <span class="at">-N</span> <span class="at">-T</span> <span class="at">-C</span> <span class="at">-o</span> StrictHostKeyChecking=no <span class="at">-R</span> 127.0.0.1:28822:127.0.0.1:22 <span class="op">&lt;</span>user<span class="op">&gt;</span>@<span class="op">&lt;</span>hostname<span class="op">&gt;</span></span></code></pre></div>
 <p>其中，<code>&lt;user&gt;</code> 和 <code>&lt;hostname&gt;</code> 分别为中转服务器的用户名和 IP 地址。</p>
 <h2 id="从-pc-登录-google-colab">从 PC 登录 Google Colab</h2>
 <p>修改 <code>~/.ssh/config</code>：</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Host jumpserver</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">    User &lt;user&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dt">    HostName &lt;hostname&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Host colab</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="dt">    User root</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="dt">    HostName 127.0.0.1</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="dt">    Port 28822</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="dt">    ProxyJump jumpserver</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Host jumpserver</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">    User &lt;user&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">    HostName &lt;hostname&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Host colab</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="dt">    User root</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="dt">    HostName 127.0.0.1</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="dt">    Port 28822</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="dt">    ProxyJump jumpserver</span></span></code></pre></div>
 <p>其中，<code>&lt;user&gt;</code> 和 <code>&lt;hostname&gt;</code> 分别为中转服务器的用户名和 IP 地址。</p>
 <p>在 PC 执行以下命令登录 Google Colab：</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> colab</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> colab</span></code></pre></div>
 <p>当重新启动 Google Colab 运行环境时，Google Colab 的 host key 会发生变化，导致无法登录。解决方法是在 PC 执行以下命令，删除原来储存的 host key：</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-R</span> <span class="st">&quot;[127.0.0.1]:28822&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-R</span> <span class="st">&quot;[127.0.0.1]:28822&quot;</span></span></code></pre></div>
 <h1 id="配置-google-colab-1">配置 Google Colab</h1>
 <h2 id="安装-oh-my-zsh">安装 <a href="https://ohmyz.sh/">Oh My Zsh</a></h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> <span class="at">-c</span> <span class="st">&quot;</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="va">)</span><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> <span class="at">-c</span> <span class="st">&quot;</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="va">)</span><span class="st">&quot;</span></span></code></pre></div>
 <h2 id="修改时区">修改时区</h2>
 <p>由于 Google Colab 是 docker 镜像，直接修改时区会发生错误：</p>
 <pre><code>Failed to create bus connection: No such file or directory</code></pre>
 <p>可以通过环境变量的方式修改：</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&#39;export TZ=&quot;:Asia/Hong_Kong&quot;&#39;</span> <span class="op">&gt;&gt;</span> ~/.zshrc</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&#39;export TZ=&quot;:Asia/Hong_Kong&quot;&#39;</span> <span class="op">&gt;&gt;</span> ~/.zshrc</span></code></pre></div>
 <h2 id="安装-python-3.10">安装 Python 3.10</h2>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>apt install <span class="op">-</span>y software<span class="op">-</span>properties<span class="op">-</span>common</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>add<span class="op">-</span>apt<span class="op">-</span>repository <span class="op">-</span>y ppa:deadsnakes<span class="op">/</span>ppa</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>apt install <span class="op">-</span>y python3<span class="fl">.10</span><span class="op">-</span>full python3<span class="fl">.10</span><span class="op">-</span>dev</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>apt install <span class="op">-</span>y software<span class="op">-</span>properties<span class="op">-</span>common</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>add<span class="op">-</span>apt<span class="op">-</span>repository <span class="op">-</span>y ppa:deadsnakes<span class="op">/</span>ppa</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>apt install <span class="op">-</span>y python3<span class="fl">.10</span><span class="op">-</span>full python3<span class="fl">.10</span><span class="op">-</span>dev</span></code></pre></div>
 <h2 id="使用-byobu">使用 Byobu</h2>
 <p>为了防止 SSH 连接中断后，运行的程序就停止，应该在登录 SSH 后使用 <code>byobu</code> 命令打开 Byobu 会话，然后在 Byobu 会话中运行程序。这样即使 SSH 连接中断，重新登录后再次使用 <code>byobu</code> 命令就可以恢复原来的会话。</p>
 <h1 id="常用命令">常用命令</h1>
 <h2 id="查看系统信息">查看系统信息</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">neofetch</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">neofetch</span></span></code></pre></div>
 <h2 id="查看-cpu-使用情况">查看 CPU 使用情况</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">htop</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">htop</span></span></code></pre></div>
 <h2 id="挂载-google-drive">挂载 Google Drive</h2>
 <p>在启动 8 小时左右，服务器资源会被回收。为了防止数据丢失，可以定期将中间结果保存到 Google Drive 中。将 Google Drive 挂载到 Google Colab 的方法是在 Google Colab 单元格中执行：</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">&#39;/content/gdrive&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">&#39;/content/gdrive&#39;</span>)</span></code></pre></div>
 <p>然后按提示操作。</p>
 <h2 id="查看-gpu-型号">查看 GPU 型号</h2>
 <p>在 Google Colab 的单元格中执行以下命令：</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.cuda.get_device_name())</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.cuda.get_device_name())</span></code></pre></div>
 <p>如果 GPU 型号不理想，可以尝试重新启动 Google Colab 运行环境。</p>
 <h2 id="查看-gpu-使用情况">查看 GPU 使用情况</h2>
-<div class="sourceCode" id="cb17"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="va">LD_LIBRARY_PATH</span><span class="op">=</span>/usr/lib64-nvidia <span class="ex">watch</span> <span class="at">-n</span> 1 nvidia-smi</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="va">LD_LIBRARY_PATH</span><span class="op">=</span>/usr/lib64-nvidia <span class="ex">watch</span> <span class="at">-n</span> 1 nvidia-smi</span></code></pre></div>
 <p>不能直接使用 <code>export LD_LIBRARY_PATH=/usr/lib64-nvidia</code>，这样会导致某些程序不能使用 GPU。</p>
 <h2 id="配置-jax-使用-tpu">配置 JAX 使用 TPU</h2>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> jax.tools.colab_tpu <span class="im">import</span> setup_tpu</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>setup_tpu()</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(jax.devices())</span></code></pre></div>
+<p>在 Shell 中执行：</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">COLAB_TPU_ADDR</span><span class="op">=&lt;</span>COLAB_TPU_ADDR<span class="op">&gt;</span></span></code></pre></div>
+<p>其中 <code>&lt;COLAB_TPU_ADDR&gt;</code> 需要替换为第一步中打印出的 <code>COLAB_TPU_ADDR</code> 环境变量的值。</p>
+<p>在 <code>import jax</code> 前执行：</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> jax.tools.colab_tpu <span class="im">import</span> setup_tpu</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>setup_tpu()</span></code></pre></div>
+<p>然后 <code>import jax</code> 测试：</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(jax.devices())</span></code></pre></div>
 <p>更多 TPU 用法请参看 <a href="https://github.com/ayaka14732/tpu-starter">TPU Starter</a>。</p>
 <p>（作于 2020 年 9 月 17 日，修订于 2022 年 4 月 16 日）</p>
 </body>
