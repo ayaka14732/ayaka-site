@@ -5,8 +5,8 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="三日月綾香" />
-  <meta name="keywords" content="ssh, Google Colab, 服务器" />
-  <title>ssh 连接 Google Colab</title>
+  <meta name="keywords" content="SSH, Google Colab, 服务器" />
+  <title>SSH 连接 Google Colab</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -81,7 +81,7 @@
   </style>
   <link rel="stylesheet" href="/pandoc.css" />
   <link rel="stylesheet" href="/sans.css" />
-  <meta name="description" content="Google Colab 提供了免费的服务器资源。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在真实的终端中输入命令。为此，以借助中转服务器，使用 ssh 连接 Google Colab"/>
+  <meta name="description" content="Google Colab 提供了免费的计算资源。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在真实的终端中输入命令。为此，以借助中转服务器，使用 SSH 连接 Google Colab"/>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -104,7 +104,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">ssh 连接 Google Colab</h1>
+<h1 class="title">SSH 连接 Google Colab</h1>
 <p class="author">三日月綾香</p>
 </header>
 <nav id="TOC" role="doc-toc">
@@ -114,13 +114,13 @@
 <ul>
 <li><a href="#打印环境变量">打印环境变量</a></li>
 <li><a href="#查看-pc-的-ssh-公钥">查看 PC 的 SSH 公钥</a></li>
-<li><a href="#配置-google-colab">配置 Google Colab</a></li>
+<li><a href="#修改配置">修改配置</a></li>
 <li><a href="#查看-google-colab-的-ssh-公钥">查看 Google Colab 的 SSH 公钥</a></li>
 <li><a href="#将-google-colab-的-ssh-公钥加入中转服务器">将 Google Colab 的 SSH 公钥加入中转服务器</a></li>
 <li><a href="#将-google-colab-的-ssh-端口转发到中转服务器">将 Google Colab 的 SSH 端口转发到中转服务器</a></li>
 <li><a href="#从-pc-登录-google-colab">从 PC 登录 Google Colab</a></li>
 </ul></li>
-<li><a href="#配置-google-colab-1">配置 Google Colab</a>
+<li><a href="#配置-google-colab">配置 Google Colab</a>
 <ul>
 <li><a href="#安装-oh-my-zsh">安装 <span>Oh My Zsh</span></a></li>
 <li><a href="#修改时区">修改时区</a></li>
@@ -138,9 +138,12 @@
 </ul></li>
 </ul>
 </nav>
-<p>Google Colab 提供了免费的服务器资源。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在真实的终端中输入命令。为此，可以借助中转服务器，使用 ssh 连接 Google Colab。</p>
+<blockquote>
+<p>同时发布于 Medium: <a href="https://medium.com/@ayaka_45434/connect-to-google-colab-using-ssh-bb342e0d0fd2" lang="en" hreflang="en">Connect to Google Colab Using SSH</a></p>
+</blockquote>
+<p>Google Colab 提供了免费的计算资源。然而，Google Colab 只提供了网页的操作界面，不能像平时操作服务器一样在终端中输入命令。为此，可以借助中转服务器，使用 SSH 连接 Google Colab。</p>
 <h1 id="实现思路">实现思路</h1>
-<p>为了通过 ssh 连接 Google Colab，需要一个有公网 IP 的中转服务器。通过端口转发，将 Google Colab 的 ssh 端口转发到中转服务器上，然后在 PC 上通过中转服务器连接 Google Colab。</p>
+<p>为了通过 SSH 连接 Google Colab，需要一个有公网 IP 的中转服务器。通过端口转发，将 Google Colab 的 SSH 端口转发到中转服务器上，然后在 PC 上通过中转服务器连接 Google Colab。</p>
 <p><img src="1.png" /></p>
 <h1 id="实现步骤">实现步骤</h1>
 <h2 id="打印环境变量">打印环境变量</h2>
@@ -151,7 +154,7 @@
 <h2 id="查看-pc-的-ssh-公钥">查看 PC 的 SSH 公钥</h2>
 <p>在 PC 执行以下命令查看 SSH 公钥：</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_rsa.pub</span></code></pre></div>
-<h2 id="配置-google-colab">配置 Google Colab</h2>
+<h2 id="修改配置">修改配置</h2>
 <p>在 Google Colab 单元格中执行以下命令：</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>sh</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p <span class="op">~/</span>.ssh</span>
@@ -172,10 +175,11 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&#39;&lt;Google Colab 的 SSH 公钥&gt;&#39;</span> <span class="op">&gt;&gt;</span> ~/.ssh/authorized_keys</span></code></pre></div>
 <p>其中，<code>&lt;Google Colab 的 SSH 公钥&gt;</code> 需要替换为上一步查看的 SSH 公钥。</p>
 <h2 id="将-google-colab-的-ssh-端口转发到中转服务器">将 Google Colab 的 SSH 端口转发到中转服务器</h2>
+<p>在 Google Colab 单元格中执行以下命令：</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!ssh</span> <span class="at">-N</span> <span class="at">-T</span> <span class="at">-C</span> <span class="at">-o</span> StrictHostKeyChecking=no <span class="at">-R</span> 127.0.0.1:28822:127.0.0.1:22 <span class="op">&lt;</span>user<span class="op">&gt;</span>@<span class="op">&lt;</span>hostname<span class="op">&gt;</span></span></code></pre></div>
 <p>其中，<code>&lt;user&gt;</code> 和 <code>&lt;hostname&gt;</code> 分别为中转服务器的用户名和 IP 地址。</p>
 <h2 id="从-pc-登录-google-colab">从 PC 登录 Google Colab</h2>
-<p>修改 <code>~/.ssh/config</code>：</p>
+<p>修改 PC 的 <code>~/.ssh/config</code>：</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Host jumpserver</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">    User &lt;user&gt;</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">    HostName &lt;hostname&gt;</span></span>
@@ -188,9 +192,9 @@
 <p>其中，<code>&lt;user&gt;</code> 和 <code>&lt;hostname&gt;</code> 分别为中转服务器的用户名和 IP 地址。</p>
 <p>在 PC 执行以下命令登录 Google Colab：</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> colab</span></code></pre></div>
-<p>当重新启动 Google Colab 运行环境时，Google Colab 的 host key 会发生变化，导致无法登录。解决方法是在 PC 执行以下命令，删除原来储存的 host key：</p>
+<p>当重新启动 Google Colab 运行环境时，Google Colab 的 host key 会发生变化，导致登录时出现错误。解决方法是在 PC 执行以下命令，删除原来储存的 host key：</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-R</span> <span class="st">&quot;[127.0.0.1]:28822&quot;</span></span></code></pre></div>
-<h1 id="配置-google-colab-1">配置 Google Colab</h1>
+<h1 id="配置-google-colab">配置 Google Colab</h1>
 <h2 id="安装-oh-my-zsh">安装 <a href="https://ohmyz.sh/">Oh My Zsh</a></h2>
 <div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> <span class="at">-c</span> <span class="st">&quot;</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="va">)</span><span class="st">&quot;</span></span></code></pre></div>
 <h2 id="修改时区">修改时区</h2>
@@ -210,7 +214,7 @@
 <h2 id="查看-cpu-使用情况">查看 CPU 使用情况</h2>
 <div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">htop</span></span></code></pre></div>
 <h2 id="挂载-google-drive">挂载 Google Drive</h2>
-<p>在启动 8 小时左右，服务器资源会被回收。为了防止数据丢失，可以定期将中间结果保存到 Google Drive 中。将 Google Drive 挂载到 Google Colab 的方法是在 Google Colab 单元格中执行：</p>
+<p>在启动 8 小时左右，服务器会被回收。为了防止数据丢失，可以定期将中间结果保存到 Google Drive 中。将 Google Drive 挂载到 Google Colab 的方法是在 Google Colab 单元格中执行：</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">&#39;/content/gdrive&#39;</span>)</span></code></pre></div>
 <p>然后按提示操作。</p>
