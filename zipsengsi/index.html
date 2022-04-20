@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-HK" xml:lang="zh-HK" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="入聲字, 情感分析, 音韻學, 自然語言處理, Hugging Face Transformers" />
+  <title>入聲字情感分析</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="/pandoc.css" />
+  <link rel="stylesheet" href="/sans.css" />
+  <meta name="description" content="TL;DR: 入聲字的情感與舒聲字無明顯差別。"/>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">入聲字情感分析</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#簡介">簡介</a></li>
+<li><a href="#實驗過程">實驗過程</a></li>
+<li><a href="#實驗結果">實驗結果</a></li>
+<li><a href="#附錄">附錄</a></li>
+</ul>
+</nav>
+<blockquote>
+<p>同時發佈於<a href="https://zhuanlan.zhihu.com/p/501762638">知乎</a></p>
+</blockquote>
+<p>TL;DR: 入聲字的情感與舒聲字無明顯差別。</p>
+<h1 id="簡介">簡介</h1>
+<p>上次羣友提出了一個問題：「有沒有一種説法，入聲字有很多冷酷、消極、負能量的字？」</p>
+<p><img src="1.jpg" /></p>
+<p>為了解決這個問題，我決定使用情感分析模型。</p>
+<p>在 NLP 中，情感分析是文本分類的一個分支，是對帶有情感色彩（褒義貶義/正向負向）的主觀性文本進行分析，以確定該文本的觀點、喜好、情感傾向<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。目前非常流行的 NLP 函式庫 <a href="https://huggingface.co/docs/transformers/quicktour">Hugging Face Transformers</a> 中提供了預訓練的 DistilBERT 模型作為情感分析模型。</p>
+<p>解決問題的思路是：首先從漢英詞典 <a href="https://github.com/Heptagon196/Dict">Heptagon196/Dict</a> 中選出所有單字條目及對應的英文解釋<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。 然後，對於所有單字，使用 <a href="https://github.com/CanCLID/ToJyutping">ToJyutping</a> 函式庫為單字標註粵語拼音<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>， 然後據粵語拼音判斷是否該字是否為入聲字<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。接下來，對於所有單字，根據其對應的英文解釋，使用預訓練的 DistilBERT 模型判斷該字的情感傾向得分<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>。最後，比較舒聲字和入聲字的情感傾向平均分。若得分相近，則説明入聲字的情感與舒聲字無明顯差別，否則有明顯差別。</p>
+<h1 id="實驗過程">實驗過程</h1>
+<p>本次實驗使用 NumPy 1.22.3，TensorFlow 2.10.0 及 Hugging Face Transformers 4.18.0 版本。</p>
+<p>從漢英詞典中選出所有單字條目及對應的英文解釋的程式較為簡單，此處略去。</p>
+<p>情感分析部分的程式如下。</p>
+<p>1. 引入函式庫</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ToJyutping</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span></code></pre></div>
+<p>2. 載入情感分析模型</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>classifier <span class="op">=</span> pipeline(<span class="st">&#39;sentiment-analysis&#39;</span>)</span></code></pre></div>
+<p>3. 定義情感傾向得分函式</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> handle_one_result(result):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> result[<span class="st">&#39;label&#39;</span>] <span class="op">==</span> <span class="st">&#39;POSITIVE&#39;</span>:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> result[<span class="st">&#39;score&#39;</span>] <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> score <span class="op">&gt;</span> <span class="fl">50.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> <span class="fl">100.</span> <span class="op">-</span> result[<span class="st">&#39;score&#39;</span>] <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> score <span class="op">&lt;</span> <span class="fl">50.</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> score</span></code></pre></div>
+<p>4. 定義輔助函式</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> 分块(lst, n):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [lst[i:i<span class="op">+</span>n] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(lst), n)]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> 根据粤拼判断入声(粵拼: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">bool</span>(re.search(<span class="st">&#39;[ptk]\d$&#39;</span>, 粵拼))</span></code></pre></div>
+<p>5. 讀入單字及其英文解釋，並分塊</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>汉字_英文列表 <span class="op">=</span> []</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>英文列表 <span class="op">=</span> []</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;词表.txt&#39;</span>, encoding<span class="op">=</span><span class="st">&#39;utf-8&#39;</span>) <span class="im">as</span> f:</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f:</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        汉字, 英文 <span class="op">=</span> line.rstrip(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>).split(<span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        汉字_英文列表.append((汉字, 英文))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        英文列表.append(英文)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>分块英文列表 <span class="op">=</span> 分块(英文列表, <span class="dv">64</span>)</span></code></pre></div>
+<p>6. 使用情感分析模型得出情感傾向得分</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>情感分析结果列表 <span class="op">=</span> []</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> 英文块 <span class="kw">in</span> tqdm(分块英文列表):</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    情感分析结果块 <span class="op">=</span> classifier(英文块)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    情感分析结果块 <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(handle_one_result, 情感分析结果块))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    情感分析结果列表.extend(情感分析结果块)</span></code></pre></div>
+<p>7. 判斷入聲字，並分別統計舒聲字和入聲字的得分</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>舒声字得分列表 <span class="op">=</span> []</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>入声字得分列表 <span class="op">=</span> []</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;结果.txt&#39;</span>, <span class="st">&#39;w&#39;</span>, encoding<span class="op">=</span><span class="st">&#39;utf-8&#39;</span>) <span class="im">as</span> f:</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (汉字, 英文), 情感分析结果 <span class="kw">in</span> <span class="bu">zip</span>(汉字_英文列表, 情感分析结果列表):</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        粵拼 <span class="op">=</span> ToJyutping.get_jyutping_text(汉字)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> 粵拼:</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span>  <span class="co"># 不处理没有读音的情况</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        是入声字 <span class="op">=</span> 根据粤拼判断入声(粵拼)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> 是入声字:</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            舒声字得分列表.append(情感分析结果)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            入声字得分列表.append(情感分析结果)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(汉字, 粵拼, <span class="st">&#39;舒&#39;</span> <span class="cf">if</span> <span class="kw">not</span> 是入声字 <span class="cf">else</span> <span class="st">&#39;入&#39;</span>, 英文, 情感分析结果, sep<span class="op">=</span><span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="bu">file</span><span class="op">=</span>f)</span></code></pre></div>
+<p>8. 計算舒聲字和入聲字的情感傾向平均分，並輸出</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>舒声字平均分 <span class="op">=</span> np.array(舒声字得分列表).mean()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>入声字平均分 <span class="op">=</span> np.array(入声字得分列表).mean()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;舒声字平均分：</span><span class="sc">{舒声字平均分:.2f}</span><span class="ss">&#39;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;入声字平均分：</span><span class="sc">{入声字平均分:.2f}</span><span class="ss">&#39;</span>)</span></code></pre></div>
+<h1 id="實驗結果">實驗結果</h1>
+<p>程式輸出：</p>
+<pre><code>舒声字平均分：60.90
+入声字平均分：59.42</code></pre>
+<p>因此，入聲字的情感與舒聲字無明顯差別。</p>
+<h1 id="附錄">附錄</h1>
+<p>得分最高的前 10 個字：</p>
+<ul>
+<li><span lang="zh-Hans">恺</span> joyful 舒 99.9882459640503</li>
+<li><span lang="zh-Hans">嫣</span> captivating 舒 99.98819828033447</li>
+<li><span lang="zh-Hans">绮</span> beautiful 舒 99.98807907104492</li>
+<li><span lang="zh-Hans">粲</span> beautiful 舒 99.98807907104492</li>
+<li><span lang="zh-Hans">琼</span> beautiful 舒 99.98807907104492</li>
+<li><span lang="zh-Hans">婺</span> beautiful 舒 99.98807907104492</li>
+<li><span lang="zh-Hans">婵</span> beautiful 舒 99.98807907104492</li>
+<li><span lang="zh-Hans">娟</span> beautiful 舒 99.98807907104492</li>
+<li><span lang="zh-Hans">娈</span> beautiful 舒 99.98807907104492</li>
+<li><span lang="zh-Hans">妍</span> beautiful 舒 99.98807907104492</li>
+</ul>
+<p>得分最低的前 10 個字：</p>
+<ul>
+<li><span lang="zh-Hans">累</span> cumbersome 舒 0.019413232803344727</li>
+<li><span lang="zh-Hans">髡</span> make the head bald 舒 0.019556283950805664</li>
+<li><span lang="zh-Hans">滞</span> sluggish 舒 0.0196993350982666</li>
+<li><span lang="zh-Hans">镌</span> degrade 舒 0.019878149032592773</li>
+<li><span lang="zh-Hans">颓</span> become bald 舒 0.020331144332885742</li>
+<li><span lang="zh-Hans">鲁</span> crass 舒 0.020509958267211914</li>
+<li><span lang="zh-Hans">朽</span> rotten 舒 0.020557641983032227</li>
+<li><span lang="zh-Hans">摞</span> pile up 舒 0.020569562911987305</li>
+<li><span lang="zh-Hans">旷</span> waste 舒 0.02065300941467285</li>
+<li><span lang="zh-Hans">懈</span> lax 舒 0.020700693130493164</li>
+</ul>
+<p>可以看到得分最高和最低的前 10 個字都是舒聲字。</p>
+<p>得分最高的前 10 個入聲字：</p>
+<ul>
+<li><span lang="zh-Hans">赫</span> awe-inspiring 入 99.98770952224731</li>
+<li><span lang="zh-Hans">阔</span> rich 入 99.9876856803894</li>
+<li><span lang="zh-Hans">倜</span> energetic 入 99.98763799667358</li>
+<li><span lang="zh-Hans">实</span> real 入 99.98708963394165</li>
+<li><span lang="zh-Hans">诺</span> to promise 入 99.98689889907837</li>
+<li><span lang="zh-Hans">燠</span> warm 入 99.98680353164673</li>
+<li><span lang="zh-Hans">煜</span> brilliant 入 99.98660087585449</li>
+<li><span lang="zh-Hans">灼</span> brilliant 入 99.98660087585449</li>
+<li><span lang="zh-Hans">铄</span> bright 入 99.98644590377808</li>
+<li><span lang="zh-Hans">翌</span> bright 入 99.98644590377808</li>
+</ul>
+<p>得分最低的前 10 個入聲字：</p>
+<ul>
+<li><span lang="zh-Hans">蛭</span> fluke 入 0.02079606056213379</li>
+<li><span lang="zh-Hans">恝</span> indifferent 入 0.020998716354370117</li>
+<li><span lang="zh-Hans">辱</span> disgrace 入 0.021058320999145508</li>
+<li><span lang="zh-Hans">谪</span> disgrace (an official) 入 0.02148747444152832</li>
+<li><span lang="zh-Hans">碌</span> laborious 入 0.02244114875793457</li>
+<li><span lang="zh-Hans">僻</span> low 入 0.02256035804748535</li>
+<li><span lang="zh-Hans">隰</span> low 入 0.02256035804748535</li>
+<li><span lang="zh-Hans">俗</span> vulgar 入 0.022727251052856445</li>
+<li><span lang="zh-Hans">弱</span> weak 入 0.023156404495239258</li>
+<li><span lang="zh-Hans">蹩</span> limp 入 0.023239850997924805</li>
+</ul>
+<p>本次實驗的完整程式碼見 <a href="https://gist.github.com/ayaka14732/d4527a028e5e96e54de67305eb2967f1">Gist</a>。</p>
+<p>（作於 2022 年 4 月 17 日，發佈於 2022 年 4 月 20 日）</p>
+<section class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p><a href="https://houbb.github.io/2020/01/20/nlp-qingganfenxi-01-overview" class="uri">https://houbb.github.io/2020/01/20/nlp-qingganfenxi-01-overview</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>如果某個條目對應多個解釋，則只選擇第一個。例如「<span lang="zh-Hans">贴</span>」有 to stick; to paste; to keep close to; to fit snugly; allowance 五個解釋，分析時僅選擇 to stick 一個<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>對於多音字，ToJyutping 函式庫只返回頻率最高的一個讀音<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>有少數字在中古並非入聲字，但在粵語中變為入聲，如「<span lang="zh-Hans">值</span>」。但這類字較少，因此對結果影響不大<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>單字與對應的英文解釋的含義可能不完全一致，從而導致情感分析的結果不準確。例如「<span lang="zh-Hans">挽</span>」的英文解釋為 draw，但 draw 還有「繪畫」的意思，而「<span lang="zh-Hans">挽</span>」字無。不過這類字較少，因此對結果影響不大<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>
