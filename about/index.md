@@ -14,11 +14,13 @@ math: |-
 
 # 关于我
 
-爱好语言学、音韵学。思考时除了用普通话和粤语，还使用[自己的人造语言](../v8/){lang=zh-Hant hreflang=zh-Hant}。
+爱好语言学、音韵学。思考时除了用普通话、粤语和英语，还使用[自己的人造语言](../v8/){lang=zh-Hant hreflang=zh-Hant}。
 
-Arch Linux 用户。喜欢十多种编程语言，最熟悉 Python、JavaScript 和 Haskell。
+Arch Linux 用户。喜欢十多种编程语言，最熟悉 Python 和 Haskell。
 
 喜欢古风歌曲，因為唱古风歌曲的时候会感到安心。
+
+我用[日记](https://zitkiryok.ayaka14732.workers.dev/)记录下日常生活。
 
 # 关于本站
 
