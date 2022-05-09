@@ -21,7 +21,7 @@ math: |-
 
 基本规则：
 
-1. 按里程收费，巴士与 MRT 同价（车费表见文末）
+1. 按里程收费，巴士与 MRT 同价（车费表见下文）
 1. 换乘时里程累加，不分别计算
 
 换乘规则：
@@ -123,7 +123,7 @@ math: |-
 
 ![](0.png)
 
-# 附录：车费表
+# 车费表
 
 | 距离（千米） | 票价 |
 | :- | :- |
@@ -170,14 +170,14 @@ math: |-
 # 常用工具
 
 1. 谷歌地图：实时规划路线
-1. Bus Uncle 查巴士的到达时间：https://t.me/sgbusunclebot
-1. 车费计算器：https://www.lta.gov.sg/content/ltagov/en/map/fare-calculator.html
+1. Bus Uncle 查巴士的到达时间：<https://t.me/sgbusunclebot>
+1. 车费计算器：<https://www.lta.gov.sg/content/ltagov/en/map/fare-calculator.html>
 
 # 参考资料
 
-1. 换乘规则和支付方式：https://www.transitlink.com.sg/travel-fares/
-1. 支付方式：https://www.sbstransit.com.sg/fares-and-concessions
-1. 车费表（2021&#8239;年&#8239;12&#8239;月&#8239;26&#8239;日起生效）：https://landtransportguru.net/fare-review-exercise-2021-flyer-front/
-1. 15 分钟换乘图：https://mothership.sg/2018/03/new-transfer-rules-trains-lower-fares/
+1. 换乘规则和支付方式：<https://www.transitlink.com.sg/travel-fares/>
+1. 支付方式：<https://www.sbstransit.com.sg/fares-and-concessions>
+1. 车费表（2021&#8239;年&#8239;12&#8239;月&#8239;26&#8239;日起生效）：<https://landtransportguru.net/fare-review-exercise-2021-flyer-front/>
+1. 15 分钟换乘图：<https://mothership.sg/2018/03/new-transfer-rules-trains-lower-fares/>
 
 （2022&#8239;年&#8239;5&#8239;月&#8239;9&#8239;日）
