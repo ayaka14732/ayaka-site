@@ -8,7 +8,7 @@ keywords:
 - 学习感想
 ---
 
-> [English](en-GB/){lang=en-GB hreflang=en-GB}
+> [English Version](en-GB/){lang=en-GB hreflang=en-GB}
 >
 > 注：这篇文章可以看作我学习机器学习的一个阶段性的总结。
 

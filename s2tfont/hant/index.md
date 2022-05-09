@@ -13,7 +13,7 @@ math: |-
 
 > 簡轉繁字型下載頁：[繁媛明朝](https://github.com/ayaka14732/FanWunMing/releases)、[繁媛黑體](https://github.com/ayaka14732/FanWunHak/releases)
 >
-> [简体中文](../){lang=zh-CN hreflang=zh-CN}
+> [简体中文版](../){lang=zh-CN hreflang=zh-CN}
 
 # 簡介
 

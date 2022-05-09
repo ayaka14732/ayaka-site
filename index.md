@@ -46,7 +46,7 @@ math: |-
 1. [Arch Linux 连接 Pulse Secure VPN 记录](archpulse/){lang=zh-CN hreflang=zh-CN}
 1. [腾讯云 coscmd 通配符格式](cosignore/){lang=zh-CN hreflang=zh-CN}
 1. [入聲字情感分析](zipsengsi/)
-1. [一文看懂新加坡公共交通车费计算方式](sg-fare/){lang=zh-CN hreflang=zh-CN}
+1. [一文讀懂新加坡公共交通車資計算方式](sg-fare/hant/){lang=zh-Hant hreflang=zh-Hant}
 
 :::{.hidden}
 # 隨筆

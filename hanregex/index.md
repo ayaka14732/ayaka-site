@@ -9,7 +9,7 @@ keywords:
 - Unicode
 ---
 
-> [简体中文](zh-CN/){lang=zh-CN hreflang=zh-CN}
+> [简体中文版](zh-CN/){lang=zh-CN hreflang=zh-CN}
 
 # tl;dr
 

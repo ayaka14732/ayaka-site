@@ -8,7 +8,7 @@ keywords:
 - thoughts on learning
 ---
 
-> [简体中文](../){lang=zh-CN hreflang=zh-CN}
+> [简体中文版](../){lang=zh-CN hreflang=zh-CN}
 >
 > P.S.: This article can be viewed as a temporary summary of my learning of machine learning.
 

@@ -9,9 +9,13 @@ keywords:
 - 计算方式
 - 巴士
 - MRT
+math: |-
+  <style>img { border: 1px solid #ccc; }</style>
 ---
 
 > 注：本文作于 2022&#8239;年&#8239;5&#8239;月&#8239;9&#8239;日，文中描述的信息未来可能发生变化，可以根据文末的参考资料获取最新的信息。
+>
+> [繁體中文版](hant/){lang=zh-Hant hreflang=zh-Hant}
 
 # 车费规则
 

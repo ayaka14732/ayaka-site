@@ -8,7 +8,7 @@ keywords:
 - Unicode
 ---
 
-> [English](../){lang=en hreflang=en}
+> [English Version](../){lang=en hreflang=en}
 
 # tl;dr
 

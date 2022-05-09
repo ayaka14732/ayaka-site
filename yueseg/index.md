@@ -11,7 +11,7 @@ math: |-
   <link rel="alternate" hreflang="zh-HK" href="hant/"/>
 ---
 
-> [繁體中文](hant/){lang=zh-HK hreflang=zh-HK}
+> [繁體中文版](hant/){lang=zh-HK hreflang=zh-HK}
 
 # 方法
 

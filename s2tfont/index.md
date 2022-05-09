@@ -13,7 +13,7 @@ math: |-
 
 > 简转繁字体下载页面：[繁媛明朝](https://github.com/ayaka14732/FanWunMing/releases)、[繁媛黑体](https://github.com/ayaka14732/FanWunHak/releases)
 >
-> [繁體中文](hant/){lang=zh-HK hreflang=zh-HK}，同时发布于知乎：[正确实现简转繁字体 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/166089642){hreflang=zh-CN}
+> [繁體中文版](hant/){lang=zh-HK hreflang=zh-HK}，同时发布于知乎：[正确实现简转繁字体 - 三日月 綾香的文章](https://zhuanlan.zhihu.com/p/166089642){hreflang=zh-CN}
 
 # 简介
 
