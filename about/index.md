@@ -10,7 +10,7 @@ math: |-
   </script>
 ---
 
-[![GitHub](github.svg){lang=en-HK}](https://github.com/ayaka14732){.icon} [![知乎](zhihu.svg)](https://www.zhihu.com/people/.ayaka){.icon} [![Medium](medium.svg){lang=en-HK}](https://medium.com/@ayaka_45434){.icon} [![Twitter](twitter.svg){lang=en-HK}](https://twitter.com/ayaka14732){.icon} [![邮箱](mail.svg)](https://example.org/){.icon #gategdinzijau} [![bilibili](bilibili-tv.svg)](https://space.bilibili.com/6769569){.icon} [![网易云音乐](music.svg)](https://music.163.com/#/user/home?id=338500484){.icon} [![Codewars](codewars.svg){lang=en-HK}](https://www.codewars.com/users/ayaka14732){.icon} [![Instagram](instagram.svg){lang=en-HK}](https://www.instagram.com/_ayaka4276/){.icon}
+[![GitHub](github.svg){lang=en-HK}](https://github.com/ayaka14732){.icon} [![知乎](zhihu.svg)](https://www.zhihu.com/people/.ayaka){.icon} [![Medium](medium.svg){lang=en-HK}](https://medium.com/@ayaka_45434){.icon} [![Twitter](twitter.svg){lang=en-HK}](https://twitter.com/ayaka14732){.icon} [![邮箱](mail.svg)](https://example.org/){.icon #gategdinzijau} [![bilibili](bilibili-tv.svg)](https://space.bilibili.com/6769569){.icon} [![网易云音乐](music.svg)](https://music.163.com/#/user/home?id=338500484){.icon} [![Codewars](codewars.svg){lang=en-HK}](https://www.codewars.com/users/ayaka14732){.icon} [![Instagram](instagram.svg){lang=en-HK}](https://www.instagram.com/ayaka14732/){.icon}
 
 # 关于我
 
@@ -18,9 +18,7 @@ math: |-
 
 Arch Linux 用户。喜欢十多种编程语言，最熟悉 Python 和 Haskell。
 
-喜欢古风歌曲，因為唱古风歌曲的时候会感到安心。
-
-我用[日记](https://zitkiryok.ayaka14732.workers.dev/)记录下日常生活。
+喜欢古风歌曲，唱古风歌曲的时候会感到安心。
 
 # 关于本站
 
