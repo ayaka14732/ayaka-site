@@ -12,7 +12,7 @@ math: |-
   </style>
 ---
 
-[About](about/){lang=en hreflang=zh-HK}
+[About](about/){lang=en hreflang=zh-HK} - [English Site](https://lisa.shn.hk/){lang=en hreflang=en-GB}
 
 # 文章
 
@@ -37,7 +37,6 @@ math: |-
 1. [粵語（廣州音）與中古音對應關係](teoi/)（未定稿）
 1. [漢字的單音化現象](guan/)
 1. [日語漢音的重紐對立](tyongdiu/)
-1. [Bantian Railway Station](btq/){lang=en hreflang=en}
 1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿）
 1. [蛇口碼頭至香港機場航線紀錄](zyk/)
 1. [Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件](openwrt/){lang=zh-CN hreflang=zh-CN}
@@ -52,7 +51,6 @@ math: |-
 # 隨筆
 
 1. [Nushu Everywhere](nushu-everywhere/){lang=en-US hreflang=en-US}
-1. [The Shidinn Language](shidinn/){lang=en hreflang=en}
 1. [如何正确学习青年大学习](daxuexi/){lang=zh-CN hreflang=zh-CN}
 :::
 
