@@ -68,7 +68,7 @@ function createVodPlayerIOS(url, videoId, dateString, dimension, width, height) 
 
 从注释可以看出，当客户端为 iOS 时，网页使用的播放器不是 Flash，而是 HTML5，而 HTML5 是目前广泛支持的技术。因此，只要将客户端更换为 iOS，就可以让网页使用 HTML5 播放。
 
-在控制台中选择「切换装置」，然后选择「iPhone SE」，点击刷新。结果发现虽然要求安装 Flash 的字样消失了，但视频播放区域仍为黑屏，仍然无法正常播放。
+在控制台中选择「切换装置」，然后选择 iPhone SE，点击刷新，发现虽然要求安装 Flash 的字样消失了，但视频播放区域仍为黑屏，仍然无法正常播放。
 
 在控制台中查看网络请求可以发现，在加载视频时，页面请求 `http://v.gdmztv.com:82//mzt/vod/ios/2022/07/26/a34f1b5e19004249900b610e3a133fe7.jsonp?callback=success_jsonpCallback&_=1660968398473` 时失败，服务器返回 404 错误。由于这个资源包含视频地址，页面请求这个资源失败，也就无法得到视频地址，从而导致视频无法播放。
 
