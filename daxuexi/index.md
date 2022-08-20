@@ -2,7 +2,7 @@
 title: 如何正确学习青年大学习
 lang: zh-CN
 math: |-
-  <style>img { border: 1px solid #ccc; max-height: 100vh; max-width: 80%; }</style>
+  <style>p > img { border: 1px solid #ccc; display: block; margin: 0 auto; max-height: 100vh; max-width: 80%; }</style>
   <meta name="description" content="你已经是一个成熟的程序员了，要学会自己 Debug"/>
 ---
 
