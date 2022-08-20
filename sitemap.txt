@@ -9,6 +9,7 @@ https://ayaka.shn.hk/colab/
 https://ayaka.shn.hk/cosignore/
 https://ayaka.shn.hk/cppregex/
 https://ayaka.shn.hk/daxuexi/
+https://ayaka.shn.hk/dialect-news/
 https://ayaka.shn.hk/fanwan/
 https://ayaka.shn.hk/fcitx5-freebsd/
 https://ayaka.shn.hk/guan/
