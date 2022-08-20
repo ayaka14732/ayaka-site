@@ -165,7 +165,7 @@
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>从注释可以看出，当客户端为 iOS 时，网页使用的播放器不是 Flash，而是 HTML5，而 HTML5 是目前广泛支持的技术。因此，只要将客户端更换为 iOS，就可以让网页使用 HTML5 播放。</p>
-<p>在控制台中选择「切换装置」，然后选择「iPhone SE」，点击刷新。结果发现虽然要求安装 Flash 的字样消失了，但视频播放区域仍为黑屏，仍然无法正常播放。</p>
+<p>在控制台中选择「切换装置」，然后选择 iPhone SE，点击刷新，发现虽然要求安装 Flash 的字样消失了，但视频播放区域仍为黑屏，仍然无法正常播放。</p>
 <p>在控制台中查看网络请求可以发现，在加载视频时，页面请求 <code>http://v.gdmztv.com:82//mzt/vod/ios/2022/07/26/a34f1b5e19004249900b610e3a133fe7.jsonp?callback=success_jsonpCallback&amp;_=1660968398473</code> 时失败，服务器返回 404 错误。由于这个资源包含视频地址，页面请求这个资源失败，也就无法得到视频地址，从而导致视频无法播放。</p>
 <p>如果不知道视频地址的话，是永远无法播放视频的，而网站上已经没有其他可以利用的信息了，我认为是网站本身的问题，应该向网站反馈。然而，在网站的「<a href="http://www.gdmztv.com/about/contact.shtml">联系我们</a>」页面上，居然写着联系方式为「待添加」。</p>
 <p><img src="3.png" /></p>
