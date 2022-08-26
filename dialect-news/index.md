@@ -4,14 +4,14 @@ lang: zh-CN
 math: |-
   <style>
     p > img { border: 1px solid #ccc; display: block; margin: 0 auto; max-height: 100vh; max-width: 80%; }
-    code { word-break: break-all; }
+    a, code { word-break: break-all; }
   </style>
   <meta name="description" content="成功播放方言新闻，并不是一件容易的事情。"/>
 ---
 
 # 服务 900
 
-服务 900 是梅州市广播电视台推出的客家话每日新闻节目。因为播音员的发音比普通人清晰，所以客家话新闻是非常宝贵的客家话资料。
+服务 900 是梅州市广播电视台推出的客家话每日新闻节目。电视新闻播音要求标准清晰，所以客家话新闻是非常宝贵的客家话资料。
 
 然而，通过网络检索到[梅州市广播电视台 2022&#8239;年&#8239;7&#8239;月&#8239;26&#8239;日《服务 900》完整版](http://news.gdmztv.com/2022/307195.shtml)后，却发现页面上赫然写着「您还没有安装 flash 播放器，请点击这里安装 Adobe Flash Player」字样。Flash 是早已过时的技术，说明网站早已无人维护，而网站内容却还在不断更新，令人唏嘘不已。
 
@@ -108,7 +108,7 @@ function createVodPlayerIOS(url, videoId, dateString, dimension, width, height) 
 
 ![](7.jpg)
 
-为此，我想找到一种方法，能够自动获取往期文昌新闻的全部视频列表。但是，因为不知道检索时 App 向哪个 URL 发出请求，所以需要通过 Wireshark 抓包进行分析。这个 App 中的所有 URL 使用的都是不加密的 HTTP 协议，所以抓包的方法并不麻烦。
+为此，我想自动获取往期文昌新闻的全部视频列表。但是，因为不知道检索时 App 向哪个 URL 发出请求，所以需要通过 Wireshark 抓包进行分析。这个 App 中的所有 URL 使用的都是不加密的 HTTP 协议，所以抓包的方法并不麻烦。
 
 不过这时却出现了一个问题。通常在抓包时，我们是在电脑上运行 Wireshark 程序，在手机上运行要抓包的 App，电脑和手机连接到同一个路由器上，然后在电脑的 Wireshark 程序中登录路由器，在路由器上抓取数据包。但是这次我在外面，使用的是公共的路由器，没有办法登录路由器抓取数据包，所以只能另想办法。
 
