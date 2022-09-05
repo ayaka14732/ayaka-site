@@ -74,3 +74,4 @@ should be after 漢字化的日文元素名稱是什麼樣子
 - [凌莞](https://nyac.at/){lang=zh-CN hreflang=zh-CN}
 - [skylee](https://skylee.xyz/){lang=en}
 - [山前](https://estela.moe/){lang=zh-Hant hreflang=en}
+- [泉雲清](https://ius.shn.hk/){lang=zh-Hant hreflang=zh-Hant}
