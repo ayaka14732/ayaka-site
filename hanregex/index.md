@@ -13,28 +13,97 @@ keywords:
 
 # tl;dr
 
-**Python:**
+## Python
 
 ```
 [\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?
 ```
 
-**Python (need `pip install regex`):**
+## Python (need `pip install regex`)
 
 ```
 [\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?
 ```
 
-**JavaScript (ES6):**
+## JavaScript (ES6)
 
 ```
 [\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?
 ```
 
-**JavaScript (pre-ES6):**
+## JavaScript (pre-ES6)
 
 ```
 ([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud888[\udc00-\udfaf])([\ufe00-\ufe0f]|\udb40[\udd00-\uddef])?
+```
+
+# Examples
+
+## Python
+
+
+```python
+import json
+import re
+
+pattern = re.compile(r'[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?')
+
+for i, match in enumerate(pattern.finditer('a〆文𦫖﨑禰󠄀')):
+    print(f'Match {i}:', match[0], json.dumps(match[0]))
+
+# Match 0: 〆 "\u3006"
+# Match 1: 文 "\u6587"
+# Match 2: 𦫖 "\ud85a\uded6"
+# Match 3: 﨑 "\ufa11"
+# Match 4: 禰󠄀 "\u79b0\udb40\udd00"
+```
+
+## Python (need `pip install regex`)
+
+```python
+import json
+import regex as re
+
+pattern = re.compile(r'[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?')
+
+for i, match in enumerate(pattern.finditer('a〆文𦫖﨑禰󠄀')):
+    print(f'Match {i}:', match[0], json.dumps(match[0]))
+
+# Match 0: 〆 "\u3006"
+# Match 1: 文 "\u6587"
+# Match 2: 𦫖 "\ud85a\uded6"
+# Match 3: 﨑 "\ufa11"
+# Match 4: 禰󠄀 "\u79b0\udb40\udd00"
+```
+
+## JavaScript (ES6)
+
+```javascript
+const pattern = /[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?/gmu;
+
+'a〆文𦫖﨑禰󠄀'.match(pattern).forEach((match, i) => {
+   console.log(`Match ${i}: ${match}, length: ${match.length}`);
+});
+// Match 0: 〆, length: 1
+// Match 1: 文, length: 1
+// Match 2: 𦫖, length: 2
+// Match 3: 﨑, length: 1
+// Match 4: 禰󠄀, length: 3
+```
+
+## JavaScript (pre-ES6)
+
+```javascript
+const pattern = /([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud888[\udc00-\udfaf])([\ufe00-\ufe0f]|\udb40[\udd00-\uddef])?/gm;
+
+'a〆文𦫖﨑禰󠄀'.match(pattern).forEach((match, i) => {
+   console.log(`Match ${i}: ${match}, length: ${match.length}`);
+});
+// Match 0: 〆, length: 1
+// Match 1: 文, length: 1
+// Match 2: 𦫖, length: 2
+// Match 3: 﨑, length: 1
+// Match 4: 禰󠄀, length: 3
 ```
 
 # Explanation
@@ -75,75 +144,6 @@ keywords:
 
 - `U+FE00-U+FE0F`: Variation Selectors
 - `U+E0100-U+E01EF`: Variation Selectors Supplement
-
-# Examples
-
-**Python:**
-
-
-```python
-import json
-import re
-
-pattern = re.compile(r'[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?')
-
-for i, match in enumerate(pattern.finditer('a〆文𦫖﨑禰󠄀')):
-    print(f'Match {i}:', match[0], json.dumps(match[0]))
-
-# Match 0: 〆 "\u3006"
-# Match 1: 文 "\u6587"
-# Match 2: 𦫖 "\ud85a\uded6"
-# Match 3: 﨑 "\ufa11"
-# Match 4: 禰󠄀 "\u79b0\udb40\udd00"
-```
-
-**Python (need `pip install regex`):**
-
-```python
-import json
-import regex as re
-
-pattern = re.compile(r'[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?')
-
-for i, match in enumerate(pattern.finditer('a〆文𦫖﨑禰󠄀')):
-    print(f'Match {i}:', match[0], json.dumps(match[0]))
-
-# Match 0: 〆 "\u3006"
-# Match 1: 文 "\u6587"
-# Match 2: 𦫖 "\ud85a\uded6"
-# Match 3: 﨑 "\ufa11"
-# Match 4: 禰󠄀 "\u79b0\udb40\udd00"
-```
-
-**JavaScript (ES6):**
-
-```javascript
-const pattern = /[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?/gmu;
-
-'a〆文𦫖﨑禰󠄀'.match(pattern).forEach((match, i) => {
-   console.log(`Match ${i}: ${match}, length: ${match.length}`);
-});
-// Match 0: 〆, length: 1
-// Match 1: 文, length: 1
-// Match 2: 𦫖, length: 2
-// Match 3: 﨑, length: 1
-// Match 4: 禰󠄀, length: 3
-```
-
-**JavaScript (pre-ES6):**
-
-```javascript
-const pattern = /([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud888[\udc00-\udfaf])([\ufe00-\ufe0f]|\udb40[\udd00-\uddef])?/gmu;
-
-'a〆文𦫖﨑禰󠄀'.match(pattern).forEach((match, i) => {
-   console.log(`Match ${i}: ${match}, length: ${match.length}`);
-});
-// Match 0: 〆, length: 1
-// Match 1: 文, length: 1
-// Match 2: 﨑, length: 1
-// Match 3: 禰, length: 1
-// TODO FIXME: 𦫖 is not matched!!
-```
 
 # Wrong Solutions
 
