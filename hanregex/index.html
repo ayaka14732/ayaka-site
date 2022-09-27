@@ -110,21 +110,26 @@
 <ul>
 <li><a href="#tldr">tl;dr</a></li>
 <li><a href="#explanation">Explanation</a></li>
-<li><a href="#python-example">Python Example</a></li>
-<li><a href="#javascript-example">JavaScript Example</a></li>
-<li><a href="#why-does-pschan-not-work">Why Does <code>\p{sc=Han}</code> Not Work</a></li>
-<li><a href="#why-does-pideo-not-work">Why Does <code>\p{Ideo}</code> Not Work</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#wrong-solutions">Wrong Solutions</a></li>
+<li><a href="#references">References</a></li>
 </ul>
 </nav>
 <blockquote>
 <p><a href="zh-CN/" lang="zh-CN" hreflang="zh-CN">简体中文版</a></p>
 </blockquote>
 <h1 id="tldr">tl;dr</h1>
-<pre><code>[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U0003134f]</code></pre>
+<p><strong>Python:</strong></p>
+<pre><code>[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?</code></pre>
+<p><strong>Python (need <code>pip install regex</code>):</strong></p>
+<pre><code>[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?</code></pre>
+<p><strong>JavaScript (ES6):</strong></p>
+<pre><code>[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?</code></pre>
+<p><strong>JavaScript (pre-ES6):</strong></p>
+<pre><code>([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud888[\udc00-\udfaf])([\ufe00-\ufe0f]|\udb40[\udd00-\uddef])?</code></pre>
 <h1 id="explanation">Explanation</h1>
+<p><strong>CJK Unified Ideographs:</strong></p>
 <ul>
-<li><code>U+3006</code>: Character 〆 (often regarded as a Chinese character)</li>
-<li><code>U+3007</code>: Character 〇 (often regarded as a Chinese character)</li>
 <li><code>U+4E00-U+9FFF</code>: CJK Unified Ideographs</li>
 <li><code>U+3400-U+4DBF</code>: CJK Unified Ideographs Extension A</li>
 <li><code>U+20000-U+2A6DF</code>: CJK Unified Ideographs Extension B</li>
@@ -133,75 +138,99 @@
 <li><code>U+2B820-U+2CEAF</code>: CJK Unified Ideographs Extension E</li>
 <li><code>U+2CEB0-U+2EBEF</code>: CJK Unified Ideographs Extension F</li>
 <li><code>U+30000-U+3134F</code>: CJK Unified Ideographs Extension G</li>
+<li><code>U+31350–U+323AF</code>: CJK Unified Ideographs Extension H</li>
 </ul>
-<h1 id="python-example">Python Example</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> re</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> han_regex <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r&#39;[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U0003134f]&#39;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> is_han <span class="op">=</span> <span class="kw">lambda</span> c: <span class="bu">bool</span>(han_regex.fullmatch(c))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>([is_han(c) <span class="cf">for</span> c <span class="kw">in</span> <span class="st">&#39;m！文𦫖〇〆&#39;</span>])</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>[<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>]</span></code></pre></div>
-<h1 id="javascript-example">JavaScript Example</h1>
-<p>If you can use ES6 <a href="https://caniuse.com/mdn-javascript_builtins_regexp_unicode">RegExp: Unicode</a>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">const</span> isHan <span class="op">=</span> (c) <span class="kw">=&gt;</span> <span class="ss">/</span><span class="sc">^[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{3134f}]$</span><span class="ss">/u</span><span class="op">.</span><span class="fu">test</span>(c)<span class="op">;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>([<span class="op">...</span><span class="st">&#39;m！文𦫖〇〆&#39;</span>]<span class="op">.</span><span class="fu">map</span>(isHan))<span class="op">;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>[ <span class="kw">false</span><span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span> ]</span></code></pre></div>
-<p>If you cannot use ES6, you have to use <a href="http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm">surrogate pairs</a>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">const</span> isHan <span class="op">=</span> (c) <span class="kw">=&gt;</span> <span class="ss">/</span><span class="sc">^[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud883][\udc00-\udfff]|\u</span><span class="ss">d869</span><span class="sc">[\udc00-\udedf\udf00-\udfff]|\u</span><span class="ss">d87a</span><span class="sc">[\udc00-\udfef]|\u</span><span class="ss">d884</span><span class="sc">[\udc00-\udf4f]$</span><span class="ss">/</span><span class="op">.</span><span class="fu">test</span>(c)<span class="op">;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>([<span class="op">...</span><span class="st">&#39;m！文𦫖〇〆&#39;</span>]<span class="op">.</span><span class="fu">map</span>(isHan))<span class="op">;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>[ <span class="kw">false</span><span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="kw">true</span> ]</span></code></pre></div>
-<h1 id="why-does-pschan-not-work">Why Does <code>\p{sc=Han}</code> Not Work</h1>
-<p>The syntax <code>\p{...}</code> is called <a href="https://tc39.es/proposal-regexp-unicode-property-escapes/">Unicode property escapes</a>. The first part <code>sc</code> is the Unicode property name meaning ‘script’, while the second part <code>Han</code> is the Unicode property value.</p>
-<p>To determine which characters are associated with the Han script, you can check <a href="https://www.unicode.org/Public/UCD/latest/ucd/Scripts.txt"><code>Scripts.txt</code></a> in UCD.</p>
+<p><strong>12 CJK Unified Ideographs in the CJK Compatibility Ideographs block:</strong></p>
 <ul>
-<li><code>U+2E80-U+2E99</code>: CJK Radicals</li>
-<li><code>U+2E9B-U+2EF3</code>: CJK Radicals</li>
-<li><code>U+2F00-U+2FD5</code>: Kangxi Radicals</li>
-<li><code>U+3005</code>: Ideographic Iteration Mark</li>
-<li><code>U+3007</code>: Ideographic Number Zero</li>
-<li><code>U+3021-U+3029</code>: Suzhou Numerals</li>
-<li><code>U+3038-U+303A</code>: Suzhou Numerals</li>
-<li><code>U+303B</code>: Vertical Ideographic Iteration Mark</li>
-<li><code>U+3400-U+4DBF</code>: <strong>CJK Unified Ideographs Extension A</strong></li>
-<li><code>U+4E00-U+9FFF</code>: <strong>CJK Unified Ideographs</strong></li>
-<li><code>U+F900-U+FA6D</code>: CJK Compatibility Ideographs</li>
-<li><code>U+FA70-U+FAD9</code>: CJK Compatibility Ideographs</li>
-<li><code>U+16FE2</code>: Old Chinese Hook Mark</li>
-<li><code>U+16FE3</code>: Old Chinese Iteration Mark</li>
-<li><code>U+16FF0-U+16FF1</code>: Vietnamese Alternate Reading Marks</li>
-<li><code>U+20000-U+2A6DF</code>: <strong>CJK Unified Ideographs Extension B</strong></li>
-<li><code>U+2A700-U+2B738</code>: <strong>CJK Unified Ideographs Extension C</strong></li>
-<li><code>U+2B740-U+2B81D</code>: <strong>CJK Unified Ideographs Extension D</strong></li>
-<li><code>U+2B820-U+2CEA1</code>: <strong>CJK Unified Ideographs Extension E</strong></li>
-<li><code>U+2CEB0-U+2EBE0</code>: <strong>CJK Unified Ideographs Extension F</strong></li>
-<li><code>U+2F800-U+2FA1D</code>: CJK Compatibility Ideographs Supplements</li>
-<li><code>U+30000-U+3134A</code>: <strong>CJK Unified Ideographs Extension G</strong></li>
+<li><code>U+FA0E</code>: 﨎</li>
+<li><code>U+FA0F</code>: 﨏</li>
+<li><code>U+FA11</code>: 﨑</li>
+<li><code>U+FA13</code>: 﨓</li>
+<li><code>U+FA14</code>: 﨔</li>
+<li><code>U+FA1F</code>: 﨟</li>
+<li><code>U+FA21</code>: 﨡</li>
+<li><code>U+FA23</code>: 﨣</li>
+<li><code>U+FA24</code>: 﨤</li>
+<li><code>U+FA27</code>: 﨧</li>
+<li><code>U+FA28</code>: 﨨</li>
+<li><code>U+FA29</code>: 﨩</li>
 </ul>
-<p>You can see that it covers more than just Chinese characters.</p>
-<h1 id="why-does-pideo-not-work">Why Does <code>\p{Ideo}</code> Not Work</h1>
-<p>Similarly, <code>Ideo</code> here is an abbreviation for ‘Ideograph’. To determine which characters are associated with the Ideograph property, you can check <a href="https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt"><code>PropList.txt</code></a> in UCD.</p>
+<p><strong>2 characters in the CJK Symbols and Punctuation block that are often regarded as Chinese characters:</strong></p>
 <ul>
-<li><code>U+3006</code>: Ideographic Closing Mark</li>
-<li><code>U+3007</code>: Ideographic Number Zero</li>
-<li><code>U+3021-U+3029</code>: Suzhou Numerals</li>
-<li><code>U+3038-U+303A</code>: Suzhou Numerals</li>
-<li><code>U+3400-U+4DBF</code>: <strong>CJK Unified Ideographs Extension A</strong></li>
-<li><code>U+4E00-U+9FFF</code>: <strong>CJK Unified Ideographs</strong></li>
-<li><code>U+F900-U+FA6D</code>: CJK Compatibility Ideographs</li>
-<li><code>U+FA70-U+FAD9</code>: CJK Compatibility Ideographs</li>
-<li><code>U+16FE4</code>: Khitan Small Script Filler</li>
-<li><code>U+17000-U+187F7</code>: Tangut Ideographs</li>
-<li><code>U+18800-U+18AFF</code>: Tangut Components</li>
-<li><code>U+18B00-U+18CD5</code>: Khitan Small Script Characters</li>
-<li><code>U+18D00-U+18D08</code>: Tangut Ideographs Supplement</li>
-<li><code>U+1B170-U+1B2FB</code>: Nushu Characters</li>
-<li><code>U+20000-U+2A6DF</code>: <strong>CJK Unified Ideographs Extension B</strong></li>
-<li><code>U+2A700-U+2B738</code>: <strong>CJK Unified Ideographs Extension C</strong></li>
-<li><code>U+2B740-U+2B81D</code>: <strong>CJK Unified Ideographs Extension D</strong></li>
-<li><code>U+2B820-U+2CEA1</code>: <strong>CJK Unified Ideographs Extension E</strong></li>
-<li><code>U+2CEB0-U+2EBE0</code>: <strong>CJK Unified Ideographs Extension F</strong></li>
-<li><code>U+2F800-U+2FA1D</code>: CJK Compatibility Ideographs Supplements</li>
-<li><code>U+30000-U+3134A</code>: <strong>CJK Unified Ideographs Extension G</strong></li>
+<li><code>U+3006</code>: 〆</li>
+<li><code>U+3007</code>: 〇</li>
 </ul>
-<p>Like the previous one, you can see that it covers more than just Chinese characters.</p>
+<p><strong>Variation Selectors:</strong></p>
+<ul>
+<li><code>U+FE00-U+FE0F</code>: Variation Selectors</li>
+<li><code>U+E0100-U+E01EF</code>: Variation Selectors Supplement</li>
+</ul>
+<h1 id="examples">Examples</h1>
+<p><strong>Python:</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r&#39;[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?&#39;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, match <span class="kw">in</span> <span class="bu">enumerate</span>(pattern.finditer(<span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span>)):</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&#39;Match </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">:&#39;</span>, match[<span class="dv">0</span>], json.dumps(match[<span class="dv">0</span>]))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 0: 〆 &quot;\u3006&quot;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 1: 文 &quot;\u6587&quot;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 2: 𦫖 &quot;\ud85a\uded6&quot;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 3: 﨑 &quot;\ufa11&quot;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 4: 禰󠄀 &quot;\u79b0\udb40\udd00&quot;</span></span></code></pre></div>
+<p><strong>Python (need <code>pip install regex</code>):</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> regex <span class="im">as</span> re</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r&#39;[\p</span><span class="sc">{Unified_Ideograph}</span><span class="vs">\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?&#39;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, match <span class="kw">in</span> <span class="bu">enumerate</span>(pattern.finditer(<span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span>)):</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&#39;Match </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">:&#39;</span>, match[<span class="dv">0</span>], json.dumps(match[<span class="dv">0</span>]))</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 0: 〆 &quot;\u3006&quot;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 1: 文 &quot;\u6587&quot;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 2: 𦫖 &quot;\ud85a\uded6&quot;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 3: 﨑 &quot;\ufa11&quot;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 4: 禰󠄀 &quot;\u79b0\udb40\udd00&quot;</span></span></code></pre></div>
+<p><strong>JavaScript (ES6):</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pattern <span class="op">=</span> <span class="ss">/</span><span class="sc">[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?</span><span class="ss">/gmu</span><span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span><span class="op">.</span><span class="fu">match</span>(pattern)<span class="op">.</span><span class="fu">forEach</span>((match<span class="op">,</span> i) <span class="kw">=&gt;</span> {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>   <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Match </span><span class="sc">${</span>i<span class="sc">}</span><span class="vs">: </span><span class="sc">${</span>match<span class="sc">}</span><span class="vs">, length: </span><span class="sc">${</span>match<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 0: 〆, length: 1</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 1: 文, length: 1</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 2: 𦫖, length: 2</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 3: 﨑, length: 1</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 4: 禰󠄀, length: 3</span></span></code></pre></div>
+<p><strong>JavaScript (pre-ES6):</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pattern <span class="op">=</span> <span class="ss">/</span><span class="sc">([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\u</span><span class="ss">d869</span><span class="sc">[\udc00-\udedf\udf00-\udfff]|\u</span><span class="ss">d87a</span><span class="sc">[\udc00-\udfef]|\u</span><span class="ss">d888</span><span class="sc">[\udc00-\udfaf])([\ufe00-\ufe0f]|\u</span><span class="ss">db40</span><span class="sc">[\udd00-\uddef])?</span><span class="ss">/gmu</span><span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span><span class="op">.</span><span class="fu">match</span>(pattern)<span class="op">.</span><span class="fu">forEach</span>((match<span class="op">,</span> i) <span class="kw">=&gt;</span> {</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>   <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Match </span><span class="sc">${</span>i<span class="sc">}</span><span class="vs">: </span><span class="sc">${</span>match<span class="sc">}</span><span class="vs">, length: </span><span class="sc">${</span>match<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 0: 〆, length: 1</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 1: 文, length: 1</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 2: 﨑, length: 1</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 3: 禰, length: 1</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">// </span><span class="al">TODO</span><span class="co"> </span><span class="al">FIXME</span><span class="co">: 𦫖 is not matched!!</span></span></code></pre></div>
+<h1 id="wrong-solutions">Wrong Solutions</h1>
+<ol type="1">
+<li>Solutions containing <code>\p{sc=Han}</code> (means the Han script in Unicode) is wrong because it selects more than Chinese characters</li>
+<li>Solutions containing <code>\p{Ideo}</code> (means the Ideograph property in Unicode) is wrong because it selects more than Chinese characters</li>
+<li>Solutions containing <code>\p{Variation_Selector}</code> is wrong because it also selects Mongolian variation selectors</li>
+</ol>
+<h1 id="references">References</h1>
+<ol type="1">
+<li><a href="https://www.unicode.org/Public/UCD/latest/ucd/Scripts.txt">Unicode Scripts</a></li>
+<li><a href="https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt">Unicode PropList</a></li>
+<li><a href="https://github.com/mrabarnett/mrab-regex#unicode-codepoint-properties-including-scripts-and-blocks">Unicode codepoint properties in the Python <code>regex</code> library</a></li>
+<li><a href="https://tc39.es/proposal-regexp-unicode-property-escapes/">Unicode property escapes in JavaScript (ECMA)</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes">Unicode property escapes in JavaScript (MDN)</a></li>
+<li><a href="https://caniuse.com/mdn-javascript_builtins_regexp_unicode">Can I Use RegExp: Unicode</a></li>
+<li><a href="http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm">Surrogate Pair Calculator</a></li>
+</ol>
 </body>
 </html>
