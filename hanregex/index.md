@@ -13,14 +13,34 @@ keywords:
 
 # tl;dr
 
+**Python:**
+
 ```
-[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U0003134f]
+[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?
+```
+
+**Python (need `pip install regex`):**
+
+```
+[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?
+```
+
+**JavaScript (ES6):**
+
+```
+[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?
+```
+
+**JavaScript (pre-ES6):**
+
+```
+([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud888[\udc00-\udfaf])([\ufe00-\ufe0f]|\udb40[\udd00-\uddef])?
 ```
 
 # Explanation
 
-- `U+3006`: Character 〆 (often regarded as a Chinese character)
-- `U+3007`: Character 〇 (often regarded as a Chinese character)
+**CJK Unified Ideographs:**
+
 - `U+4E00-U+9FFF`: CJK Unified Ideographs
 - `U+3400-U+4DBF`: CJK Unified Ideographs Extension A
 - `U+20000-U+2A6DF`: CJK Unified Ideographs Extension B
@@ -29,90 +49,114 @@ keywords:
 - `U+2B820-U+2CEAF`: CJK Unified Ideographs Extension E
 - `U+2CEB0-U+2EBEF`: CJK Unified Ideographs Extension F
 - `U+30000-U+3134F`: CJK Unified Ideographs Extension G
+- `U+31350–U+323AF`: CJK Unified Ideographs Extension H
 
-# Python Example
+**12 CJK Unified Ideographs in the CJK Compatibility Ideographs block:**
+
+- `U+FA0E`: 﨎
+- `U+FA0F`: 﨏
+- `U+FA11`: 﨑
+- `U+FA13`: 﨓
+- `U+FA14`: 﨔
+- `U+FA1F`: 﨟
+- `U+FA21`: 﨡
+- `U+FA23`: 﨣
+- `U+FA24`: 﨤
+- `U+FA27`: 﨧
+- `U+FA28`: 﨨
+- `U+FA29`: 﨩
+
+**2 characters in the CJK Symbols and Punctuation block that are often regarded as Chinese characters:**
+
+- `U+3006`: 〆
+- `U+3007`: 〇
+
+**Variation Selectors:**
+
+- `U+FE00-U+FE0F`: Variation Selectors
+- `U+E0100-U+E01EF`: Variation Selectors Supplement
+
+# Examples
+
+**Python:**
+
 
 ```python
->>> import re
->>> han_regex = re.compile(r'[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U0003134f]')
->>> is_han = lambda c: bool(han_regex.fullmatch(c))
->>> print([is_han(c) for c in 'm！文𦫖〇〆'])
-[False, False, True, True, True, True]
+import json
+import re
+
+pattern = re.compile(r'[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?')
+
+for i, match in enumerate(pattern.finditer('a〆文𦫖﨑禰󠄀')):
+    print(f'Match {i}:', match[0], json.dumps(match[0]))
+
+# Match 0: 〆 "\u3006"
+# Match 1: 文 "\u6587"
+# Match 2: 𦫖 "\ud85a\uded6"
+# Match 3: 﨑 "\ufa11"
+# Match 4: 禰󠄀 "\u79b0\udb40\udd00"
 ```
 
-# JavaScript Example
+**Python (need `pip install regex`):**
 
-If you can use ES6 [RegExp: Unicode](https://caniuse.com/mdn-javascript_builtins_regexp_unicode):
+```python
+import json
+import regex as re
+
+pattern = re.compile(r'[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?')
+
+for i, match in enumerate(pattern.finditer('a〆文𦫖﨑禰󠄀')):
+    print(f'Match {i}:', match[0], json.dumps(match[0]))
+
+# Match 0: 〆 "\u3006"
+# Match 1: 文 "\u6587"
+# Match 2: 𦫖 "\ud85a\uded6"
+# Match 3: 﨑 "\ufa11"
+# Match 4: 禰󠄀 "\u79b0\udb40\udd00"
+```
+
+**JavaScript (ES6):**
 
 ```javascript
-> const isHan = (c) => /^[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{3134f}]$/u.test(c);
-> console.log([...'m！文𦫖〇〆'].map(isHan));
-[ false, false, true, true, true, true ]
+const pattern = /[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?/gmu;
+
+'a〆文𦫖﨑禰󠄀'.match(pattern).forEach((match, i) => {
+   console.log(`Match ${i}: ${match}, length: ${match.length}`);
+});
+// Match 0: 〆, length: 1
+// Match 1: 文, length: 1
+// Match 2: 𦫖, length: 2
+// Match 3: 﨑, length: 1
+// Match 4: 禰󠄀, length: 3
 ```
 
-If you cannot use ES6, you have to use [surrogate pairs](http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm):
+**JavaScript (pre-ES6):**
 
 ```javascript
-> const isHan = (c) => /^[\u3006\u3007\u4e00-\u9fff\u3400-\u4dbf]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud883][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud884[\udc00-\udf4f]$/.test(c);
-> console.log([...'m！文𦫖〇〆'].map(isHan));
-[ false, false, true, true, true, true ]
+const pattern = /([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud888[\udc00-\udfaf])([\ufe00-\ufe0f]|\udb40[\udd00-\uddef])?/gmu;
+
+'a〆文𦫖﨑禰󠄀'.match(pattern).forEach((match, i) => {
+   console.log(`Match ${i}: ${match}, length: ${match.length}`);
+});
+// Match 0: 〆, length: 1
+// Match 1: 文, length: 1
+// Match 2: 﨑, length: 1
+// Match 3: 禰, length: 1
+// TODO FIXME: 𦫖 is not matched!!
 ```
 
-# Why Does `\p{sc=Han}` Not Work
+# Wrong Solutions
 
-The syntax `\p{...}` is called [Unicode property escapes](https://tc39.es/proposal-regexp-unicode-property-escapes/). The first part `sc` is the Unicode property name meaning 'script', while the second part `Han` is the Unicode property value.
+1. Solutions containing `\p{sc=Han}` (means the Han script in Unicode) is wrong because it selects more than Chinese characters
+1. Solutions containing `\p{Ideo}` (means the Ideograph property in Unicode) is wrong because it selects more than Chinese characters
+1. Solutions containing `\p{Variation_Selector}` is wrong because it also selects Mongolian variation selectors
 
-To determine which characters are associated with the Han script, you can check [`Scripts.txt`](https://www.unicode.org/Public/UCD/latest/ucd/Scripts.txt) in UCD.
+# References
 
-- `U+2E80-U+2E99`: CJK Radicals
-- `U+2E9B-U+2EF3`: CJK Radicals
-- `U+2F00-U+2FD5`: Kangxi Radicals
-- `U+3005`: Ideographic Iteration Mark
-- `U+3007`: Ideographic Number Zero
-- `U+3021-U+3029`: Suzhou Numerals
-- `U+3038-U+303A`: Suzhou Numerals
-- `U+303B`: Vertical Ideographic Iteration Mark
-- `U+3400-U+4DBF`: **CJK Unified Ideographs Extension A**
-- `U+4E00-U+9FFF`: **CJK Unified Ideographs**
-- `U+F900-U+FA6D`: CJK Compatibility Ideographs
-- `U+FA70-U+FAD9`: CJK Compatibility Ideographs
-- `U+16FE2`: Old Chinese Hook Mark
-- `U+16FE3`: Old Chinese Iteration Mark
-- `U+16FF0-U+16FF1`: Vietnamese Alternate Reading Marks
-- `U+20000-U+2A6DF`: **CJK Unified Ideographs Extension B**
-- `U+2A700-U+2B738`: **CJK Unified Ideographs Extension C**
-- `U+2B740-U+2B81D`: **CJK Unified Ideographs Extension D**
-- `U+2B820-U+2CEA1`: **CJK Unified Ideographs Extension E**
-- `U+2CEB0-U+2EBE0`: **CJK Unified Ideographs Extension F**
-- `U+2F800-U+2FA1D`: CJK Compatibility Ideographs Supplements
-- `U+30000-U+3134A`: **CJK Unified Ideographs Extension G**
-
-You can see that it covers more than just Chinese characters.
-
-# Why Does `\p{Ideo}` Not Work
-
-Similarly, `Ideo` here is an abbreviation for 'Ideograph'. To determine which characters are associated with the Ideograph property, you can check [`PropList.txt`](https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt) in UCD.
-
-- `U+3006`: Ideographic Closing Mark
-- `U+3007`: Ideographic Number Zero
-- `U+3021-U+3029`: Suzhou Numerals
-- `U+3038-U+303A`: Suzhou Numerals
-- `U+3400-U+4DBF`: **CJK Unified Ideographs Extension A**
-- `U+4E00-U+9FFF`: **CJK Unified Ideographs**
-- `U+F900-U+FA6D`: CJK Compatibility Ideographs
-- `U+FA70-U+FAD9`: CJK Compatibility Ideographs
-- `U+16FE4`: Khitan Small Script Filler
-- `U+17000-U+187F7`: Tangut Ideographs
-- `U+18800-U+18AFF`: Tangut Components
-- `U+18B00-U+18CD5`: Khitan Small Script Characters
-- `U+18D00-U+18D08`: Tangut Ideographs Supplement
-- `U+1B170-U+1B2FB`: Nushu Characters
-- `U+20000-U+2A6DF`: **CJK Unified Ideographs Extension B**
-- `U+2A700-U+2B738`: **CJK Unified Ideographs Extension C**
-- `U+2B740-U+2B81D`: **CJK Unified Ideographs Extension D**
-- `U+2B820-U+2CEA1`: **CJK Unified Ideographs Extension E**
-- `U+2CEB0-U+2EBE0`: **CJK Unified Ideographs Extension F**
-- `U+2F800-U+2FA1D`: CJK Compatibility Ideographs Supplements
-- `U+30000-U+3134A`: **CJK Unified Ideographs Extension G**
-
-Like the previous one, you can see that it covers more than just Chinese characters.
+1. [Unicode Scripts](https://www.unicode.org/Public/UCD/latest/ucd/Scripts.txt)
+1. [Unicode PropList](https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt)
+1. [Unicode codepoint properties in the Python `regex` library](https://github.com/mrabarnett/mrab-regex#unicode-codepoint-properties-including-scripts-and-blocks)
+1. [Unicode property escapes in JavaScript (ECMA)](https://tc39.es/proposal-regexp-unicode-property-escapes/)
+1. [Unicode property escapes in JavaScript (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes)
+1. [Can I Use RegExp: Unicode](https://caniuse.com/mdn-javascript_builtins_regexp_unicode)
+1. [Surrogate Pair Calculator](http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm)
