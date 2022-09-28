@@ -25,13 +25,23 @@ keywords:
 [\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?
 ```
 
-## JavaScript (ES6)
+## JavaScript (RegExp: Unicode property escapes)
+
+[Can I use RegExp: Unicode property escapes](https://caniuse.com/mdn-javascript_builtins_regexp_property_escapes)
+
+```
+[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?
+```
+
+## JavaScript (RegExp: Unicode)
+
+[Can I use RegExp: Unicode](https://caniuse.com/mdn-javascript_builtins_regexp_unicode)
 
 ```
 [\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?
 ```
 
-## JavaScript (pre-ES6)
+## JavaScript
 
 ```
 ([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud888[\udc00-\udfaf])([\ufe00-\ufe0f]|\udb40[\udd00-\uddef])?
@@ -76,7 +86,26 @@ for i, match in enumerate(pattern.finditer('a〆文𦫖﨑禰󠄀')):
 # Match 4: 禰󠄀 "\u79b0\udb40\udd00"
 ```
 
-## JavaScript (ES6)
+## JavaScript (RegExp: Unicode property escapes)
+
+[Can I use RegExp: Unicode property escapes](https://caniuse.com/mdn-javascript_builtins_regexp_property_escapes)
+
+```javascript
+const pattern = /[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?/gmu;
+
+'a〆文𦫖﨑禰󠄀'.match(pattern).forEach((match, i) => {
+   console.log(`Match ${i}: ${match}, length: ${match.length}`);
+});
+// Match 0: 〆, length: 1
+// Match 1: 文, length: 1
+// Match 2: 𦫖, length: 2
+// Match 3: 﨑, length: 1
+// Match 4: 禰󠄀, length: 3
+```
+
+## JavaScript (RegExp: Unicode)
+
+[Can I use RegExp: Unicode](https://caniuse.com/mdn-javascript_builtins_regexp_unicode)
 
 ```javascript
 const pattern = /[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?/gmu;
@@ -91,7 +120,7 @@ const pattern = /[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebe
 // Match 4: 禰󠄀, length: 3
 ```
 
-## JavaScript (pre-ES6)
+## JavaScript
 
 ```javascript
 const pattern = /([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud888[\udc00-\udfaf])([\ufe00-\ufe0f]|\udb40[\udd00-\uddef])?/gm;
@@ -158,5 +187,4 @@ const pattern = /([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1
 1. [Unicode codepoint properties in the Python `regex` library](https://github.com/mrabarnett/mrab-regex#unicode-codepoint-properties-including-scripts-and-blocks)
 1. [Unicode property escapes in JavaScript (ECMA)](https://tc39.es/proposal-regexp-unicode-property-escapes/)
 1. [Unicode property escapes in JavaScript (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes)
-1. [Can I Use RegExp: Unicode](https://caniuse.com/mdn-javascript_builtins_regexp_unicode)
 1. [Surrogate Pair Calculator](http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm)
