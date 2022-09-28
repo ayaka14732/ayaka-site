@@ -112,15 +112,17 @@
 <ul>
 <li><a href="#python">Python</a></li>
 <li><a href="#python-need-pip-install-regex">Python (need <code>pip install regex</code>)</a></li>
-<li><a href="#javascript-es6">JavaScript (ES6)</a></li>
-<li><a href="#javascript-pre-es6">JavaScript (pre-ES6)</a></li>
+<li><a href="#javascript-regexp-unicode-property-escapes">JavaScript (RegExp: Unicode property escapes)</a></li>
+<li><a href="#javascript-regexp-unicode">JavaScript (RegExp: Unicode)</a></li>
+<li><a href="#javascript">JavaScript</a></li>
 </ul></li>
 <li><a href="#examples">Examples</a>
 <ul>
 <li><a href="#python-1">Python</a></li>
 <li><a href="#python-need-pip-install-regex-1">Python (need <code>pip install regex</code>)</a></li>
-<li><a href="#javascript-es6-1">JavaScript (ES6)</a></li>
-<li><a href="#javascript-pre-es6-1">JavaScript (pre-ES6)</a></li>
+<li><a href="#javascript-regexp-unicode-property-escapes-1">JavaScript (RegExp: Unicode property escapes)</a></li>
+<li><a href="#javascript-regexp-unicode-1">JavaScript (RegExp: Unicode)</a></li>
+<li><a href="#javascript-1">JavaScript</a></li>
 </ul></li>
 <li><a href="#explanation">Explanation</a></li>
 <li><a href="#wrong-solutions">Wrong Solutions</a></li>
@@ -135,30 +137,20 @@
 <pre><code>[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?</code></pre>
 <h2 id="python-need-pip-install-regex">Python (need <code>pip install regex</code>)</h2>
 <pre><code>[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?</code></pre>
-<h2 id="javascript-es6">JavaScript (ES6)</h2>
+<h2 id="javascript-regexp-unicode-property-escapes">JavaScript (RegExp: Unicode property escapes)</h2>
+<p><a href="https://caniuse.com/mdn-javascript_builtins_regexp_property_escapes">Can I use RegExp: Unicode property escapes</a></p>
+<pre><code>[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?</code></pre>
+<h2 id="javascript-regexp-unicode">JavaScript (RegExp: Unicode)</h2>
+<p><a href="https://caniuse.com/mdn-javascript_builtins_regexp_unicode">Can I use RegExp: Unicode</a></p>
 <pre><code>[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?</code></pre>
-<h2 id="javascript-pre-es6">JavaScript (pre-ES6)</h2>
+<h2 id="javascript">JavaScript</h2>
 <pre><code>([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\ud869[\udc00-\udedf\udf00-\udfff]|\ud87a[\udc00-\udfef]|\ud888[\udc00-\udfaf])([\ufe00-\ufe0f]|\udb40[\udd00-\uddef])?</code></pre>
 <h1 id="examples">Examples</h1>
 <h2 id="python-1">Python</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r&#39;[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?&#39;</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, match <span class="kw">in</span> <span class="bu">enumerate</span>(pattern.finditer(<span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span>)):</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&#39;Match </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">:&#39;</span>, match[<span class="dv">0</span>], json.dumps(match[<span class="dv">0</span>]))</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 0: 〆 &quot;\u3006&quot;</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 1: 文 &quot;\u6587&quot;</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 2: 𦫖 &quot;\ud85a\uded6&quot;</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 3: 﨑 &quot;\ufa11&quot;</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 4: 禰󠄀 &quot;\u79b0\udb40\udd00&quot;</span></span></code></pre></div>
-<h2 id="python-need-pip-install-regex-1">Python (need <code>pip install regex</code>)</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> regex <span class="im">as</span> re</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r&#39;[\p</span><span class="sc">{Unified_Ideograph}</span><span class="vs">\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?&#39;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r&#39;[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002ebef\U00030000-\U000323af\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?&#39;</span>)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, match <span class="kw">in</span> <span class="bu">enumerate</span>(pattern.finditer(<span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span>)):</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&#39;Match </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">:&#39;</span>, match[<span class="dv">0</span>], json.dumps(match[<span class="dv">0</span>]))</span>
@@ -168,19 +160,23 @@
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 2: 𦫖 &quot;\ud85a\uded6&quot;</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 3: 﨑 &quot;\ufa11&quot;</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 4: 禰󠄀 &quot;\u79b0\udb40\udd00&quot;</span></span></code></pre></div>
-<h2 id="javascript-es6-1">JavaScript (ES6)</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pattern <span class="op">=</span> <span class="ss">/</span><span class="sc">[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?</span><span class="ss">/gmu</span><span class="op">;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span><span class="op">.</span><span class="fu">match</span>(pattern)<span class="op">.</span><span class="fu">forEach</span>((match<span class="op">,</span> i) <span class="kw">=&gt;</span> {</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>   <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Match </span><span class="sc">${</span>i<span class="sc">}</span><span class="vs">: </span><span class="sc">${</span>match<span class="sc">}</span><span class="vs">, length: </span><span class="sc">${</span>match<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 0: 〆, length: 1</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 1: 文, length: 1</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 2: 𦫖, length: 2</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 3: 﨑, length: 1</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 4: 禰󠄀, length: 3</span></span></code></pre></div>
-<h2 id="javascript-pre-es6-1">JavaScript (pre-ES6)</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pattern <span class="op">=</span> <span class="ss">/</span><span class="sc">([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\u</span><span class="ss">d869</span><span class="sc">[\udc00-\udedf\udf00-\udfff]|\u</span><span class="ss">d87a</span><span class="sc">[\udc00-\udfef]|\u</span><span class="ss">d888</span><span class="sc">[\udc00-\udfaf])([\ufe00-\ufe0f]|\u</span><span class="ss">db40</span><span class="sc">[\udd00-\uddef])?</span><span class="ss">/gm</span><span class="op">;</span></span>
+<h2 id="python-need-pip-install-regex-1">Python (need <code>pip install regex</code>)</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> regex <span class="im">as</span> re</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r&#39;[\p</span><span class="sc">{Unified_Ideograph}</span><span class="vs">\u3006\u3007][\ufe00-\ufe0f\U000e0100-\U000e01ef]?&#39;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, match <span class="kw">in</span> <span class="bu">enumerate</span>(pattern.finditer(<span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span>)):</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&#39;Match </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">:&#39;</span>, match[<span class="dv">0</span>], json.dumps(match[<span class="dv">0</span>]))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 0: 〆 &quot;\u3006&quot;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 1: 文 &quot;\u6587&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 2: 𦫖 &quot;\ud85a\uded6&quot;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 3: 﨑 &quot;\ufa11&quot;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Match 4: 禰󠄀 &quot;\u79b0\udb40\udd00&quot;</span></span></code></pre></div>
+<h2 id="javascript-regexp-unicode-property-escapes-1">JavaScript (RegExp: Unicode property escapes)</h2>
+<p><a href="https://caniuse.com/mdn-javascript_builtins_regexp_property_escapes">Can I use RegExp: Unicode property escapes</a></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pattern <span class="op">=</span> <span class="ss">/</span><span class="sc">[\p{Unified_Ideograph}\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?</span><span class="ss">/gmu</span><span class="op">;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span><span class="op">.</span><span class="fu">match</span>(pattern)<span class="op">.</span><span class="fu">forEach</span>((match<span class="op">,</span> i) <span class="kw">=&gt;</span> {</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>   <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Match </span><span class="sc">${</span>i<span class="sc">}</span><span class="vs">: </span><span class="sc">${</span>match<span class="sc">}</span><span class="vs">, length: </span><span class="sc">${</span>match<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
@@ -190,6 +186,29 @@
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 2: 𦫖, length: 2</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 3: 﨑, length: 1</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 4: 禰󠄀, length: 3</span></span></code></pre></div>
+<h2 id="javascript-regexp-unicode-1">JavaScript (RegExp: Unicode)</h2>
+<p><a href="https://caniuse.com/mdn-javascript_builtins_regexp_unicode">Can I use RegExp: Unicode</a></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pattern <span class="op">=</span> <span class="ss">/</span><span class="sc">[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}\u{30000}-\u{323af}\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007][\ufe00-\ufe0f\u{e0100}-\u{e01ef}]?</span><span class="ss">/gmu</span><span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span><span class="op">.</span><span class="fu">match</span>(pattern)<span class="op">.</span><span class="fu">forEach</span>((match<span class="op">,</span> i) <span class="kw">=&gt;</span> {</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>   <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Match </span><span class="sc">${</span>i<span class="sc">}</span><span class="vs">: </span><span class="sc">${</span>match<span class="sc">}</span><span class="vs">, length: </span><span class="sc">${</span>match<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 0: 〆, length: 1</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 1: 文, length: 1</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 2: 𦫖, length: 2</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 3: 﨑, length: 1</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 4: 禰󠄀, length: 3</span></span></code></pre></div>
+<h2 id="javascript-1">JavaScript</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pattern <span class="op">=</span> <span class="ss">/</span><span class="sc">([\u4e00-\u9fff\u3400-\u4dbf\ufa0e\ufa0f\ufa11\ufa13\ufa14\ufa1f\ufa21\ufa23\ufa24\ufa27\ufa28\ufa29\u3006\u3007]|[\ud840-\ud868\ud86a-\ud879\ud880-\ud887][\udc00-\udfff]|\u</span><span class="ss">d869</span><span class="sc">[\udc00-\udedf\udf00-\udfff]|\u</span><span class="ss">d87a</span><span class="sc">[\udc00-\udfef]|\u</span><span class="ss">d888</span><span class="sc">[\udc00-\udfaf])([\ufe00-\ufe0f]|\u</span><span class="ss">db40</span><span class="sc">[\udd00-\uddef])?</span><span class="ss">/gm</span><span class="op">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;a〆文𦫖﨑禰󠄀&#39;</span><span class="op">.</span><span class="fu">match</span>(pattern)<span class="op">.</span><span class="fu">forEach</span>((match<span class="op">,</span> i) <span class="kw">=&gt;</span> {</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>   <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Match </span><span class="sc">${</span>i<span class="sc">}</span><span class="vs">: </span><span class="sc">${</span>match<span class="sc">}</span><span class="vs">, length: </span><span class="sc">${</span>match<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 0: 〆, length: 1</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 1: 文, length: 1</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 2: 𦫖, length: 2</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 3: 﨑, length: 1</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Match 4: 禰󠄀, length: 3</span></span></code></pre></div>
 <h1 id="explanation">Explanation</h1>
 <p><strong>CJK Unified Ideographs:</strong></p>
 <ul>
@@ -241,7 +260,6 @@
 <li><a href="https://github.com/mrabarnett/mrab-regex#unicode-codepoint-properties-including-scripts-and-blocks">Unicode codepoint properties in the Python <code>regex</code> library</a></li>
 <li><a href="https://tc39.es/proposal-regexp-unicode-property-escapes/">Unicode property escapes in JavaScript (ECMA)</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes">Unicode property escapes in JavaScript (MDN)</a></li>
-<li><a href="https://caniuse.com/mdn-javascript_builtins_regexp_unicode">Can I Use RegExp: Unicode</a></li>
 <li><a href="http://russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm">Surrogate Pair Calculator</a></li>
 </ol>
 </body>
