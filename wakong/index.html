@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="挖空, wakong, BART, 大规模语言模型, 模型预训练" />
+  <title>挖空算法及其 Python 实现</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="/pandoc.css" />
+  <link rel="stylesheet" href="/sans.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">挖空算法及其 Python 实现</h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#问题定义">问题定义</a>
+<ul>
+<li><a href="#算法输入与输出">算法输入与输出</a></li>
+<li><a href="#算法要求">算法要求</a></li>
+</ul></li>
+<li><a href="#算法流程">算法流程</a></li>
+<li><a href="#时间复杂度">时间复杂度</a></li>
+<li><a href="#算法设计中的难点">算法设计中的难点</a>
+<ul>
+<li><a href="#确定从句子中挖去的词数">确定从句子中挖去的词数</a></li>
+<li><a href="#随机选取挖空的长度">随机选取挖空的长度</a></li>
+<li><a href="#生成挖空的长度列表">生成挖空的长度列表</a></li>
+<li><a href="#将要挖的空均匀分布在句子中">将要挖的空均匀分布在句子中</a></li>
+<li><a href="#调整算法参数">调整算法参数</a></li>
+</ul></li>
+<li><a href="#python-实现">Python 实现</a></li>
+<li><a href="#后记">后记</a></li>
+</ul>
+</nav>
+<blockquote>
+<p>同时发布于知乎：<a href="https://zhuanlan.zhihu.com/p/572321312">挖空算法及其 Python 实现</a></p>
+</blockquote>
+<h1 id="简介">简介</h1>
+<p>给句子挖空是深度学习预训练中的一个常见操作。例如，在 BART 模型的预训练中，text infilling 这一训练目标是让模型习得完形填空的能力，这就需要设计挖空算法，以生成用于模型训练的句子。然而，目前的论文对实验中采取的挖空方法只有模糊的介绍，只具有理论意义，无法真正实现为算法；而大多数实现也只是设计了大致可用的算法，没有进行深入的分析。对此，本文提出了一个恰当且健壮的挖空算法 (Wakong Algorithm)，并发布了 Python 库，可以在生产环境中直接使用。</p>
+<p>本文作为我的大规模语言模型预训练项目的一部分，得到了谷歌 <a href="https://sites.research.google/trc/about/">TPU Research Cloud</a> (TRC) 的云 TPU 支持，为项目节省了大量时间。</p>
+<h1 id="问题定义">问题定义</h1>
+<h2 id="算法输入与输出">算法输入与输出</h2>
+<p>挖空算法是一个用于给固定长度的句子挖空的算法。算法的输入为句子的长度 <code>seq_len</code>，输出为一个由二元组组成的列表，其中每个二元组表示在句子中挖的一个空，第一个元素为起始位置，第二个元素为长度。</p>
+<p>例如，当输入句子长度 40 时，算法的输出可能为：</p>
+<pre><code>[(5, 4), (23, 2)]</code></pre>
+<p>这一输出表示句子被挖了两个空，第一个空的起始位置为 5，长度为 4；第二个空的起始位置为 23，长度为 2。用图示可以表示如下：</p>
+<p>…..(xxxx)…………..(xx)……………</p>
+<h2 id="算法要求">算法要求</h2>
+<p>在 BART 论文的基础上，本文认为一个合理的挖空算法需要满足以下四个要求：</p>
+<ol type="1">
+<li>挖空算法是一个随机算法，即在输入相同时，算法可能会输出不同的结果。这是为了使挖空的方式更为多样化，使模型更好地习得完形填空的知识；</li>
+<li>挖空算法平均挖去的词应当占句子总词数的 15%。选择 15% 这个数字较为适中，不致使预训练目标过于简单，同时又保留一定量的语义信息，可以完成完形填空的任务；</li>
+<li>挖空算法中每一个空的长度不固定，在 0-10 之间，长度为 3 的空出现频率最高，频率由 0-3 递增，由 3-10 递减。可以出现长度为 0 的空，这是为了使模型学到完形填空中可能不需要填写任何词，增加训练目标的难度，从而使模型学到更多的语义知识；</li>
+<li>挖空算法中任意两个空不能重叠，也不能直接相邻，间隔至少为 1。这是为了保证算法输出的格式合理。</li>
+</ol>
+<h1 id="算法流程">算法流程</h1>
+<p>1. 常数</p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BproposedMaskRate%7D%20%3D%200.188" alt="\mathsf{proposedMaskRate} = 0.188" title="\mathsf{proposedMaskRate} = 0.188" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BpoissonRate%7D%20%3D%204.2" alt="\mathsf{poissonRate} = 4.2" title="\mathsf{poissonRate} = 4.2" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BmaxSpanLen%7D%20%3D%2010" alt="\mathsf{maxSpanLen} = 10" title="\mathsf{maxSpanLen} = 10" class="math inline" /></p>
+<p>2. <code>probsList</code></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BprobsList%7D%20%3D%20%5Cleft%5B%20%5Cmathrm%7Bnormalise%7D%20%5Cleft%28%20%5Cmathsf%7Bprobs%7D%20%5Cleft%5B%20%7B%3A%7D%5C%2Ci%20%5Cright%5D%20%5Cright%29%20%5Cmathrm%7Bfor%7D%20%5C%3B%20i%20%5C%3B%20%5Cmathrm%7Bin%7D%20%5Cleft%5B2%2C%20%5C%3B%20..%20%2C%20%5C%3B%20%5Cmathsf%7BmaxSpanLen%7D%20%2B%201%20%5Cright%5D%20%5Cright%5D" alt="\mathsf{probsList} = \left[ \mathrm{normalise} \left( \mathsf{probs} \left[ {:}\,i \right] \right) \mathrm{for} \; i \; \mathrm{in} \left[2, \; .. , \; \mathsf{maxSpanLen} + 1 \right] \right]" title="\mathsf{probsList} = \left[ \mathrm{normalise} \left( \mathsf{probs} \left[ {:}\,i \right] \right) \mathrm{for} \; i \; \mathrm{in} \left[2, \; .. , \; \mathsf{maxSpanLen} + 1 \right] \right]" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7Bprobs%7D%20%3D%20%5Cleft%5B%20%5CPr%28X%3Di%29%20%5C%3B%20%5Cmathrm%7Bfor%7D%20%5C%3B%20i%20%5C%3B%20%5Cmathrm%7Bin%7D%20%5Cleft%5B%200%2C%20%5C%3B%20..%2C%20%5C%3B%20%5Cmathsf%7BmaxSpanLen%7D%20%2B%201%20%5Cright%5D%20%5Cright%5D" alt="\mathsf{probs} = \left[ \Pr(X=i) \; \mathrm{for} \; i \; \mathrm{in} \left[ 0, \; .., \; \mathsf{maxSpanLen} + 1 \right] \right]" title="\mathsf{probs} = \left[ \Pr(X=i) \; \mathrm{for} \; i \; \mathrm{in} \left[ 0, \; .., \; \mathsf{maxSpanLen} + 1 \right] \right]" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20X%20%5Csim%20%5Cmathrm%7BPois%7D%28%5Cmathsf%7BpoissonRate%7D%29" alt="X \sim \mathrm{Pois}(\mathsf{poissonRate})" title="X \sim \mathrm{Pois}(\mathsf{poissonRate})" class="math inline" /></p>
+<p>3. <code>determineShouldMaskLen</code></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BdetermineShouldMaskLen%7D%20%5Cleft%28%20%5Cmathsf%7BseqLen%7D%20%5Cright%29%20%3D%20%5Cbegin%7Bcases%7D%20%20%5Clceil%20x%20%5Crceil%2C%20%26%20%5Ctext%7Bif%7D%20%5C%3B%20%5Comega%20%3C%20p%20%5C%5C%20%20%5Clfloor%20x%20%5Crfloor%2C%20%26%20%5Ctext%7Botherwise%7D%20%5C%5C%20%5Cend%7Bcases%7D" alt="\mathsf{determineShouldMaskLen} \left( \mathsf{seqLen} \right) = \begin{cases}  \lceil x \rceil, &amp; \text{if} \; \omega &lt; p \\  \lfloor x \rfloor, &amp; \text{otherwise} \\ \end{cases}" title="\mathsf{determineShouldMaskLen} \left( \mathsf{seqLen} \right) = \begin{cases}  \lceil x \rceil, &amp; \text{if} \; \omega &lt; p \\  \lfloor x \rfloor, &amp; \text{otherwise} \\ \end{cases}" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Comega%20%5Csim%20%5Cmathrm%7BU%7D%20%5Cleft%28%200%2C%201%20%5Cright%29" alt="\omega \sim \mathrm{U} \left( 0, 1 \right)" title="\omega \sim \mathrm{U} \left( 0, 1 \right)" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20x%20%3D%20%5Cmathsf%7BseqLen%7D%20%2A%20%5Cmathsf%7BproposedMaskRate%7D" alt="x = \mathsf{seqLen} * \mathsf{proposedMaskRate}" title="x = \mathsf{seqLen} * \mathsf{proposedMaskRate}" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20p%20%3D%20x%20-%20%5Clfloor%20x%20%5Crfloor" alt="p = x - \lfloor x \rfloor" title="p = x - \lfloor x \rfloor" class="math inline" /></p>
+<p>4. <code>generateSpans</code></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BgenerateSpans%7D%20%5Cleft%28%20m%20%5Cright%29%20%3D%20%5Cmathrm%7Bshuffle%7D%20%5Cleft%28%20%5Cmathrm%7Banamorphism%7D%20%5Cleft%28%20f%20%5Cright%29%20%5Cleft%28%20m%20%5Cright%29%20%5Cright%29" alt="\mathsf{generateSpans} \left( m \right) = \mathrm{shuffle} \left( \mathrm{anamorphism} \left( f \right) \left( m \right) \right)" title="\mathsf{generateSpans} \left( m \right) = \mathrm{shuffle} \left( \mathrm{anamorphism} \left( f \right) \left( m \right) \right)" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20f%20%5Cleft%28%20%5Cmathsf%7BremainedLen%7D%20%5Cright%29%20%3D%20%5Cbegin%7Bcases%7D%20%20%5Cmathrm%7BNothing%7D%2C%20%26%20%5Ctext%7Bif%7D%20%5C%3B%20%5Cmathsf%7BremainedLen%7D%20%5Cleq%200%20%5C%5C%20%20%5Cleft%28%20%5Cmathsf%7Bspan%7D%2C%20%5C%3B%20%5Cmathrm%7BJust%7D%20%5Cleft%28%20%5Cmathsf%7BremainedLen%7D%20-%20%5Cmathsf%7Bspan%7D%20-%201%20%5Cright%29%20%5Cright%29%2C%20%26%20%5Ctext%7Botherwise%7D%20%5Cend%7Bcases%7D" alt="f \left( \mathsf{remainedLen} \right) = \begin{cases}  \mathrm{Nothing}, &amp; \text{if} \; \mathsf{remainedLen} \leq 0 \\  \left( \mathsf{span}, \; \mathrm{Just} \left( \mathsf{remainedLen} - \mathsf{span} - 1 \right) \right), &amp; \text{otherwise} \end{cases}" title="f \left( \mathsf{remainedLen} \right) = \begin{cases}  \mathrm{Nothing}, &amp; \text{if} \; \mathsf{remainedLen} \leq 0 \\  \left( \mathsf{span}, \; \mathrm{Just} \left( \mathsf{remainedLen} - \mathsf{span} - 1 \right) \right), &amp; \text{otherwise} \end{cases}" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7Bspan%7D%20%5Csim%20%5Cmathrm%7BCategorical%7D%20%5Cleft%28%20%5B0%2C%20%5C%3B%20..%2C%20%5C%3B%20n%20%2B%201%5D%2C%20%5C%3B%20%5Cmathsf%7BprobsList%7D%20%5Cleft%5B%20n%20-%201%20%5Cright%5D%20%5Cright%29" alt="\mathsf{span} \sim \mathrm{Categorical} \left( [0, \; .., \; n + 1], \; \mathsf{probsList} \left[ n - 1 \right] \right)" title="\mathsf{span} \sim \mathrm{Categorical} \left( [0, \; .., \; n + 1], \; \mathsf{probsList} \left[ n - 1 \right] \right)" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20n%20%3D%20%5Cmin%20%5Cleft%28%20%5Cmathsf%7BmaxSpanLen%7D%2C%20%5C%3B%20%5Cmathsf%7BremainedLen%7D%20%5Cright%29" alt="n = \min \left( \mathsf{maxSpanLen}, \; \mathsf{remainedLen} \right)" title="n = \min \left( \mathsf{maxSpanLen}, \; \mathsf{remainedLen} \right)" class="math inline" /></p>
+<p>5. <code>distributeInsertPoses</code></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BdistributeInsertPoses%7D%20%5Cleft%28%20%5Cmathsf%7Bxs%7D%20%5Cright%29%20%3D%20f%20%5Cleft%28%20%5Cmathsf%7Bxs%7D%2C%20%5C%3B%200%20%5Cright%29" alt="\mathsf{distributeInsertPoses} \left( \mathsf{xs} \right) = f \left( \mathsf{xs}, \; 0 \right)" title="\mathsf{distributeInsertPoses} \left( \mathsf{xs} \right) = f \left( \mathsf{xs}, \; 0 \right)" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20f%20%5Cleft%28%20n%2C%20%5C%3B%20%5Cmathsf%7Bxs%7D%20%5Cright%29%20%3D%20%5Cbegin%7Bcases%7D%20%20%5Cmathsf%7B%5Cleft%5B%20%5C%2C%20%5Cright%5D%7D%2C%20%26%20%5Ctext%7Bif%7D%20%5C%3B%20%5Cmathrm%7Bempty%7D%20%5Cleft%28%20%5Cmathsf%7Bxs%7D%20%5Cright%29%20%5C%5C%20%20%5Cleft%5B%20%5Cleft%28%20p%20%2B%20n%2C%20%5C%3B%20s%20%5Cright%29%20%5Cright%5D%20%2B%20f%20%5Cleft%28n%20%2B%20s%20%2B%201%2C%20%5C%3B%20%5Cmathsf%7Bys%7D%20%5Cright%29%2C%20%26%20%5Ctext%7Botherwise%7D%20%5C%5C%20%5Cend%7Bcases%7D" alt="f \left( n, \; \mathsf{xs} \right) = \begin{cases}  \mathsf{\left[ \, \right]}, &amp; \text{if} \; \mathrm{empty} \left( \mathsf{xs} \right) \\  \left[ \left( p + n, \; s \right) \right] + f \left(n + s + 1, \; \mathsf{ys} \right), &amp; \text{otherwise} \\ \end{cases}" title="f \left( n, \; \mathsf{xs} \right) = \begin{cases}  \mathsf{\left[ \, \right]}, &amp; \text{if} \; \mathrm{empty} \left( \mathsf{xs} \right) \\  \left[ \left( p + n, \; s \right) \right] + f \left(n + s + 1, \; \mathsf{ys} \right), &amp; \text{otherwise} \\ \end{cases}" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cleft%5B%20%5Cleft%28%20p%2C%20s%20%5Cright%29%20%5Cright%5D%20%2B%20%5Cmathsf%7Bys%7D%20%5Cleftarrow%20%5Cmathsf%7Bxs%7D" alt="\left[ \left( p, s \right) \right] + \mathsf{ys} \leftarrow \mathsf{xs}" title="\left[ \left( p, s \right) \right] + \mathsf{ys} \leftarrow \mathsf{xs}" class="math inline" /></p>
+<p>6. <code>randomAddOne</code></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BrandomAddOne%7D%20%5Cleft%28%20%5Cmathsf%7Bxs%7D%20%5Cright%29%20%3D%20%5Cbegin%7Bcases%7D%20%20%5Cmathsf%7Bxs%7D%2C%20%26%20%5Ctext%7Bif%7D%20%5C%3B%20%5Comega%20%3C%200.5%20%5C%5C%20%20%5Cleft%5B%20%28p%20%2B%201%2C%20s%29%20%5C%3B%20%5Cmathrm%7Bfor%7D%20%5C%3B%20%28p%2C%20s%29%20%5C%3B%20%5Cmathrm%7Bin%7D%20%5C%3B%20%5Cmathsf%7Bxs%7D%20%5Cright%5D%2C%20%26%20%5Ctext%7Botherwise%7D%20%5C%5C%20%5Cend%7Bcases%7D" alt="\mathsf{randomAddOne} \left( \mathsf{xs} \right) = \begin{cases}  \mathsf{xs}, &amp; \text{if} \; \omega &lt; 0.5 \\  \left[ (p + 1, s) \; \mathrm{for} \; (p, s) \; \mathrm{in} \; \mathsf{xs} \right], &amp; \text{otherwise} \\ \end{cases}" title="\mathsf{randomAddOne} \left( \mathsf{xs} \right) = \begin{cases}  \mathsf{xs}, &amp; \text{if} \; \omega &lt; 0.5 \\  \left[ (p + 1, s) \; \mathrm{for} \; (p, s) \; \mathrm{in} \; \mathsf{xs} \right], &amp; \text{otherwise} \\ \end{cases}" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Comega%20%5Csim%20%5Cmathrm%7BU%7D%20%5Cleft%28%200%2C%201%20%5Cright%29" alt="\omega \sim \mathrm{U} \left( 0, 1 \right)" title="\omega \sim \mathrm{U} \left( 0, 1 \right)" class="math inline" /></p>
+<p>7. <code>wakong</code></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7Bwakong%7D%20%5Cleft%28%20%5Cmathsf%7BseqLen%7D%20%5Cright%29%20%3D%20%5Cmathsf%7BrandomAddOne%7D%20%5Cleft%28%20%5Cmathsf%7BdistributeInsertPoses%7D%20%5Cleft%28%20%5Cmathrm%7Bzip%7D%20%5Cleft%28%20%5Cmathsf%7BabsInsertPoses%7D%2C%20%5C%3B%20%5Cmathsf%7Bspans%7D%20%5Cright%29%20%5Cright%29%20%5Cright%29" alt="\mathsf{wakong} \left( \mathsf{seqLen} \right) = \mathsf{randomAddOne} \left( \mathsf{distributeInsertPoses} \left( \mathrm{zip} \left( \mathsf{absInsertPoses}, \; \mathsf{spans} \right) \right) \right)" title="\mathsf{wakong} \left( \mathsf{seqLen} \right) = \mathsf{randomAddOne} \left( \mathsf{distributeInsertPoses} \left( \mathrm{zip} \left( \mathsf{absInsertPoses}, \; \mathsf{spans} \right) \right) \right)" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BabsInsertPoses%7D%20%3D%20%5Cmathrm%7Bsort%7D%20%5Cleft%28%20X%20%5Cright%29" alt="\mathsf{absInsertPoses} = \mathrm{sort} \left( X \right)" title="\mathsf{absInsertPoses} = \mathrm{sort} \left( X \right)" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20X%20%3D%20X_%7B1%2C%20%5C%3B%20..%2C%20%5C%3B%20%5Cmathsf%7BnSpans%7D%7D%20%5Csim%20%5Cmathrm%7BDiscreteUniform%7D%20%5Cleft%5B%200%2C%20%5C%3B%20%5Cmathsf%7BnPossibleInsertPoses%7D%20-%201%20%5Cright%5D" alt="X = X_{1, \; .., \; \mathsf{nSpans}} \sim \mathrm{DiscreteUniform} \left[ 0, \; \mathsf{nPossibleInsertPoses} - 1 \right]" title="X = X_{1, \; .., \; \mathsf{nSpans}} \sim \mathrm{DiscreteUniform} \left[ 0, \; \mathsf{nPossibleInsertPoses} - 1 \right]" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cleft%28%20%5Cforall%20%5C%3B%20i%2C%20j%20%5Cin%20%5Cleft%5C%7B%201%2C%20%5C%3B%20..%2C%20%5C%3B%20%5Cmathsf%7BnSpans%7D%20%5Cright%5C%7D%2C%20X_i%20%5Cne%20X_j%20%5Cright%29" alt="\left( \forall \; i, j \in \left\{ 1, \; .., \; \mathsf{nSpans} \right\}, X_i \ne X_j \right)" title="\left( \forall \; i, j \in \left\{ 1, \; .., \; \mathsf{nSpans} \right\}, X_i \ne X_j \right)" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BnPossibleInsertPoses%7D%20%3D%20%5Cmathsf%7BseqLen%7D%20-%20%5Cmathrm%7Bsum%7D%20%5Cleft%28%20%5Cmathsf%7Bspans%7D%20%5Cright%29%20-%20%5Cmathsf%7BnSpans%7D%20%2B%201" alt="\mathsf{nPossibleInsertPoses} = \mathsf{seqLen} - \mathrm{sum} \left( \mathsf{spans} \right) - \mathsf{nSpans} + 1" title="\mathsf{nPossibleInsertPoses} = \mathsf{seqLen} - \mathrm{sum} \left( \mathsf{spans} \right) - \mathsf{nSpans} + 1" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BnSpans%7D%20%3D%20%5Cmathrm%7Blen%7D%20%5Cleft%28%20%5Cmathsf%7Bspans%7D%20%5Cright%29" alt="\mathsf{nSpans} = \mathrm{len} \left( \mathsf{spans} \right)" title="\mathsf{nSpans} = \mathrm{len} \left( \mathsf{spans} \right)" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7Bspans%7D%20%3D%20%5Cmathsf%7BgenerateSpans%7D%20%5Cleft%28%20%5Cmathsf%7BshouldMaskLen%7D%20%5Cright%29" alt="\mathsf{spans} = \mathsf{generateSpans} \left( \mathsf{shouldMaskLen} \right)" title="\mathsf{spans} = \mathsf{generateSpans} \left( \mathsf{shouldMaskLen} \right)" class="math inline" /></p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathsf%7BshouldMaskLen%7D%20%3D%20%5Cmathsf%7BdetermineShouldMaskLen%7D%20%5Cleft%28%20%5Cmathsf%7BseqLen%7D%20%5Cright%29" alt="\mathsf{shouldMaskLen} = \mathsf{determineShouldMaskLen} \left( \mathsf{seqLen} \right)" title="\mathsf{shouldMaskLen} = \mathsf{determineShouldMaskLen} \left( \mathsf{seqLen} \right)" class="math inline" /></p>
+<h1 id="时间复杂度">时间复杂度</h1>
+<p>算法中时间复杂度最高的步骤是对随机生成的 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20kn" alt="kn" title="kn" class="math inline" /> 个空排序，因此总体时间复杂度为 <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20O%20%5Cleft%28%20n%20%5Clog%20n%20%5Cright%29" alt="O \left( n \log n \right)" title="O \left( n \log n \right)" class="math inline" />。</p>
+<h1 id="算法设计中的难点">算法设计中的难点</h1>
+<h2 id="确定从句子中挖去的词数">确定从句子中挖去的词数</h2>
+<p>根据算法要求，平均挖去的词应当占句子总词数的 15%，但这样计算有时会出现小数。为此，本文设定在出现小数时，根据小数位随机决定向下取整或向上取整。例如，若计算得出挖去的词为 3.3 个，则随机生成一次 0-1 之间均匀分布的随机数，若该数小于 0.3 则向上取整为 4，否则向下取整为 3。</p>
+<h2 id="随机选取挖空的长度">随机选取挖空的长度</h2>
+<p>根据 BART 论文，本文从泊松分布中采样，随机生成挖空的长度。本文没有按照 BART 论文将泊松分布的参数设定为 4，而是设定为 3.5，以使长度为 3 的空出现频率最高（但是，在后续步骤中会提到，本文将这一参数修订为 4.2）。对于大于 10 的值，本文将其概率设定为 0，并将 0-10 的值的概率标准化至求和为 1。这样生成的分布的累积分布函数为 [0.0151 0.0783 0.2111 0.3970 0.5922 0.7562 0.8710 0.9399 0.9760 0.9929 1.0000]。</p>
+<h2 id="生成挖空的长度列表">生成挖空的长度列表</h2>
+<p>从上述分布中采样多次，即可生成挖空的长度列表。采样在挖空的长度之和达到要挖去的词数时停止。</p>
+<p>若挖空的长度之和没有达到目标词数，但采样结果加挖空的长度之和大于目标词数（如目标词数为 10，当前长度之和为 9，但采样结果为 5，9 加 5 大于 10），则舍弃该次采样结果，重新进行采样，直到采样结果加挖空的长度之和在目标词数的范围内为止。在实际实现时，为了保证算法效率，不应该采样失败重采，而是应当首先根据目标词数与挖空的长度之和计算出预期采样结果的范围，再根据上述分布计算出除去超出预期采样结果范围的值的新分布，将概率标准化至求和为 1 后从新分布中采样。</p>
+<p>由于算法要求任意两个空不能直接相邻，长度为 <em>k</em> 的空实际也占据了它右侧的一个位置，即实际长度为 <em>k</em>+1，因此在计算挖空的长度之和时，每一个空的长度需要额外加 1，即挖空的长度之和加挖空的个数。这样很好地避免了两个空直接相邻的问题，但会导致最终平均挖去的词数比预期的 15% 小（为此，在后续步骤中会将平均挖去的词数调整为 18.8%，使得最终结果接近 15%）。</p>
+<p>由于在采样起始时可能出现长度为 0 的样本，而采样终止的条件为达到目标长度，不可能出现长度为 0 的样本，因此会产生不对称的现象。为此，在采样结束后应当对挖空的长度列表随机打乱，使挖空的长度随机分布。</p>
+<h2 id="将要挖的空均匀分布在句子中">将要挖的空均匀分布在句子中</h2>
+<p>设句子长度为 <em>m</em>，挖空的长度之和为 <em>K</em>，挖空的个数为 <em>n</em>，则可选的起始位置共有 <em>m</em>-<em>K</em>-<em>n</em>+1 个，要从这些起始位置中随机选出 <em>n</em> 个作为起始位置。其中，减 <em>n</em> 的原因如同上文所述，是因为长度为 <em>k</em> 的空实际也占据了它右侧的一个位置，所以 <em>n</em> 个空会额外占据 <em>n</em> 个位置。</p>
+<p>但是，这样做会导致句子的最后一个单词永远不会被挖空。为此，在完成上述步骤后，再随机生成一次 0-1 之间均匀分布的随机数，若该数小于 0.5，则将挖的所有空向右移动一位，也就是假设预留的空位在左边，由此保证了算法的对称性。</p>
+<h2 id="调整算法参数">调整算法参数</h2>
+<p>在实现算法后，发现平均挖去的词数小于 15%，这是由于上文提到的原因，在算法的执行过程中，计算挖空的长度之和时，每一个空的长度需要额外加 1，导致实际挖去的词数小于目标词数。为此，经过试验发现，将算法参数中平均挖去的词数调整为 18.8%，最终结果接近 15.17%，接近 15%。</p>
+<p>另外，算法生成长度较短的空的频率高于预期，这是因为当采样接近尾声时，预期的采样结果只能出现较小的值。这种现象是为算法所允许的，因为只需要保证长度为 3 的空出现频率最高即可。但是，为了使算法生成长度较长的空的频率增加，将泊松分布的参数由 3.5 修改为 4.2。</p>
+<h1 id="python-实现">Python 实现</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax.numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpyro.distributions <span class="im">as</span> dist</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> random <span class="im">import</span> Random</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>proposed_mask_rate <span class="op">=</span> <span class="fl">0.188</span>  <span class="co"># resulting mask rate would be approximately 0.15</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>poisson_rate <span class="op">=</span> <span class="fl">4.2</span>  <span class="co"># span length = 3 would be the most frequent in the resulting distribution</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>max_span_len <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalise_probs(a: np.ndarray) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">/</span> a.<span class="bu">sum</span>()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_probs_list() <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">float</span>]]:</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    probs_list <span class="op">=</span> []</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    poisson <span class="op">=</span> dist.Poisson(rate<span class="op">=</span>poisson_rate)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    probs <span class="op">=</span> np.exp(poisson.log_prob(np.arange(max_span_len <span class="op">+</span> <span class="dv">1</span>)))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    probs_ <span class="op">=</span> normalise_probs(probs)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    probs_list.append(probs_.cumsum().tolist())</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(max_span_len <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        probs_ <span class="op">=</span> normalise_probs(probs[:<span class="op">-</span>i<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        probs_list.append(probs_.cumsum().tolist())</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> probs_list[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>probs_list <span class="op">=</span> generate_probs_list()</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>MaskScheme <span class="op">=</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">int</span>, <span class="bu">int</span>]]</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> determine_should_mask_len(rng: Random, seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> seq_len <span class="op">*</span> proposed_mask_rate</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    integer_part <span class="op">=</span> <span class="bu">int</span>(x)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    fractional_part <span class="op">=</span> x <span class="op">-</span> <span class="bu">float</span>(integer_part)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    should_add <span class="op">=</span> rng.random() <span class="op">&lt;</span> fractional_part</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    should_mask_len <span class="op">=</span> integer_part <span class="op">+</span> should_add</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> should_mask_len</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_spans(rng: Random, should_mask_len: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    spans <span class="op">=</span> []</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> should_mask_len <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        current_max_span_len <span class="op">=</span> <span class="bu">min</span>(max_span_len, should_mask_len)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>        probs <span class="op">=</span> probs_list[current_max_span_len <span class="op">-</span> <span class="dv">1</span>]</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        span_len <span class="op">=</span> rng.choices(<span class="bu">range</span>(current_max_span_len <span class="op">+</span> <span class="dv">1</span>), cum_weights<span class="op">=</span>probs)[<span class="dv">0</span>]</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        spans.append(span_len)</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        should_mask_len <span class="op">-=</span> span_len <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    rng.shuffle(spans)</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> spans</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> distribute_insert_poses(abs_insert_poses: <span class="bu">list</span>[<span class="bu">int</span>], spans: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> MaskScheme:</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    offset <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> []</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> abs_insert_pos, span <span class="kw">in</span> <span class="bu">zip</span>(abs_insert_poses, spans):</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>        insert_pos <span class="op">=</span> abs_insert_pos <span class="op">+</span> offset</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>        mask_scheme.append((insert_pos, span))</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>        offset <span class="op">+=</span> span <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask_scheme</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_add_one(rng: Random, mask_scheme: MaskScheme) <span class="op">-&gt;</span> MaskScheme:</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    should_add_one <span class="op">=</span> rng.random() <span class="op">&lt;</span> <span class="fl">0.5</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> should_add_one:</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>        mask_scheme <span class="op">=</span> [(insert_pos <span class="op">+</span> <span class="dv">1</span>, span) <span class="cf">for</span> insert_pos, span <span class="kw">in</span> mask_scheme]</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask_scheme</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> wakong(rng: Random, seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> MaskScheme:</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    should_mask_len <span class="op">=</span> determine_should_mask_len(rng, seq_len)</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    spans <span class="op">=</span> generate_spans(rng, should_mask_len)</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>    n_spans <span class="op">=</span> <span class="bu">len</span>(spans)</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>    n_possible_insert_poses <span class="op">=</span> seq_len <span class="op">-</span> <span class="bu">sum</span>(spans) <span class="op">-</span> n_spans <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>    abs_insert_poses <span class="op">=</span> <span class="bu">sorted</span>(rng.sample(<span class="bu">range</span>(n_possible_insert_poses), n_spans))</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> distribute_insert_poses(abs_insert_poses, spans)</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> random_add_one(rng, mask_scheme)</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask_scheme</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test():</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>    seed <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> Random(seed)</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> wakong(rng, <span class="dv">100</span>)</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(mask_scheme)</span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>    test()</span></code></pre></div>
+<h1 id="后记">后记</h1>
+<p>虽然挖空算法本身并不复杂，却有大量边缘情况需要考虑。在写作本文的过程中，我感到我与其说是在设计算法，不如说是在不断说服自己必须要对一个个边缘情况特殊处理，没有更美的解法了。好在最终的算法保证了数学上的对称性，满意地解决了这一问题。</p>
+<p>（发布于 2022 年 10 月 10 日）</p>
+</body>
+</html>
