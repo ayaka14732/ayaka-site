@@ -47,6 +47,7 @@ math: |-
 1. [入聲字情感分析](zipsengsi/)
 1. [一文讀懂新加坡公共交通車資計算方式](sg-fare/hant/){lang=zh-Hant hreflang=zh-Hant}
 1. [方言新闻的正确打开方式](dialect-news/){lang=zh-CN hreflang=zh-CN}
+1. [挖空算法及其 Python 实现](wakong/){lang=zh-CN hreflang=zh-CN}
 
 :::{.hidden}
 # 隨筆
