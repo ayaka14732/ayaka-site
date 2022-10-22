@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="三日月綾香" />
   <meta name="keywords" content="挖空, wakong, BART, 大规模语言模型, 模型预训练" />
-  <title>挖空算法及其 Python 实现</title>
+  <title>句子挖空算法及其 Python 实现</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -103,7 +103,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">挖空算法及其 Python 实现</h1>
+<h1 class="title">句子挖空算法及其 Python 实现</h1>
 <p class="author">三日月綾香</p>
 </header>
 <nav id="TOC" role="doc-toc">
@@ -131,7 +131,7 @@
 <p>同时发布于知乎：<a href="https://zhuanlan.zhihu.com/p/572321312">挖空算法及其 Python 实现</a></p>
 </blockquote>
 <h1 id="简介">简介</h1>
-<p>给句子挖空是深度学习预训练中的一个常见操作。例如，在 BART 模型的预训练中，text infilling 这一训练目标是让模型习得完形填空的能力，这就需要设计挖空算法，以生成用于模型训练的句子。然而，目前的论文对实验中采取的挖空方法只有模糊的介绍，只具有理论意义，无法真正实现为算法；而大多数实现也只是设计了大致可用的算法，没有进行深入的分析。对此，本文提出了一个恰当且健壮的挖空算法 (Wakong Algorithm)，并发布了 Python 库，可以在生产环境中直接使用。</p>
+<p>给句子挖空是深度学习预训练中的一个常见步骤。例如，在 BART 模型的预训练中，text infilling 这一训练目标是让模型习得完形填空的能力，这就需要设计挖空算法，以生成用于模型训练的句子。然而，目前的论文对实验中采取的挖空方法只有模糊的介绍，只具有理论意义，无法真正实现为算法；而大多数实现也只是设计了大致可用的算法，没有进行深入的分析。对此，本文提出了一个恰当且健壮的挖空算法 (Wakong Algorithm)，并发布了 Python 库，可以在生产环境中直接使用。</p>
 <p>本文作为我的大规模语言模型预训练项目的一部分，得到了谷歌 <a href="https://sites.research.google/trc/about/">TPU Research Cloud</a> (TRC) 的云 TPU 支持，为项目节省了大量时间。</p>
 <h1 id="问题定义">问题定义</h1>
 <h2 id="算法输入与输出">算法输入与输出</h2>
@@ -139,7 +139,7 @@
 <p>例如，当输入句子长度 40 时，算法的输出可能为：</p>
 <pre><code>[(5, 4), (23, 2)]</code></pre>
 <p>这一输出表示句子被挖了两个空，第一个空的起始位置为 5，长度为 4；第二个空的起始位置为 23，长度为 2。用图示可以表示如下：</p>
-<p>…..(xxxx)…………..(xx)……………</p>
+<pre><code>.....(xxxx)..............(xx)...............</code></pre>
 <h2 id="算法要求">算法要求</h2>
 <p>在 BART 论文的基础上，本文认为一个合理的挖空算法需要满足以下四个要求：</p>
 <ol type="1">
@@ -192,7 +192,7 @@
 <p>根据 BART 论文，本文从泊松分布中采样，随机生成挖空的长度。本文没有按照 BART 论文将泊松分布的参数设定为 4，而是设定为 3.5，以使长度为 3 的空出现频率最高（但是，在后续步骤中会提到，本文将这一参数修订为 4.2）。对于大于 10 的值，本文将其概率设定为 0，并将 0-10 的值的概率标准化至求和为 1。这样生成的分布的累积分布函数为 [0.0151 0.0783 0.2111 0.3970 0.5922 0.7562 0.8710 0.9399 0.9760 0.9929 1.0000]。</p>
 <h2 id="生成挖空的长度列表">生成挖空的长度列表</h2>
 <p>从上述分布中采样多次，即可生成挖空的长度列表。采样在挖空的长度之和达到要挖去的词数时停止。</p>
-<p>若挖空的长度之和没有达到目标词数，但采样结果加挖空的长度之和大于目标词数（如目标词数为 10，当前长度之和为 9，但采样结果为 5，9 加 5 大于 10），则舍弃该次采样结果，重新进行采样，直到采样结果加挖空的长度之和在目标词数的范围内为止。在实际实现时，为了保证算法效率，不应该采样失败重采，而是应当首先根据目标词数与挖空的长度之和计算出预期采样结果的范围，再根据上述分布计算出除去超出预期采样结果范围的值的新分布，将概率标准化至求和为 1 后从新分布中采样。</p>
+<p>若挖空的长度之和没有达到目标词数，但采样结果加挖空的长度之和大于目标词数（如目标词数为 10，当前长度之和为 9，但采样结果为 5，9 加 5 大于 10），则舍弃该次采样结果，重新进行采样，直到采样结果加挖空的长度之和在目标词数的范围内为止。在实际实现时，为了保证算法效率，算法不应在采样失败时重采，而是应当首先根据目标词数与挖空的长度之和计算出预期采样结果的范围，再根据上述分布计算出除去超出预期采样结果范围的值的新分布，将概率标准化至求和为 1 后从新分布中采样。</p>
 <p>由于算法要求任意两个空不能直接相邻，长度为 <em>k</em> 的空实际也占据了它右侧的一个位置，即实际长度为 <em>k</em>+1，因此在计算挖空的长度之和时，每一个空的长度需要额外加 1，即挖空的长度之和加挖空的个数。这样很好地避免了两个空直接相邻的问题，但会导致最终平均挖去的词数比预期的 15% 小（为此，在后续步骤中会将平均挖去的词数调整为 18.8%，使得最终结果接近 15%）。</p>
 <p>由于在采样起始时可能出现长度为 0 的样本，而采样终止的条件为达到目标长度，不可能出现长度为 0 的样本，因此会产生不对称的现象。为此，在采样结束后应当对挖空的长度列表随机打乱，使挖空的长度随机分布。</p>
 <h2 id="将要挖的空均匀分布在句子中">将要挖的空均匀分布在句子中</h2>
@@ -200,92 +200,92 @@
 <p>但是，这样做会导致句子的最后一个单词永远不会被挖空。为此，在完成上述步骤后，再随机生成一次 0-1 之间均匀分布的随机数，若该数小于 0.5，则将挖的所有空向右移动一位，也就是假设预留的空位在左边，由此保证了算法的对称性。</p>
 <h2 id="调整算法参数">调整算法参数</h2>
 <p>在实现算法后，发现平均挖去的词数小于 15%，这是由于上文提到的原因，在算法的执行过程中，计算挖空的长度之和时，每一个空的长度需要额外加 1，导致实际挖去的词数小于目标词数。为此，经过试验发现，将算法参数中平均挖去的词数调整为 18.8%，最终结果接近 15.17%，接近 15%。</p>
-<p>另外，算法生成长度较短的空的频率高于预期，这是因为当采样接近尾声时，预期的采样结果只能出现较小的值。这种现象是为算法所允许的，因为只需要保证长度为 3 的空出现频率最高即可。但是，为了使算法生成长度较长的空的频率增加，将泊松分布的参数由 3.5 修改为 4.2。</p>
+<p>另外，算法生成长度较短的空的频率高于预期，这是因为当采样接近尾声时，预期的采样结果只能出现较小的值。这种现象是为算法所允许的，因为只需要保证长度为 3 的空出现频率最高即可。但是，为了使算法生成长度较长的空的频率增加，以提高训练难度，本文将泊松分布的参数由 3.5 修改为 4.2。</p>
 <h1 id="python-实现">Python 实现</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax.numpy <span class="im">as</span> np</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpyro.distributions <span class="im">as</span> dist</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> random <span class="im">import</span> Random</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>proposed_mask_rate <span class="op">=</span> <span class="fl">0.188</span>  <span class="co"># resulting mask rate would be approximately 0.15</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>poisson_rate <span class="op">=</span> <span class="fl">4.2</span>  <span class="co"># span length = 3 would be the most frequent in the resulting distribution</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>max_span_len <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalise_probs(a: np.ndarray) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">/</span> a.<span class="bu">sum</span>()</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_probs_list() <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">float</span>]]:</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    probs_list <span class="op">=</span> []</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    poisson <span class="op">=</span> dist.Poisson(rate<span class="op">=</span>poisson_rate)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    probs <span class="op">=</span> np.exp(poisson.log_prob(np.arange(max_span_len <span class="op">+</span> <span class="dv">1</span>)))</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    probs_ <span class="op">=</span> normalise_probs(probs)</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    probs_list.append(probs_.cumsum().tolist())</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(max_span_len <span class="op">-</span> <span class="dv">1</span>):</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        probs_ <span class="op">=</span> normalise_probs(probs[:<span class="op">-</span>i<span class="op">-</span><span class="dv">1</span>])</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        probs_list.append(probs_.cumsum().tolist())</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> probs_list[::<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>probs_list <span class="op">=</span> generate_probs_list()</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>MaskScheme <span class="op">=</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">int</span>, <span class="bu">int</span>]]</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> determine_should_mask_len(rng: Random, seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> seq_len <span class="op">*</span> proposed_mask_rate</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    integer_part <span class="op">=</span> <span class="bu">int</span>(x)</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    fractional_part <span class="op">=</span> x <span class="op">-</span> <span class="bu">float</span>(integer_part)</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    should_add <span class="op">=</span> rng.random() <span class="op">&lt;</span> fractional_part</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    should_mask_len <span class="op">=</span> integer_part <span class="op">+</span> should_add</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> should_mask_len</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_spans(rng: Random, should_mask_len: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    spans <span class="op">=</span> []</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> should_mask_len <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        current_max_span_len <span class="op">=</span> <span class="bu">min</span>(max_span_len, should_mask_len)</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>        probs <span class="op">=</span> probs_list[current_max_span_len <span class="op">-</span> <span class="dv">1</span>]</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        span_len <span class="op">=</span> rng.choices(<span class="bu">range</span>(current_max_span_len <span class="op">+</span> <span class="dv">1</span>), cum_weights<span class="op">=</span>probs)[<span class="dv">0</span>]</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        spans.append(span_len)</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        should_mask_len <span class="op">-=</span> span_len <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    rng.shuffle(spans)</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> spans</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> distribute_insert_poses(abs_insert_poses: <span class="bu">list</span>[<span class="bu">int</span>], spans: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> MaskScheme:</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    offset <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> []</span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> abs_insert_pos, span <span class="kw">in</span> <span class="bu">zip</span>(abs_insert_poses, spans):</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>        insert_pos <span class="op">=</span> abs_insert_pos <span class="op">+</span> offset</span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>        mask_scheme.append((insert_pos, span))</span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>        offset <span class="op">+=</span> span <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask_scheme</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_add_one(rng: Random, mask_scheme: MaskScheme) <span class="op">-&gt;</span> MaskScheme:</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    should_add_one <span class="op">=</span> rng.random() <span class="op">&lt;</span> <span class="fl">0.5</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> should_add_one:</span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>        mask_scheme <span class="op">=</span> [(insert_pos <span class="op">+</span> <span class="dv">1</span>, span) <span class="cf">for</span> insert_pos, span <span class="kw">in</span> mask_scheme]</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask_scheme</span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> wakong(rng: Random, seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> MaskScheme:</span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    should_mask_len <span class="op">=</span> determine_should_mask_len(rng, seq_len)</span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    spans <span class="op">=</span> generate_spans(rng, should_mask_len)</span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>    n_spans <span class="op">=</span> <span class="bu">len</span>(spans)</span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>    n_possible_insert_poses <span class="op">=</span> seq_len <span class="op">-</span> <span class="bu">sum</span>(spans) <span class="op">-</span> n_spans <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>    abs_insert_poses <span class="op">=</span> <span class="bu">sorted</span>(rng.sample(<span class="bu">range</span>(n_possible_insert_poses), n_spans))</span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> distribute_insert_poses(abs_insert_poses, spans)</span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> random_add_one(rng, mask_scheme)</span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask_scheme</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test():</span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>    seed <span class="op">=</span> <span class="dv">42</span></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> Random(seed)</span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> wakong(rng, <span class="dv">100</span>)</span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(mask_scheme)</span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>    test()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax.numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpyro.distributions <span class="im">as</span> dist</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> random <span class="im">import</span> Random</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>proposed_mask_rate <span class="op">=</span> <span class="fl">0.188</span>  <span class="co"># resulting mask rate would be approximately 0.15</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>poisson_rate <span class="op">=</span> <span class="fl">4.2</span>  <span class="co"># span length = 3 would be the most frequent in the resulting distribution</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>max_span_len <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalise_probs(a: np.ndarray) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">/</span> a.<span class="bu">sum</span>()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_probs_list() <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">float</span>]]:</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    probs_list <span class="op">=</span> []</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    poisson <span class="op">=</span> dist.Poisson(rate<span class="op">=</span>poisson_rate)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    probs <span class="op">=</span> np.exp(poisson.log_prob(np.arange(max_span_len <span class="op">+</span> <span class="dv">1</span>)))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    probs_ <span class="op">=</span> normalise_probs(probs)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    probs_list.append(probs_.cumsum().tolist())</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(max_span_len <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        probs_ <span class="op">=</span> normalise_probs(probs[:<span class="op">-</span>i<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        probs_list.append(probs_.cumsum().tolist())</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> probs_list[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>probs_list <span class="op">=</span> generate_probs_list()</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>MaskScheme <span class="op">=</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">int</span>, <span class="bu">int</span>]]</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> determine_should_mask_len(rng: Random, seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> seq_len <span class="op">*</span> proposed_mask_rate</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    integer_part <span class="op">=</span> <span class="bu">int</span>(x)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    fractional_part <span class="op">=</span> x <span class="op">-</span> <span class="bu">float</span>(integer_part)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    should_add <span class="op">=</span> rng.random() <span class="op">&lt;</span> fractional_part</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    should_mask_len <span class="op">=</span> integer_part <span class="op">+</span> should_add</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> should_mask_len</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_spans(rng: Random, should_mask_len: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    spans <span class="op">=</span> []</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> should_mask_len <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        current_max_span_len <span class="op">=</span> <span class="bu">min</span>(max_span_len, should_mask_len)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        probs <span class="op">=</span> probs_list[current_max_span_len <span class="op">-</span> <span class="dv">1</span>]</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        span_len <span class="op">=</span> rng.choices(<span class="bu">range</span>(current_max_span_len <span class="op">+</span> <span class="dv">1</span>), cum_weights<span class="op">=</span>probs)[<span class="dv">0</span>]</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        spans.append(span_len)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>        should_mask_len <span class="op">-=</span> span_len <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    rng.shuffle(spans)</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> spans</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> distribute_insert_poses(abs_insert_poses: <span class="bu">list</span>[<span class="bu">int</span>], spans: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> MaskScheme:</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    offset <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> []</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> abs_insert_pos, span <span class="kw">in</span> <span class="bu">zip</span>(abs_insert_poses, spans):</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>        insert_pos <span class="op">=</span> abs_insert_pos <span class="op">+</span> offset</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>        mask_scheme.append((insert_pos, span))</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>        offset <span class="op">+=</span> span <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask_scheme</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_add_one(rng: Random, mask_scheme: MaskScheme) <span class="op">-&gt;</span> MaskScheme:</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    should_add_one <span class="op">=</span> rng.random() <span class="op">&lt;</span> <span class="fl">0.5</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> should_add_one:</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        mask_scheme <span class="op">=</span> [(insert_pos <span class="op">+</span> <span class="dv">1</span>, span) <span class="cf">for</span> insert_pos, span <span class="kw">in</span> mask_scheme]</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask_scheme</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> wakong(rng: Random, seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> MaskScheme:</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    should_mask_len <span class="op">=</span> determine_should_mask_len(rng, seq_len)</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    spans <span class="op">=</span> generate_spans(rng, should_mask_len)</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>    n_spans <span class="op">=</span> <span class="bu">len</span>(spans)</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    n_possible_insert_poses <span class="op">=</span> seq_len <span class="op">-</span> <span class="bu">sum</span>(spans) <span class="op">-</span> n_spans <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    abs_insert_poses <span class="op">=</span> <span class="bu">sorted</span>(rng.sample(<span class="bu">range</span>(n_possible_insert_poses), n_spans))</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> distribute_insert_poses(abs_insert_poses, spans)</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> random_add_one(rng, mask_scheme)</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask_scheme</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test():</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    seed <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> Random(seed)</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    mask_scheme <span class="op">=</span> wakong(rng, <span class="dv">100</span>)</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(mask_scheme)</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    test()</span></code></pre></div>
 <p>（发布于 2022 年 10 月 10 日）</p>
 </body>
 </html>
