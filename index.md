@@ -76,3 +76,4 @@ should be after 漢字化的日文元素名稱是什麼樣子
 - [skylee](https://skylee.xyz/){lang=en}
 - [山前](https://estela.moe/){lang=zh-Hant hreflang=en}
 - [泉雲清](https://ius.shn.hk/){lang=zh-Hant hreflang=zh-Hant}
+- [焰华 Honoka55](https://honoka55.github.io/){lang=zh-CN hreflang=zh-CN}
