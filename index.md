@@ -12,7 +12,7 @@ math: |-
   </style>
 ---
 
-[About](about/){lang=en hreflang=zh-HK} - [English Site](https://lisa.shn.hk/){lang=en hreflang=en-GB}
+[About](about/){lang=en hreflang=zh-HK} - [English Site](https://en.ayaka.shn.hk/){lang=en hreflang=en-GB}
 
 # 文章
 
