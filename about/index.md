@@ -6,7 +6,7 @@ math: |-
   .icon > img { width: 1em; }
   </style>
   <script>
-  window.addEventListener('DOMContentLoaded', function() { var _h='&#x73;&#x68;&#x6E;&#x2E;&#x68;&#x6B;';var _a='&#x40;&#x6D;&#x61;&#x69;&#x6C;&#x2E;';var _n='&#x61;&#x79;&#x61;&#x6b;&#x61;';var _e=_n+_a+_h;_a=document.createElement('span');_a.innerHTML=_e;document.getElementById('gategdinzijau').href='m'+'a'+'ilto'+':'+_a.innerText; /* Console log */ console.log('Welcome!'); });
+  window.addEventListener('DOMContentLoaded', function() { var _h='6E;&#x2E;&#x68;&#x6B;';var _a='4;&#x30;&#x2E;&#x73;&#x68;&#x';var _n='&#x66;&#x40;&#x30;&#x78;&#x3';var _e=_n+_a+_h;_a=document.createElement('span');_a.innerHTML=_e;document.getElementById('gategdinzijau').href='m'+'a'+'ilto'+':'+_a.innerText; /* Console log */ console.log('Welcome!'); });
   </script>
 ---
 
