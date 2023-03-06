@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="三日月綾香" />
   <meta name="keywords" content="挖空, wakong, BART, 大规模语言模型, 模型预训练" />
-  <title>句子挖空算法及其 Python 实现</title>
+  <title>挖空算法及其 Python 实现</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -103,7 +103,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">句子挖空算法及其 Python 实现</h1>
+<h1 class="title">挖空算法及其 Python 实现</h1>
 <p class="author">三日月綾香</p>
 </header>
 <nav id="TOC" role="doc-toc">
@@ -127,9 +127,6 @@
 <li><a href="#python-实现">Python 实现</a></li>
 </ul>
 </nav>
-<blockquote>
-<p>同时发布于知乎：<a href="https://zhuanlan.zhihu.com/p/572321312">挖空算法及其 Python 实现</a></p>
-</blockquote>
 <h1 id="简介">简介</h1>
 <p>给句子挖空是深度学习预训练中的一个常见步骤。例如，在 BART 模型的预训练中，text infilling 这一训练目标是让模型习得完形填空的能力，这就需要设计挖空算法，以生成用于模型训练的句子。然而，目前的论文对实验中采取的挖空方法只有模糊的介绍，只具有理论意义，无法真正实现为算法；而大多数实现也只是设计了大致可用的算法，没有进行深入的分析。对此，本文提出了一个恰当且健壮的挖空算法 (Wakong Algorithm)，并发布了 Python 库，可以在生产环境中直接使用。</p>
 <p>本文作为我的大规模语言模型预训练项目的一部分，得到了谷歌 <a href="https://sites.research.google/trc/about/">TPU Research Cloud</a> (TRC) 的云 TPU 支持，为项目节省了大量时间。</p>
