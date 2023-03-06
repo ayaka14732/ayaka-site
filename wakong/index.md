@@ -1,5 +1,5 @@
 ---
-title: 句子挖空算法及其 Python 实现
+title: 挖空算法及其 Python 实现
 lang: zh-CN
 keywords:
 - 挖空
@@ -8,8 +8,6 @@ keywords:
 - 大规模语言模型
 - 模型预训练
 ---
-
-> 同时发布于知乎：[挖空算法及其 Python 实现](https://zhuanlan.zhihu.com/p/572321312)
 
 # 简介
 

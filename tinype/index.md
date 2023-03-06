@@ -8,8 +8,6 @@ keywords:
 - 汇编语言
 ---
 
-> 同时发布于知乎：[Windows 上最小的「HelloWorld.exe」能有多小？ - 三日月 綾香的回答](https://www.zhihu.com/question/21715980/answer/2239380126)
->
 > GitHub 链接：[ayaka14732/TinyPE-on-Win10](https://github.com/ayaka14732/TinyPE-on-Win10)
 
 ## 简介
