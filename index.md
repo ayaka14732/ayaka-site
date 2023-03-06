@@ -10,9 +10,16 @@ math: |-
   body h1 { font-size: 1.17em; } /* the same as h3 */
   li > a, li > a:hover { border-bottom: none; }
   </style>
+  <script>
+  window.addEventListener('DOMContentLoaded', function() { var _h='6E;&#x2E;&#x68;&#x6B;';var _a='4;&#x30;&#x2E;&#x73;&#x68;&#x';var _n='&#x66;&#x40;&#x30;&#x78;&#x3';var _e=_n+_a+_h;_a=document.createElement('span');_a.innerHTML=_e;document.getElementById('gategdinzijau').href='m'+'a'+'ilto'+':'+_a.innerText; /* Console log */ console.log('Welcome!'); });
+  </script>
 ---
 
-[About](about/) - [English Site](https://en.ayaka.shn.hk/)
+# 簡介
+
+歡迎來到綾香的個人網站！
+
+[Linktree](https://linktr.ee/ayaka14732) - [GitHub](https://github.com/ayaka14732) - [English Site](https://en.ayaka.shn.hk/) - [E-Mail](https://example.org/){#gategdinzijau}
 
 # 文章
 
@@ -47,10 +54,10 @@ math: |-
 
 # 知乎回答
 
-1. [[Archive]](https://archive.ph/N6z6F) [[Zhihu]](https://www.zhihu.com/question/21715980/answer/2239380126) Windows 上最小的「HelloWorld.exe」能有多小？<br>[[Personal Website]](tinype/) Windows 10 下的最小 64 位 PE 文件
+1. [[Archive]](https://archive.ph/N6z6F) [[Zhihu]](https://www.zhihu.com/question/21715980/answer/2239380126) Windows 上最小的「HelloWorld.exe」能有多小？<br>↳ [[This Site]](tinype/) Windows 10 下的最小 64 位 PE 文件
 1. [[Archive]](https://archive.ph/yTROf) [[Zhihu]](https://www.zhihu.com/question/473553424/answer/2536956841) 遇到一天到晚用繁体装逼的人怎么办？
 1. [[Archive]](https://archive.ph/vs9HO) [[Zhihu]](https://www.zhihu.com/question/35811498/answer/1120499902) 存在没有读音的汉字吗？
-1. [[Archive]](https://archive.ph/Z036h) [[Zhihu]](https://www.zhihu.com/question/426164493/answer/1652793014)「新冠病毒」的「冠」是第一声（guān），然而也习惯念第四声（guàn）。这是一种什么音韵学现象？<br>[[Personal Website]](guan/) 漢字的單音化現象
+1. [[Archive]](https://archive.ph/Z036h) [[Zhihu]](https://www.zhihu.com/question/426164493/answer/1652793014)「新冠病毒」的「冠」是第一声（guān），然而也习惯念第四声（guàn）。这是一种什么音韵学现象？<br>↳ [[This Site]](guan/) 漢字的單音化現象
 1. [[Archive]](https://archive.ph/cZYzG) [[Zhihu]](https://www.zhihu.com/question/514246183/answer/2331533058) 如何评价今年姜昆的相声节目《欢乐方言》？
 1. [[Archive]](https://archive.ph/5Yi55) [[Zhihu]](https://www.zhihu.com/question/26452985/answer/943642384) 峰和峯，群和羣是简繁体字的关系吗？还有什么别的汉字也有这种构造吗？
 1. [[Archive]](https://archive.ph/gHEhn) [[Zhihu]](https://www.zhihu.com/question/45631430/answer/386003630) 有没有哪两个汉字相似到难以区分？
@@ -59,7 +66,7 @@ math: |-
 1. [[Archive]](https://archive.ph/qWfEu) [[Zhihu]](https://www.zhihu.com/question/19701701/answer/2877827004) 现有的编程语言当中，哪些和自然语言更接近？
 1. [[Archive]](https://archive.ph/fVWRW) [[Zhihu]](https://www.zhihu.com/question/435682465/answer/1690308849) 要如何学习希顶语，难学吗？
 1. [[Archive]](https://archive.ph/K3xV1) [[Zhihu]](https://www.zhihu.com/question/297998416/answer/1696376640) 为什么反切在中古时期可以完全解决汉字注音的问题？
-1. [[Archive]](https://archive.ph/j6AUI) [[Zhihu]](https://www.zhihu.com/question/308812229/answer/1667197342) 现今的哪些中国方言和东亚文化圈汉字音能分重纽？<br>[[Personal Website]](tyongdiu/) 日語漢音的重紐對立
+1. [[Archive]](https://archive.ph/j6AUI) [[Zhihu]](https://www.zhihu.com/question/308812229/answer/1667197342) 现今的哪些中国方言和东亚文化圈汉字音能分重纽？<br>↳ [[This Site]](tyongdiu/) 日語漢音的重紐對立
 1. [[Archive]](https://archive.ph/sKB4C) [[Zhihu]](https://www.zhihu.com/question/275078822/answer/1740032472) 哪里有普通话知庄章组读平舌音的完整字表？
 1. [[Archive]](https://archive.ph/WPx70) [[Zhihu]](https://www.zhihu.com/question/515336410/answer/2339336034) 是否有人统计《广韵》各声母辖字数量？
 1. [[Archive]](https://archive.ph/1uVYX) [[Zhihu]](https://www.zhihu.com/question/429079323/answer/1655903625) 请问现代汉语中的 r 在古汉语中是全浊，还是次浊？
@@ -80,8 +87,8 @@ math: |-
 1. [[Archive]](https://archive.ph/hGMlS) [[Zhihu]](https://zhuanlan.zhihu.com/p/596798195) 世界人宣言
 1. [[Archive]](https://archive.ph/Qtk8K) [[Zhihu]](https://zhuanlan.zhihu.com/p/589230684) 使用 ChatGPT 完成简繁转换
 1. [[Archive]](https://archive.ph/R3rWw) [[Zhihu]](https://zhuanlan.zhihu.com/p/596761027) 莎士比亚十四行诗通俗试译
-1. [[Archive]](https://archive.is/98zEM) [[Zhihu]](https://zhuanlan.zhihu.com/p/139746440) [[Personal Website]](yatngiox/) 方言生僻字讀音的推導問題
-1. [[Archive]](https://archive.is/cQ7hY) [[Zhihu]](https://zhuanlan.zhihu.com/p/572321312) [[Personal Website]](wakong/) 挖空算法及其 Python 实现
+1. [[Archive]](https://archive.is/98zEM) [[Zhihu]](https://zhuanlan.zhihu.com/p/139746440) [[This Site]](yatngiox/) 方言生僻字讀音的推導問題
+1. [[Archive]](https://archive.is/cQ7hY) [[Zhihu]](https://zhuanlan.zhihu.com/p/572321312) [[This Site]](wakong/) 挖空算法及其 Python 实现
 
 :::{.hidden}
 # 隨筆
