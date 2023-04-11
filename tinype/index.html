@@ -117,7 +117,7 @@
 <blockquote>
 <p>GitHub 链接：<a href="https://github.com/ayaka14732/TinyPE-on-Win10">ayaka14732/TinyPE-on-Win10</a></p>
 </blockquote>
-<h2 id="简介">简介</h2>
+<h1 id="简介">简介</h1>
 <p>本次实验尝试制作了 Windows 10 操作系统下的最小 64 位 PE 文件，该文件可以弹出带有文字提示的消息框，且满足实验的三项限制条件：</p>
 <ul>
 <li>符号通过函数名（而不是函数序号）引入</li>
@@ -194,7 +194,7 @@
 </tbody>
 </table>
 <p>其中，第 3-5 步虽然文件大小没有减小，但文件的熵减小了，这说明文件内部有更多的零，也就说明后续步骤有更多的压缩空间。</p>
-<h2 id="实验环境">实验环境</h2>
+<h1 id="实验环境">实验环境</h1>
 <ul>
 <li>操作系统：Microsoft Windows 10 Version 1903 (v10.0.18362.239) 64-bit</li>
 <li>Shell：zsh 5.7.1 (x86_64-pc-msys)</li>
@@ -203,7 +203,7 @@
 <li>汇编器：NASM version 2.14.02 compiled on Jan 30 2019</li>
 <li>调试器：x64dbg May 19 2019, 18:13:13</li>
 </ul>
-<h2 id="实验步骤">实验步骤</h2>
+<h1 id="实验步骤">实验步骤</h1>
 <p><strong>第一步：使用常规方法，利用 C 语言编写程序，使用 MSVC 编译器生成普通的 PE 文件。</strong></p>
 <p>在 Windows 编程中，要弹出消息框，可以使用 <a href="https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-messageboxa"><code>MessageBoxA</code></a> 或 <a href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw"><code>MessageBoxW</code></a> 这两个函数。其中，函数名以 A 结尾表示字符编码使用用户的当前代码页，以 W 结尾表示使用 UTF-16。</p>
 <p>由于用户使用的代码页并不统一，出于兼容性的考虑，本次实验使用以 W 结尾的 <code>MessageBoxW</code> 函数。代码页的问题其实非常常见，相信许多人在 Windows 上使用 Python 编程时，都遇到过因为代码页不对而导致程序乱码或崩溃的问题。这里使用 <code>MessageBoxW</code> 函数，与代码页无关，所以可以避免程序乱码或崩溃。</p>
@@ -987,7 +987,7 @@ file_size equ $-$$</code></pre>
 <span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="ex">000000e0:</span> 6900 6e00 6400 6f00 7700 7300 2000 3100  i.n.d.o.w.s. .1.</span>
 <span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="ex">000000f0:</span> 3000 0000 0801 0000 0000 0000 31c9 eb9e  0...........1...</span>
 <span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="ex">00000100:</span> 7c00 0000 9400 0000 0a00 0000            <span class="kw">|</span><span class="ex">...........</span></span></code></pre></div>
-<h2 id="参考资料">参考资料</h2>
+<h1 id="参考资料">参考资料</h1>
 <p>除文中已说明的参考资料外，本实验还参考了以下资料：</p>
 <ol type="1">
 <li><a href="http://www.phreedom.org/research/tinype/">Tiny PE</a></li>
