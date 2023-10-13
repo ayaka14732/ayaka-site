@@ -1,5 +1,5 @@
 ---
-title: Arch Linux 连接 Pulse Secure VPN 记录
+title: Arch Linux 连接 Pulse Secure VPN
 lang: zh-CN
 keywords:
 - Arch Linux

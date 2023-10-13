@@ -1,5 +1,5 @@
 ---
-title: 三日月綾香
+title: 綾香的 Blog
 lang: zh-HK
 math: |-
   <style>
@@ -11,7 +11,7 @@ math: |-
   li > a, li > a:hover { border-bottom: none; }
   </style>
   <script>
-  window.addEventListener('DOMContentLoaded', function() { var _h='6E;&#x2E;&#x68;&#x6B;';var _a='4;&#x30;&#x2E;&#x73;&#x68;&#x';var _n='&#x66;&#x40;&#x30;&#x78;&#x3';var _e=_n+_a+_h;_a=document.createElement('span');_a.innerHTML=_e;document.getElementById('gategdinzijau').href='m'+'a'+'ilto'+':'+_a.innerText; /* Console log */ console.log('Welcome!'); });
+  window.addEventListener('DOMContentLoaded', function() { var _h='6E;&#x2E;&#x68;&#x6B;';var _a='4;&#x30;&#x2E;&#x73;&#x68;&#x';var _n='ayaka&#x40;&#x30;&#x78;&#x3';var _e=_n+_a+_h;_a=document.createElement('span');_a.innerHTML=_e;document.getElementById('gategdinzijau').href='m'+'a'+'ilto'+':'+_a.innerText; /* Console log */ console.log('Welcome!'); });
   </script>
 ---
 
@@ -19,39 +19,37 @@ math: |-
 
 歡迎來到綾香的個人網站！
 
-[Linktree](https://linktr.ee/ayaka14732) - [GitHub](https://github.com/ayaka14732) - [English Site](https://en.ayaka.shn.hk/) - [E-Mail](https://example.org/){#gategdinzijau}
+[Linktree](https://linktr.ee/ayaka14732) - [English Site](https://en.ayaka.shn.hk/)
 
-# 文章
+# 文章 (CS)
 
-1. [日语笔记](1041/)
 1. [记一次学习 Shell 的经历](learnshell/)
 1. [直播服务器搭建记录](live/)
 1. [CCF 201403-3 命令行选项](ccf-201403-3/)
 1. [抓包登录大学教务系统](wlansniff/)
-1. [不再推荐 Haskell](antihask/)
 1. [C++ 正则表达式速查手册](cppregex/)
-1. [我的個人思考用語簡介](v8/)（未定稿）
-1. [体验 OpenType 的 locl/smpl/trad/ss01-ss20 特性](opentype/)
 1. [HTML 设置 `lang` 属性的意义](langtag/)
-1. [铃羽系统在汉语数制拓展表示中的应用](suzuha/)
 1. [如何正确使用正则表达式匹配汉字](hanregex/zh-CN/)
-1. [漢字化的日文元素名稱是什麼樣子](kanji-periodic-table/)
-1. [論直音、反切與其他註音方式的優劣](pyanxvsdrik/)
 1. [正確實現簡轉繁字型](s2tfont/hant/)
 1. [SSH 连接 Google Colab](colab/)
-1. [粵語（廣州音）與中古音對應關係](teoi/)（未定稿）
-1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿）
-1. [蛇口碼頭至香港機場航線紀錄](zyk/)
 1. [Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件](openwrt/)
-1. [在 FreeBSD 上使用 Fcitx5](fcitx5-freebsd/)
-1. [概率图模型课程学习感想](pgm/)
 1. [如何正确学习青年大学习](daxuexi/)
-1. [Arch Linux 连接 Pulse Secure VPN 记录](archpulse/)
+1. [Arch Linux 连接 Pulse Secure VPN](archpulse/)
 1. [腾讯云 coscmd 通配符格式](cosignore/)
-1. [入聲字情感分析](zipsengsi/)
-1. [一文讀懂新加坡公共交通車資計算方式](sg-fare/hant/)
 1. [方言新闻的正确打开方式](dialect-news/)
 
+# 文章（語言類）
+
+1. [日语笔记](1041/)
+1. [我的個人思考用語簡介](v8/)（未定稿）
+1. [铃羽系统在汉语数制拓展表示中的应用](suzuha/)
+1. [漢字化的日文元素名稱是什麼樣子](kanji-periodic-table/)
+1. [論直音、反切與其他註音方式的優劣](pyanxvsdrik/)
+1. [粵語（廣州音）與中古音對應關係](teoi/)（未定稿）
+1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿）
+1. [入聲字情感分析](zipsengsi/)
+
+:::{.hidden}
 # 知乎回答
 
 1. [[Archive]](https://archive.ph/N6z6F) [[Zhihu]](https://www.zhihu.com/question/21715980/answer/2239380126) Windows 上最小的「HelloWorld.exe」能有多小？<br>↳ [[This Site]](tinype/) Windows 10 下的最小 64 位 PE 文件
@@ -90,10 +88,15 @@ math: |-
 1. [[Archive]](https://archive.is/98zEM) [[Zhihu]](https://zhuanlan.zhihu.com/p/139746440) [[This Site]](yatngiox/) 方言生僻字讀音的推導問題
 1. [[Archive]](https://archive.is/cQ7hY) [[Zhihu]](https://zhuanlan.zhihu.com/p/572321312) [[This Site]](wakong/) 挖空算法及其 Python 实现
 
-:::{.hidden}
 # 隨筆
 
 1. [Nushu Everywhere](nushu-everywhere/){lang=en-US hreflang=en-US}
+1. [不再推荐 Haskell](antihask/)
+1. [体验 OpenType 的 locl/smpl/trad/ss01-ss20 特性](opentype/)
+1. [蛇口碼頭至香港機場航線紀錄](zyk/)
+1. [在 FreeBSD 上使用 Fcitx5](fcitx5-freebsd/)
+1. [概率图模型课程学习感想](pgm/)
+1. [一文讀懂新加坡公共交通車資計算方式](sg-fare/hant/)
 :::
 
 <!--
