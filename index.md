@@ -15,10 +15,6 @@ math: |-
   </script>
 ---
 
-# 簡介
-
-歡迎來到綾香的個人網站！
-
 [Linktree](https://linktr.ee/ayaka14732) - [English Site](https://en.ayaka.shn.hk/)
 
 # 文章 (CS)
