@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="732" viewBox="0 0 720 732" font-family="'Roboto', 'Helvetica Neue', 'Arial', sans-serif">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker></defs>
+<rect x="0" y="0" width="720" height="732" fill="#ffffff"/>
+<line x1="210.0" y1="44.0" x2="210.0" y2="672.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="210.0" y="690.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">0.1</text>
+<line x1="297.9" y1="44.0" x2="297.9" y2="672.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="297.9" y="690.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">0.2</text>
+<line x1="414.2" y1="44.0" x2="414.2" y2="672.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="414.2" y="690.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">0.5</text>
+<line x1="502.1" y1="44.0" x2="502.1" y2="672.0" stroke="#52514e" stroke-width="1"/>
+<text x="502.1" y="690.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">1</text>
+<line x1="590.0" y1="44.0" x2="590.0" y2="672.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="590.0" y="690.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">2</text>
+<text x="400.0" y="710.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal"><tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">本文</tspan> / <tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">官方</tspan> Pallas<tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">（周期数之比，对数刻度）</tspan></text>
+<rect x="120.0" y="14.0" width="12.0" height="12.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="138.0" y="25.0" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="normal">Pallas <tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">源码</tspan></text>
+<rect x="295.0" y="14.0" width="12.0" height="12.0" rx="2" fill="#1baf7a" stroke="none"/>
+<text x="313.0" y="25.0" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="normal"><tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">改写</tspan> executable</text>
+<rect x="470.0" y="14.0" width="12.0" height="12.0" rx="2" fill="#4a3aa7" stroke="none"/>
+<text x="488.0" y="25.0" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="normal"><tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">进程内补丁</tspan></text>
+<text x="20.0" y="62.0" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="bold"><tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">行宽</tspan></text>
+<text x="200.0" y="81.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,256] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="456.1" y="71.0" width="46.0" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="82.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.70</text>
+<text x="200.0" y="103.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,1024] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="447.9" y="93.0" width="54.1" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="104.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.65</text>
+<text x="200.0" y="125.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,4096] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="435.8" y="115.0" width="66.3" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="126.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.59</text>
+<text x="200.0" y="147.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,1024] <tspan font-style="italic">k</tspan> = 32</text>
+<rect x="425.3" y="137.0" width="76.8" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="148.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.55</text>
+<text x="200.0" y="169.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,4096] <tspan font-style="italic">k</tspan> = 32</text>
+<rect x="392.2" y="159.0" width="109.9" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="170.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.42</text>
+<text x="200.0" y="191.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,8192] <tspan font-style="italic">k</tspan> = 32</text>
+<rect x="360.4" y="181.0" width="141.7" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="192.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.33</text>
+<text x="20.0" y="212.0" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="bold"><tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">方向</tspan></text>
+<text x="200.0" y="231.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,128] <tspan font-style="italic">k</tspan> = 8 <tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">沿</tspan> axis 0</text>
+<rect x="469.2" y="221.0" width="32.9" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="232.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.77</text>
+<text x="200.0" y="253.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[16,128] <tspan font-style="italic">k</tspan> = 8 <tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">沿</tspan> axis 0</text>
+<rect x="406.0" y="243.0" width="96.1" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="254.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.47</text>
+<text x="200.0" y="275.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[32,128] <tspan font-style="italic">k</tspan> = 32 <tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">沿</tspan> axis 0</text>
+<rect x="358.0" y="265.0" width="144.1" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="276.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.32</text>
+<text x="200.0" y="297.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[64,128] <tspan font-style="italic">k</tspan> = 32 <tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">沿</tspan> axis 0</text>
+<rect x="423.1" y="287.0" width="79.0" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="298.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.54</text>
+<text x="200.0" y="319.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[128,128] <tspan font-style="italic">k</tspan> = 8 <tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">沿</tspan> axis 0</text>
+<rect x="437.8" y="309.0" width="64.3" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="320.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.60</text>
+<text x="200.0" y="341.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[128,128] <tspan font-style="italic">k</tspan> = 32 <tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">沿</tspan> axis 0</text>
+<rect x="413.2" y="331.0" width="88.9" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="342.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.50</text>
+<text x="200.0" y="363.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[256,128] <tspan font-style="italic">k</tspan> = 32 <tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">沿</tspan> axis 0</text>
+<rect x="380.8" y="353.0" width="121.3" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="364.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.38</text>
+<text x="20.0" y="384.0" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="bold"><tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">基本形状</tspan></text>
+<text x="200.0" y="403.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,128] <tspan font-style="italic">k</tspan> = 1</text>
+<rect x="502.1" y="393.0" width="30.7" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="538.7" y="404.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">1.27</text>
+<text x="200.0" y="425.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,128] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="478.3" y="415.0" width="23.8" height="14.0" rx="2" fill="#4a3aa7" stroke="none"/>
+<text x="508.1" y="426.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.83</text>
+<text x="200.0" y="447.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,128] <tspan font-style="italic">k</tspan> = 16</text>
+<rect x="401.1" y="437.0" width="101.0" height="14.0" rx="2" fill="#4a3aa7" stroke="none"/>
+<text x="508.1" y="448.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.45</text>
+<text x="200.0" y="469.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,128] <tspan font-style="italic">k</tspan> = 32</text>
+<rect x="323.7" y="459.0" width="178.4" height="14.0" rx="2" fill="#4a3aa7" stroke="none"/>
+<text x="508.1" y="470.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.25</text>
+<text x="200.0" y="491.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[8,128] <tspan font-style="italic">k</tspan> = 128</text>
+<rect x="234.6" y="481.0" width="267.5" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="492.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.12</text>
+<text x="20.0" y="512.0" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="bold"><tspan font-family="'Source Han Sans SC', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">行数</tspan></text>
+<text x="200.0" y="531.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[16,128] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="498.6" y="521.0" width="3.5" height="14.0" rx="2" fill="#1baf7a" stroke="none"/>
+<text x="508.1" y="532.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.97</text>
+<text x="200.0" y="553.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[32,128] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="496.4" y="543.0" width="5.7" height="14.0" rx="2" fill="#1baf7a" stroke="none"/>
+<text x="508.1" y="554.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.96</text>
+<text x="200.0" y="575.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[64,128] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="497.9" y="565.0" width="4.2" height="14.0" rx="2" fill="#1baf7a" stroke="none"/>
+<text x="508.1" y="576.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.97</text>
+<text x="200.0" y="597.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[96,128] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="479.3" y="587.0" width="22.8" height="14.0" rx="2" fill="#1baf7a" stroke="none"/>
+<text x="508.1" y="598.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.84</text>
+<text x="200.0" y="619.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[128,128] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="447.3" y="609.0" width="54.8" height="14.0" rx="2" fill="#1baf7a" stroke="none"/>
+<text x="508.1" y="620.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.65</text>
+<text x="200.0" y="641.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[256,128] <tspan font-style="italic">k</tspan> = 8</text>
+<rect x="467.6" y="631.0" width="34.5" height="14.0" rx="2" fill="#2a78d6" stroke="none"/>
+<text x="508.1" y="642.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.76</text>
+<text x="200.0" y="663.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">[16,128] <tspan font-style="italic">k</tspan> = 16</text>
+<rect x="441.0" y="653.0" width="61.1" height="14.0" rx="2" fill="#4a3aa7" stroke="none"/>
+<text x="508.1" y="664.0" font-size="11" text-anchor="start" fill="#0b0b0b" font-weight="normal">0.62</text>
+</svg>

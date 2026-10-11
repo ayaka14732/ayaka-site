@@ -33,6 +33,7 @@ math: |-
 1. [Arch Linux 连接 Pulse Secure VPN](archpulse/)
 1. [腾讯云 coscmd 通配符格式](cosignore/)
 1. [方言新闻的正确打开方式](dialect-news/)
+1. [TPU v4 上逐位正确且更快的 top-*k*](tpu-v4-top-k/)
 
 # 文章（語言類）
 
