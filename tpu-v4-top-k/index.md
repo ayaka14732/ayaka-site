@@ -15,6 +15,8 @@ description-meta: 在 TPU v4 的单个 TensorCore 上逐行求 top-k：Pallas �
 date-meta: 2026-10-11
 math: |-
   <meta property="og:image" content="https://ayaka.shn.hk/tpu-v4-top-k/cover.png"/>
+  <link rel="alternate" hreflang="zh-CN" href="https://ayaka.shn.hk/tpu-v4-top-k/"/>
+  <link rel="alternate" hreflang="en" href="https://ayaka.shn.hk/tpu-v4-top-k/en-US/"/>
   <meta name="dcterms.identifier" content="https://doi.org/10.5281/zenodo.23287738"/>
   <style>
   figure img { max-width: 100%; }
@@ -25,6 +27,8 @@ math: |-
   </style>
 ---
 
+> [English version](en-US/){lang=en hreflang=en}
+>
 > GitHub 链接：[ayaka14732/tpu-v4-top-k](https://github.com/ayaka14732/tpu-v4-top-k)
 >
 > 论文 PDF：<https://doi.org/10.5281/zenodo.23287738>

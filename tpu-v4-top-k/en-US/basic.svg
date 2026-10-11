@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" font-family="'Roboto', 'Helvetica Neue', 'Arial', sans-serif">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker></defs>
+<rect x="0" y="0" width="640" height="360" fill="#ffffff"/>
+<line x1="70.0" y1="300.0" x2="490.0" y2="300.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="304.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">100</text>
+<line x1="70.0" y1="246.1" x2="490.0" y2="246.1" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="250.1" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">300</text>
+<line x1="70.0" y1="187.0" x2="490.0" y2="187.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="191.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">1000</text>
+<line x1="70.0" y1="133.1" x2="490.0" y2="133.1" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="137.1" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">3000</text>
+<line x1="70.0" y1="74.0" x2="490.0" y2="74.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="78.0" font-size="12" text-anchor="end" fill="#52514e" font-weight="normal">10000</text>
+<line x1="70.0" y1="300.0" x2="70.0" y2="304.0" stroke="#52514e" stroke-width="1"/>
+<text x="70.0" y="318.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">1</text>
+<line x1="250.0" y1="300.0" x2="250.0" y2="304.0" stroke="#52514e" stroke-width="1"/>
+<text x="250.0" y="318.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">8</text>
+<line x1="310.0" y1="300.0" x2="310.0" y2="304.0" stroke="#52514e" stroke-width="1"/>
+<text x="310.0" y="318.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">16</text>
+<line x1="370.0" y1="300.0" x2="370.0" y2="304.0" stroke="#52514e" stroke-width="1"/>
+<text x="370.0" y="318.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">32</text>
+<line x1="490.0" y1="300.0" x2="490.0" y2="304.0" stroke="#52514e" stroke-width="1"/>
+<text x="490.0" y="318.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal">128</text>
+<line x1="70.0" y1="300.0" x2="490.0" y2="300.0" stroke="#52514e" stroke-width="1"/>
+<text x="62.0" y="30.0" font-size="12" text-anchor="start" fill="#52514e" font-weight="normal">Cycles (log scale)</text>
+<text x="280.0" y="338.0" font-size="12" text-anchor="middle" fill="#52514e" font-weight="normal"><tspan font-style="italic">k</tspan></text>
+<path d="M70.0,153.2 L250.0,140.8 L310.0,140.8 L370.0,140.8 L490.0,140.9" fill="none" stroke="#8f8e88" stroke-width="2" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<circle cx="70.0" cy="153.2" r="4" fill="#8f8e88" stroke="#ffffff" stroke-width="2"/>
+<circle cx="250.0" cy="140.8" r="4" fill="#8f8e88" stroke="#ffffff" stroke-width="2"/>
+<circle cx="310.0" cy="140.8" r="4" fill="#8f8e88" stroke="#ffffff" stroke-width="2"/>
+<circle cx="370.0" cy="140.8" r="4" fill="#8f8e88" stroke="#ffffff" stroke-width="2"/>
+<circle cx="490.0" cy="140.9" r="4" fill="#8f8e88" stroke="#ffffff" stroke-width="2"/>
+<text x="500.0" y="144.9" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="normal">Native XLA</text>
+<path d="M70.0,292.3 L250.0,205.6 L310.0,172.6 L370.0,139.1 L490.0,71.5" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="70.0" cy="292.3" r="4" fill="#eb6834" stroke="#ffffff" stroke-width="2"/>
+<circle cx="250.0" cy="205.6" r="4" fill="#eb6834" stroke="#ffffff" stroke-width="2"/>
+<circle cx="310.0" cy="172.6" r="4" fill="#eb6834" stroke="#ffffff" stroke-width="2"/>
+<circle cx="370.0" cy="139.1" r="4" fill="#eb6834" stroke="#ffffff" stroke-width="2"/>
+<circle cx="490.0" cy="71.5" r="4" fill="#eb6834" stroke="#ffffff" stroke-width="2"/>
+<text x="500.0" y="75.5" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="normal">Official Pallas</text>
+<path d="M70.0,280.4 L250.0,203.3 L310.0,196.2 L370.0,192.5 L490.0,175.0" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="70.0" cy="280.4" r="4" fill="#2a78d6" stroke="#ffffff" stroke-width="2"/>
+<circle cx="250.0" cy="203.3" r="4" fill="#2a78d6" stroke="#ffffff" stroke-width="2"/>
+<circle cx="310.0" cy="196.2" r="4" fill="#2a78d6" stroke="#ffffff" stroke-width="2"/>
+<circle cx="370.0" cy="192.5" r="4" fill="#2a78d6" stroke="#ffffff" stroke-width="2"/>
+<circle cx="490.0" cy="175.0" r="4" fill="#2a78d6" stroke="#ffffff" stroke-width="2"/>
+<text x="500.0" y="179.0" font-size="12" text-anchor="start" fill="#0b0b0b" font-weight="normal">Our dispatcher</text>
+</svg>
