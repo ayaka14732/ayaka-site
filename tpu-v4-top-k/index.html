@@ -5,7 +5,9 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="三日月綾香" />
+  <meta name="dcterms.date" content="2026-10-11" />
   <meta name="keywords" content="top-k, TPU, Pallas, JAX, XLA, 浮点全序, 败者树, 汇编器, 指令排程" />
+  <meta name="description" content="在 TPU v4 的单个 TensorCore 上逐行求 top-k：Pallas 的官方实现在含 -inf 或 NaN 的输入上会出错，本文按 IEEE 754 totalOrder 给出逐位正确的写法，在 25 个对照形状中的 24 个上快于官方 Pallas，并且全部快于原生 XLA。" />
   <title>TPU v4 上逐位正确且更快的 top-k</title>
   <style>
     code{white-space: pre-wrap;}
@@ -81,6 +83,8 @@
   </style>
   <link rel="stylesheet" href="/pandoc.css" />
   <link rel="stylesheet" href="/sans.css" />
+  <meta property="og:image" content="https://ayaka.shn.hk/tpu-v4-top-k/cover.png"/>
+  <meta name="dcterms.identifier" content="https://doi.org/10.5281/zenodo.23287738"/>
   <style>
   figure img { max-width: 100%; }
   table col { width: auto !important; }
@@ -92,7 +96,6 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
   <!-- Others -->
-  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
   <script>
     window.addEventListener('DOMContentLoaded', function() {
       var xs = document.getElementsByTagName('code');
@@ -107,6 +110,14 @@
     });
   </script>
   
+  <link rel="canonical" href="https://ayaka.shn.hk/tpu-v4-top-k/" />
+  <meta property="og:title" content="TPU v4 上逐位正确且更快的 top-k" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://ayaka.shn.hk/tpu-v4-top-k/" />
+  <meta property="og:site_name" content="綾香的 Blog" />
+  <meta property="og:description" content="在 TPU v4 的单个 TensorCore 上逐行求 top-k：Pallas 的官方实现在含 -inf 或 NaN 的输入上会出错，本文按 IEEE 754 totalOrder 给出逐位正确的写法，在 25 个对照形状中的 24 个上快于官方 Pallas，并且全部快于原生 XLA。" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "TPU v4 上逐位正确且更快的 top-k", "url": "https://ayaka.shn.hk/tpu-v4-top-k/", "inLanguage": "zh-CN", "author": {"@type": "Person", "name": "三日月綾香", "url": "https://ayaka.shn.hk/"}, "description": "在 TPU v4 的单个 TensorCore 上逐行求 top-k：Pallas 的官方实现在含 -inf 或 NaN 的输入上会出错，本文按 IEEE 754 totalOrder 给出逐位正确的写法，在 25 个对照形状中的 24 个上快于官方 Pallas，并且全部快于原生 XLA。", "image": "https://ayaka.shn.hk/tpu-v4-top-k/cover.png", "datePublished": "2026-10-11", "dateModified": "2026-10-11T16:22:03Z", "sameAs": "https://doi.org/10.5281/zenodo.23287738"}</script>
 </head>
 <body>
 <header id="title-block-header">
