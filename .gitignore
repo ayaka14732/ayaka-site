@@ -1,6 +1,7 @@
 .mypy_cache
 .vscode
 **/index.html
+/sitemap.xml
 
 # TeX files
 **/index.tex

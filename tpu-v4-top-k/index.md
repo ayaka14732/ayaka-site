@@ -11,7 +11,11 @@ keywords:
 - 败者树
 - 汇编器
 - 指令排程
+description-meta: 在 TPU v4 的单个 TensorCore 上逐行求 top-k：Pallas 的官方实现在含 -inf 或 NaN 的输入上会出错，本文按 IEEE 754 totalOrder 给出逐位正确的写法，在 25 个对照形状中的 24 个上快于官方 Pallas，并且全部快于原生 XLA。
+date-meta: 2026-10-11
 math: |-
+  <meta property="og:image" content="https://ayaka.shn.hk/tpu-v4-top-k/cover.png"/>
+  <meta name="dcterms.identifier" content="https://doi.org/10.5281/zenodo.23287738"/>
   <style>
   figure img { max-width: 100%; }
   table col { width: auto !important; }

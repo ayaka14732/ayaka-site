@@ -16,7 +16,6 @@ header-includes:
   - |
     ```{=html}
     <!-- Others -->
-    <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
     <script>
       window.addEventListener('DOMContentLoaded', function() {
         var xs = document.getElementsByTagName('code');

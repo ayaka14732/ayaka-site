@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # build.py reads the last commit date of each page
     - name: Set up Python
       uses: actions/setup-python@v2
     - name: Install pandoc
