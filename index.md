@@ -9,6 +9,7 @@ math: |-
   nav + p { padding-bottom: 0.2em; }
   body h1 { font-size: 1.17em; } /* the same as h3 */
   li > a, li > a:hover { border-bottom: none; }
+  li > time { color: #767676; font-size: 0.85em; margin-left: 0.5em; white-space: nowrap; }
   </style>
   <script>
   window.addEventListener('DOMContentLoaded', function() { var _h='6E;&#x2E;&#x68;&#x6B;';var _a='4;&#x30;&#x2E;&#x73;&#x68;&#x';var _n='ayaka&#x40;&#x30;&#x78;&#x3';var _e=_n+_a+_h;_a=document.createElement('span');_a.innerHTML=_e;document.getElementById('gategdinzijau').href='m'+'a'+'ilto'+':'+_a.innerText; /* Console log */ console.log('Welcome!'); });
@@ -19,32 +20,32 @@ math: |-
 
 # 文章 (CS)
 
-1. [记一次学习 Shell 的经历](learnshell/)
+1. [记一次学习 Shell 的经历](learnshell/) <time datetime="2018-08-29">2018-08-29</time>
 1. [直播服务器搭建记录](live/)
-1. [CCF 201403-3 命令行选项](ccf-201403-3/)
-1. [抓包登录大学教务系统](wlansniff/)
-1. [C++ 正则表达式速查手册](cppregex/)
-1. [HTML 设置 `lang` 属性的意义](langtag/)
+1. [CCF 201403-3 命令行选项](ccf-201403-3/) <time datetime="2019-03-10">2019-03-10</time>
+1. [C++ 正则表达式速查手册](cppregex/) <time datetime="2019-03-17">2019-03-17</time>
+1. [抓包登录大学教务系统](wlansniff/) <time datetime="2019-04-19">2019-04-19</time>
+1. [HTML 设置 `lang` 属性的意义](langtag/) <time datetime="2020-02-29">2020-02-29</time>
 1. [如何正确使用正则表达式匹配汉字](hanregex/zh-CN/)
-1. [正確實現簡轉繁字型](s2tfont/hant/)
-1. [SSH 连接 Google Colab](colab/)
-1. [Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件](openwrt/)
-1. [如何正确学习青年大学习](daxuexi/)
-1. [Arch Linux 连接 Pulse Secure VPN](archpulse/)
-1. [腾讯云 coscmd 通配符格式](cosignore/)
-1. [方言新闻的正确打开方式](dialect-news/)
-1. [TPU v4 上逐位正确且更快的 top-*k*](tpu-v4-top-k/)
+1. [正確實現簡轉繁字型](s2tfont/hant/) <time datetime="2020-07-31">2020-07-31</time>
+1. [SSH 连接 Google Colab](colab/) <time datetime="2020-09-17">2020-09-17</time>
+1. [Linux 下小米路由器 4A 百兆版刷入 OpenWrt 固件](openwrt/) <time datetime="2021-09-04">2021-09-04</time>
+1. [如何正确学习青年大学习](daxuexi/) <time datetime="2021-12-05">2021-12-05</time>
+1. [Arch Linux 连接 Pulse Secure VPN](archpulse/) <time datetime="2021-12-17">2021-12-17</time>
+1. [腾讯云 coscmd 通配符格式](cosignore/) <time datetime="2022-03-01">2022-03-01</time>
+1. [方言新闻的正确打开方式](dialect-news/) <time datetime="2022-08-20">2022-08-20</time>
+1. [TPU v4 上逐位正确且更快的 top-*k*](tpu-v4-top-k/) <time datetime="2026-10-11">2026-10-11</time>
 
 # 文章（語言類）
 
 1. [日语笔记](1041/)
 1. [我的個人思考用語簡介](v8/)（未定稿）
-1. [铃羽系统在汉语数制拓展表示中的应用](suzuha/)
-1. [漢字化的日文元素名稱是什麼樣子](kanji-periodic-table/)
-1. [論直音、反切與其他註音方式的優劣](pyanxvsdrik/)
-1. [粵語（廣州音）與中古音對應關係](teoi/)（未定稿）
-1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿）
-1. [入聲字情感分析](zipsengsi/)
+1. [铃羽系统在汉语数制拓展表示中的应用](suzuha/) <time datetime="2017-09-27">2017-09-27</time>
+1. [漢字化的日文元素名稱是什麼樣子](kanji-periodic-table/) <time datetime="2019-01-04">2019-01-04</time>
+1. [論直音、反切與其他註音方式的優劣](pyanxvsdrik/) <time datetime="2020-03-26">2020-03-26</time>
+1. [粵語（廣州音）與中古音對應關係](teoi/)（未定稿） <time datetime="2020-12-02">2020-12-02</time>
+1. [《分韻撮要》音系與中古音對應關係](fanwan/)（未定稿） <time datetime="2021-02-07">2021-02-07</time>
+1. [入聲字情感分析](zipsengsi/) <time datetime="2022-04-17">2022-04-17</time>
 
 :::{.hidden}
 # 知乎回答
