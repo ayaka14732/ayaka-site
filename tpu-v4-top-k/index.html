@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="三日月綾香" />
+  <meta name="keywords" content="top-k, TPU, Pallas, JAX, XLA, 浮点全序, 败者树, 汇编器, 指令排程" />
+  <title>TPU v4 上逐位正确且更快的 top-k</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="/pandoc.css" />
+  <link rel="stylesheet" href="/sans.css" />
+  <style>
+  figure img { max-width: 100%; }
+  table col { width: auto !important; }
+  a.uri { overflow-wrap: anywhere; }
+  .tbl > table { margin-bottom: 0; overflow: auto hidden; }
+  .tbl > p { font-size: 0.9em; margin: .6em 0 1.6em; }
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- Others -->
+  <meta property="og:image" content="https://avatars2.githubusercontent.com/u/68557794?s=400&u=343da7bebff676129e87341def71121ebffc4c9c&v=4"/>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var xs = document.getElementsByTagName('code');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      xs = document.getElementsByClassName('footnote-back');
+      for (var i = 0, len = xs.length; i < len; i++)
+        xs[i].lang = 'en-x-code';
+      document.querySelectorAll('div.sourceCode > pre').forEach(function(x) {
+        x.classList.add('numberSource');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">TPU v4 上逐位正确且更快的 top-<em>k</em></h1>
+<p class="author">三日月綾香</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#sec-1">1 引言</a>
+<ul>
+<li><a href="#sec-1-1">1.1 背景与动机</a></li>
+<li><a href="#sec-1-2">1.2 问题的由来</a></li>
+<li><a href="#sec-1-3">1.3 研究问题</a></li>
+<li><a href="#sec-1-4">1.4 贡献</a></li>
+<li><a href="#sec-1-5">1.5 文章结构</a></li>
+</ul></li>
+<li><a href="#sec-2">2 背景</a>
+<ul>
+<li><a href="#sec-2-1">2.1 TPU v4 的 TensorCore 与存储层次</a></li>
+<li><a href="#sec-2-2">2.2 三样资源与分析框架</a></li>
+<li><a href="#sec-2-3">2.3 两个基线各自怎样做</a></li>
+</ul></li>
+<li><a href="#sec-3">3 方法与实验设置</a>
+<ul>
+<li><a href="#sec-3-1">3.1 tpuasm：TPU 指令包的汇编器</a></li>
+<li><a href="#sec-3-2">3.2 指令的语义怎样确认</a></li>
+<li><a href="#sec-3-3">3.3 延迟怎样测得</a></li>
+<li><a href="#sec-3-4">3.4 计时边界：起点和终点都在 TC VMEM</a></li>
+<li><a href="#sec-3-5">3.5 两个基线与对照形状</a></li>
+<li><a href="#sec-3-6">3.6 正确性验证</a></li>
+<li><a href="#sec-3-7">3.7 范围与可复现性</a></li>
+</ul></li>
+<li><a href="#sec-4">4 正确性：错在哪里，修正要多少周期</a>
+<ul>
+<li><a href="#sec-4-1">4.1 已选的位置被重新选中</a></li>
+<li><a href="#sec-4-2">4.2 argmax 的并列与 NaN 规则随数据的摆放变化</a></li>
+<li><a href="#sec-4-3">4.3 完整位型的顺序</a></li>
+<li><a href="#sec-4-4">4.4 本文采用的正确性定义</a></li>
+<li><a href="#sec-4-5">4.5 三个实现的对照</a></li>
+<li><a href="#sec-4-6">4.6 冲突为什么躲不开</a></li>
+<li><a href="#sec-4-7">4.7 抬高：让冲突的值分时出现</a></li>
+<li><a href="#sec-4-8">4.8 把修正移出链</a></li>
+<li><a href="#sec-4-9">4.9 完整位型</a></li>
+<li><a href="#sec-4-10">4.10 小结</a></li>
+</ul></li>
+<li><a href="#sec-5">5 只用 Pallas 的加速</a>
+<ul>
+<li><a href="#sec-5-1">5.1 宽行：链上多了一次 XLU</a></li>
+<li><a href="#sec-5-2">5.2 纵向：不经过 XLU</a></li>
+<li><a href="#sec-5-3">5.3 大 <span class="math inline"><em>k</em></span>：消除串行依赖</a></li>
+<li><a href="#sec-5-4">5.4 多行：XLU 排不下</a></li>
+<li><a href="#sec-5-5">5.5 分派</a></li>
+<li><a href="#sec-5-6">5.6 小结</a></li>
+</ul></li>
+<li><a href="#sec-6">6 两种新算法</a>
+<ul>
+<li><a href="#sec-6-1">6.1 剩下的两个难点</a></li>
+<li><a href="#sec-6-2">6.2 折叠后数秩</a></li>
+<li><a href="#sec-6-3">6.3 整体转置：保留 <span class="math inline"><em>k</em></span> 轮，换掉每一轮走的路</a></li>
+<li><a href="#sec-6-4">6.4 败者树：每轮只重赛三场</a></li>
+<li><a href="#sec-6-5">6.5 结果</a></li>
+<li><a href="#sec-6-6">6.6 推广与边界</a></li>
+<li><a href="#sec-6-7">6.7 没有走通的路</a></li>
+</ul></li>
+<li><a href="#sec-7">7 回到编译器</a>
+<ul>
+<li><a href="#sec-7-1">7.1 占位改写</a></li>
+<li><a href="#sec-7-2">7.2 差距在排程，不在指令</a></li>
+<li><a href="#sec-7-3">7.3 进程内给 libtpu 打补丁</a></li>
+<li><a href="#sec-7-4">7.4 多个 TC VREG</a></li>
+<li><a href="#sec-7-5">7.5 败者树为什么还是手写的</a></li>
+</ul></li>
+<li><a href="#sec-8">8 评估汇总</a>
+<ul>
+<li><a href="#sec-8-1">8.1 25 个形状的总体结果</a></li>
+<li><a href="#sec-8-2">8.2 分析框架与实测</a></li>
+<li><a href="#sec-8-3">8.3 用作近似 top-<span class="math inline"><em>k</em></span></a></li>
+<li><a href="#sec-8-4">8.4 正确性验证</a></li>
+</ul></li>
+<li><a href="#sec-9">9 讨论与局限</a>
+<ul>
+<li><a href="#sec-9-1">9.1 可以推广的发现</a></li>
+<li><a href="#sec-9-2">9.2 给上游的建议</a></li>
+<li><a href="#sec-9-3">9.3 局限</a></li>
+</ul></li>
+<li><a href="#sec-10">10 相关工作</a></li>
+<li><a href="#sec-11">11 结论</a></li>
+<li><a href="#致谢">致谢</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#sec-a">附录 A 环境与复现</a></li>
+<li><a href="#sec-b">附录 B 改写和重排时要守的硬件与编译器规则</a></li>
+<li><a href="#sec-c">附录 C 补充材料</a>
+<ul>
+<li><a href="#sec-c-1">C.1 CMEM 与 HBM 的容量</a></li>
+<li><a href="#sec-c-2">C.2 原生 XLA 的一处编译器缺陷和它的修复</a></li>
+<li><a href="#sec-c-3">C.3 官方 Pallas 的错误按输入类别的分布</a></li>
+<li><a href="#sec-c-4">C.4 成对提取</a></li>
+<li><a href="#sec-c-5">C.5 行数从 8 到 128 的逐行结果</a></li>
+</ul></li>
+</ul>
+</nav>
+<blockquote>
+<p>GitHub 链接：<a href="https://github.com/ayaka14732/tpu-v4-top-k">ayaka14732/tpu-v4-top-k</a></p>
+<p>论文 PDF：<a href="https://doi.org/10.5281/zenodo.23287738" class="uri">https://doi.org/10.5281/zenodo.23287738</a></p>
+</blockquote>
+<blockquote>
+<p>摘要：在 TPU 的 Pallas kernel 中调用 <code>jax.lax.top_k</code> 时，Pallas 的官方实现在输入含 <code>-inf</code> 时会返回重复的下标，源码注释称修正的开销太高而有意保留。本文在 TPU v4 的单个 TensorCore 上检验这个取舍是否必要：对已经在 TC VMEM 中的 f32 数据逐行求 top-<span class="math inline"><em>k</em></span>，能否既逐位正确，又比官方 Pallas 快。本文以 IEEE 754 的 <code>totalOrder</code> 定义正确，发现由原生 XLA 编译的 <code>jax.lax.top_k</code> 符合这个定义，而官方 Pallas 的错误不止于重复下标：在 197592 条覆盖特殊值的输入中有 70706 条出错。逐位正确的写法在 <code>f32[8,128]</code> 取前 8 名上只多用 4.7% 的周期，修正并不昂贵。为了更快，本文把一种写法的耗时归结为跨通道运算单元 XLU 的往返延迟、XLU 的发射间隔和逐元素向量指令的条数，并据此为不同的形状选择写法：只用 Pallas 现有的 API，在 25 个形状中的 20 个上快于官方 Pallas，周期数的几何平均加速比为 1.67×，并且全部快于原生 XLA。在其余的形状上，官方 Pallas 每取出一名的耗时已经贴近一次 XLU 往返；本文为此提出折叠后数秩与整体转置后的败者树合并两种算法，使快于官方 Pallas 的形状增加到 24 个。这两种算法用到 Pallas 目前编译不出的指令，本文先把手写的汇编片段插入编译出的程序来实现它们。对其中的折叠后数秩，本文进一步在进程内给闭源的编译器 libtpu 打补丁，让它生成这些指令，再按实测的延迟重排指令。折叠后数秩由此写成一个约六十行的 Pallas 函数，编译出的程序快于手写的版本。Pallas 的近似 top-<span class="math inline"><em>k</em></span> 调用同一个官方实现，因而继承了这些错误；换成本文的写法之后，错误全部消除，在多数形状上也更快。为支撑这些指令级的实验，本文实现了 TPU 汇编器 tpuasm，所需的指令集信息全部来自公开发行的 libtpu。</p>
+</blockquote>
+<h1 id="sec-1">1 引言</h1>
+<h2 id="sec-1-1">1.1 背景与动机</h2>
+<p>top-<span class="math inline"><em>k</em></span> 是神经网络中的常见算子：MoE 的路由为每个 token 选出得分最高的几个专家，采样从 logits 中取出概率最大的若干个词，稀疏化方法用它挑出最重要的激活。本文关注其中的一类：在一个融合的 TPU kernel 里，对已经在 TC VMEM 中的一块数据逐行求 top-<span class="math inline"><em>k</em></span>，每行几百到几千个元素，一块有几行到几百行。例如 Qwen3 的 MoE 层从 128 个专家中选 8 个 [<a href="#ref-29">29</a>]，路由的矩阵乘与 top-<span class="math inline"><em>k</em></span> 写在同一个 kernel 里时，top-<span class="math inline"><em>k</em></span> 的输入就是一个 <span class="math inline">[<em>T</em>,128]</span> 的块，<span class="math inline"><em>k</em> = 8</span>。整个词表上的采样（每行十几万个元素）、<span class="math inline"><em>k</em></span> 达到数千的大规模选择不在本文的范围内：本文测量的行宽不超过 8192、<span class="math inline"><em>k</em></span> 不超过 128，更大规模上已有的研究见<a href="#sec-10">第 10 章</a>。</p>
+<p>在 TPU 上用 JAX 求 top-<span class="math inline"><em>k</em></span> 有两条现成的路。一条是直接调用 <code>jax.lax.top_k</code>，由 XLA 编译，本文称为<strong>原生 XLA</strong>。另一条是在 Pallas kernel 里调用同一个函数，由 JAX 仓库中的 <code>_top_k_impl</code> 展开成 <span class="math inline"><em>k</em></span> 轮 argmax 再交给 Mosaic 编译，本文称为<strong>官方 Pallas</strong>。后者让 top-<span class="math inline"><em>k</em></span> 可以与 kernel 里的其他计算共用已经在 TC VMEM 中的数据，是写融合 kernel 时 Pallas 唯一现成的写法。</p>
+<p>GPU 上的精确 top-<span class="math inline"><em>k</em></span> 已有系统的研究 [<a href="#ref-10">10</a>–<a href="#ref-14">14</a>, <a href="#ref-33">33</a>]；TPU 上的已有工作则都是近似算法 [<a href="#ref-17">17</a>, <a href="#ref-18">18</a>]，以召回率换取并行度。TPU 的指令集没有公开，已发表的资料只到体系结构层面 [<a href="#ref-26">26</a>–<a href="#ref-28">28</a>]。据我们所知，此前没有在指令层面分析 TPU 上精确 top-<span class="math inline"><em>k</em></span> 的工作（<a href="#sec-10">第 10 章</a>）。</p>
+<h2 id="sec-1-2">1.2 问题的由来</h2>
+<p>官方 Pallas 的实现开头有这样一段注释 [<a href="#ref-1">1</a>]：</p>
+<blockquote>
+<p>Note: This iterative argmax implementation assumes the input has at least <span class="math inline"><em>k</em></span> values distinct from <code>-inf</code>. If the input contains fewer than <span class="math inline"><em>k</em></span> values distinct from <code>-inf</code>, all remaining elements will be tied at <code>-inf</code> after masking, which may cause repeated indices in the output. We keep this behavior to avoid adding expensive defensive masking logic.</p>
+</blockquote>
+<p>也就是说，这个实现在一类输入上会返回重复的下标，作者知道这一点，并且为了性能有意保留。这类输入并不罕见：<code>-inf</code> 是掩码 logits 的标准写法，一行里有效候选不足 <span class="math inline"><em>k</em></span> 个时就会触发。原生 XLA 没有这个问题。</p>
+<h2 id="sec-1-3">1.3 研究问题</h2>
+<p>这段注释隐含一个判断：正确与快不可兼得。本文检验这个判断，分三个问题回答。</p>
+<ul>
+<li><strong>RQ1 正确性</strong>：“完全正确”具体指什么？官方 Pallas 在哪些输入上出错？只做修正、不追求更快，要多花多少周期，“修正昂贵”的前提成立吗？（<a href="#sec-4">第 4 章</a>）</li>
+<li><strong>RQ2 速度</strong>：在保持逐位正确的前提下，哪些情形可以比官方 Pallas 和原生 XLA 都快，各自受什么限制？官方的写法已经贴近硬件延迟的情形，即 <code>f32[8,128]</code> 取前 8 名和行数居中、<span class="math inline"><em>k</em></span> 较小的情形，还能不能更快？（第 <a href="#sec-5">5</a>、<a href="#sec-6">6</a> 章）</li>
+<li><strong>RQ3 编译器</strong>：如果加速依赖 Pallas 编译不出的指令，能不能不手写整段程序，仍由编译器负责形状、寄存器和排程？缺的是编译器的哪几层？（<a href="#sec-7">第 7 章</a>）</li>
+</ul>
+<h2 id="sec-1-4">1.4 贡献</h2>
+<p>本文用到的基本构件大多是已有的：正确性的定义就是 IEEE 754 的 <code>totalOrder</code> [<a href="#ref-30">30</a>]，把浮点位型变成可比整数的条件异或是基数排序中的常用技巧 [<a href="#ref-31">31</a>]，比较网络 [<a href="#ref-4">4</a>]、枚举排序与败者树 [<a href="#ref-32">32</a>] 都是经典算法。本文的贡献在于找出它们在 TPU 上各自受什么约束、怎样组合，以及让编译器生成所需指令的路径。</p>
+<ul>
+<li><strong>正确性的定义与检查。</strong> 以 <code>totalOrder</code> 为定义，并在标准留给实现决定的 NaN 之间按位型排序，这与原生 XLA 和 CPU 的结果逐位一致。按这个定义，官方实现的错误不止于重复下标：它还会返回与下标不配对的值和越界的下标，在一部分数据摆放下丢失 NaN，并且不保持位型的顺序。在 197592 条覆盖特殊值的输入上，官方实现在 70706 条上出错，本文的实现与原生 XLA 均无错误（<a href="#sec-4">第 4 章</a>）。</li>
+<li><strong>修正的开销。</strong> XLU 的归约只接受 f32，所以整数键不能直接送进去；本文按符号把键分成两段、各自编码成正常的 f32，在同一条链上分时处理。只消除重复下标几乎不增加耗时；做到逐位正确，基本形状只慢 4.7%。“修正昂贵”的前提不成立（<a href="#sec-4">第 4 章</a>）。</li>
+<li><strong>按瓶颈的加速。</strong> 以 XLU 的往返延迟、XLU 的发射间隔和向量 ALU 的指令条数三者为分析框架，给出宽行、纵向、大 <span class="math inline"><em>k</em></span>、多行等情形的写法和一个通用分派。只用 Pallas 现有的 API，25 个对照形状中已有 20 个快于官方实现，全部快于原生 XLA（<a href="#sec-5">第 5 章</a>）。</li>
+<li><strong>两种新算法。</strong> 折叠后数秩用分段转置把一行的元素换到子通道方向，把数秩所需的跨通道运算从 127 次旋转减到 15 次；整体转置后的败者树合并保留 <span class="math inline"><em>k</em></span> 轮的依赖，但让每一轮只经过通道之内的整数比较和按索引读。两者都用到编译器目前不生成的分段转置与按索引读写指令。算上它们，除取前 1 名外的 24 个形状快于官方实现（<a href="#sec-6">第 6 章</a>）。</li>
+<li><strong>用于近似 top-<span class="math inline"><em>k</em></span>。</strong> Pallas 的 <code>jax.lax.approx_max_k</code> 先分桶，再对候选调用同一个 top-<span class="math inline"><em>k</em></span>，它的第一阶段同样会丢失 NaN。把本文的写法放进它的两个阶段，2752 条输入上的错误全部消除，5 个计时形状中的 4 个比官方快 33% 至 53%（<a href="#sec-8-3">8.3 节</a>）。</li>
+<li><strong>回到编译器的路径。</strong> 对折叠后数秩，逐层找出 Mosaic 编译链路中缺的入口，在进程内的 libtpu 上补齐，并改正排程器的延迟表和依赖关系，四条指令全部由编译流程生成；再在编译器排程之后按实测延迟重排，编译生成的程序快于手写的版本（<a href="#sec-7">第 7 章</a>）。败者树的合并目前仍是手写的片段（<a href="#sec-7-5">7.5 节</a>）。</li>
+<li><strong>工具与方法。</strong> TPU 指令包的汇编器 tpuasm，所需的指令集信息全部来自公开发行的 libtpu；测定指令语义与延迟的真机实验方法；把原生 XLA 纳入同一个 TC VMEM 计时边界的方法（<a href="#sec-3">第 3 章</a>）。</li>
+</ul>
+<h2 id="sec-1-5">1.5 文章结构</h2>
+<p><a href="#sec-2">第 2 章</a>介绍 TPU v4 的 TensorCore、分析框架和两个基线的做法。<a href="#sec-3">第 3 章</a>说明方法与实验设置：tpuasm，指令语义与延迟的测定，计时边界，对照形状，正确性验证，以及范围与可复现性。<a href="#sec-4">第 4 章</a>回答 RQ1；<a href="#sec-5">第 5 章</a>给出只用 Pallas 现有 API 的加速，<a href="#sec-6">第 6 章</a>给出两种新算法，合起来回答 RQ2；<a href="#sec-7">第 7 章</a>回答 RQ3。<a href="#sec-8">第 8 章</a>汇总 25 个形状的结果、分析框架与实测的对照、在近似 top-<span class="math inline"><em>k</em></span> 中的应用和正确性验证，<a href="#sec-9">第 9 章</a>讨论可以推广的发现、给上游的建议和局限，<a href="#sec-10">第 10 章</a>是相关工作，<a href="#sec-11">第 11 章</a>总结。</p>
+<h1 id="sec-2">2 背景</h1>
+<h2 id="sec-2-1">2.1 TPU v4 的 TensorCore 与存储层次</h2>
+<p>一颗 TPU v4 芯片有两个 TensorCore（下文简称 TC），这两个 TC 合称 Megacore。每个 TC 有自己的标量单元、向量单元、4 个做矩阵乘的 MXU，以及做跨通道运算的 XLU [<a href="#ref-26">26</a>, <a href="#ref-27">27</a>]。</p>
+<p>数据从远到近经过四层存储，见<a href="#tbl-1">表 1</a>。HBM 和 CMEM 是整颗芯片的一块存储，两个 TC 都能访问全部地址。HBM 与 CMEM 的容量是实测的，测法见<a href="#sec-c-1">附录 C.1</a>；TC VMEM 和 SMEM 的容量取 <code>pltpu.get_tpu_info()</code> 报告的值。</p>
+<div id="tbl-1" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>存储</th>
+<th>归属</th>
+<th>容量</th>
+<th>怎样访问</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HBM</td>
+<td>同一颗芯片的两个 TC 共享</td>
+<td>32 GiB</td>
+<td>只能用 DMA 搬入搬出</td>
+</tr>
+<tr class="even">
+<td>CMEM</td>
+<td>同一颗芯片的两个 TC 共享</td>
+<td>128 MiB</td>
+<td>用 DMA；或用 <code>cld</code> 读进队列 <code>crf</code>，再用 <code>vpop</code> 取回 TC VREG</td>
+</tr>
+<tr class="odd">
+<td>TC VMEM</td>
+<td>每个 TC 私有</td>
+<td>16 MiB</td>
+<td>向量单元用 <code>vld</code>、<code>vst</code> 读写</td>
+</tr>
+<tr class="even">
+<td>TC VREG</td>
+<td>每个 TC 私有</td>
+<td>32 个，每个 4 KiB</td>
+<td>向量指令的操作数和结果</td>
+</tr>
+</tbody>
+</table>
+<p>表 1：TPU v4 一个 TC 能用到的存储。</p>
+</div>
+<p>程序的参数和结果默认在 HBM，XLA 常把程序中间的数组放在 CMEM。Pallas kernel 可以声明一块数组在 TC VMEM，由 kernel 自己用 DMA 把数据搬进来。本文只关心数据已经在 TC VMEM 之后的计算（<a href="#sec-3-5">3.5 节</a>）。此外每个 TC 有 1 MiB 的标量存储器 SMEM，由标量单元读写，<a href="#sec-3-3">3.3 节</a>的周期读数就暂存在这里。</p>
+<p><strong>子通道与通道。</strong> 一个 TC VREG 是 <span class="math inline">8 × 128</span> 个 32 位的字。8 行称为子通道（sublane），128 列称为通道（lane）。逐元素的向量指令在全部 <span class="math inline">8 × 128</span> 个位置上同时做同一件事，一个位置上的两个操作数来自两个寄存器的同一个子通道、同一个通道；要让不同通道或不同子通道上的元素相遇，必须专门把数据挪过去，<a href="#sec-2-2">2.2 节</a>讨论这件事的开销。TC VMEM 也按同样的形状寻址：一个 tile 是 8 行 × 128 个字，一次 <code>vld</code> 或 <code>vst</code> 读写一个 tile，正好一个 TC VREG。除了 TC VREG，还有 8 个掩码寄存器 <code>vm0</code> 至 <code>vm7</code>，每个是 <span class="math inline">8 × 128</span> 位，存放比较的结果，也用于带掩码的写；以及 2 个索引地址寄存器 IAR，按索引读写时给每个元素提供各自的行偏移（<a href="#sec-3-2">3.2 节</a>）。</p>
+<p><strong>数组怎样放进 TC VREG。</strong> 一个 <code>f32[8,128]</code> 的数组正好放进一个 TC VREG：第 <span class="math inline"><em>r</em></span> 行占第 <span class="math inline"><em>r</em></span> 个子通道，第 <span class="math inline"><em>c</em></span> 列占第 <span class="math inline"><em>c</em></span> 个通道。行宽超过 128 时，一行跨多个 TC VREG，每 128 个通道称为一个 lane tile；行数超过 8 时，每 8 行一个 TC VREG。这是 XLA 的一种布局（layout），在 HLO 里写作 <code>{1,0:T(8,128)}</code>（<a href="#sec-3-4">3.4 节</a>），Pallas kernel 在 TC VMEM 中的二维 f32 数组采用的就是它。所以沿最后一维取 top-<span class="math inline"><em>k</em></span> 时，要比较的元素在同一个子通道的不同通道上；沿第一维取时，在同一个通道的不同子通道上。</p>
+<p><strong>指令包。</strong> TC 执行的是 VLIW 指令包（bundle）：一个 bundle 里有若干条指令，各占一个固定的槽，同时发射。标量运算、向量运算、TC VMEM 的读写、向 XLU 等单元的提交与取回各有自己的槽。后文的清单在每条指令前写出它占的槽，例如 <code>{ va0: vadd.8x128.s32 v1, 1, v1 ; vld: vld.8x128 v2, [vmem:0x8] }</code> 是一个 bundle，一条加法占向量 ALU 的 <code>va0</code> 槽，一条读占 <code>vld</code> 槽，两条同时发射。向量一侧按 bundle 的顺序发射：一个 bundle 要用的结果还没准备好，它和后面的 bundle 都要等（<a href="#sec-3-3">3.3 节</a>）。</p>
+<h2 id="sec-2-2">2.2 三样资源与分析框架</h2>
+<p>top-<span class="math inline"><em>k</em></span> 要在一行之内比较不同位置的元素，硬件上有两类做法，开销的性质完全不同。</p>
+<p>跨通道的运算只能由 XLU 完成。XLU 是提交-取回式的单元：把一个 TC VREG 送进去，过一段时间从队列里取回结果（<a href="#fig-1">图 1</a>）。归约（<code>vmax.xlane</code>、<code>vmax.index.xlane</code>）从提交到可以取回是 79 个周期，循环移位（<code>vrot</code>）是 69 个周期；同一个队列上相邻两次提交至少隔 8 个周期，每个 TC 有两个队列。归约只接受 f32。</p>
+<p>逐元素的运算由向量 ALU 完成：两个 TC VREG 对应位置的比较、选择、加减，结果下一个周期可用，每个周期可以发射两条，并且有整数版本。沿子通道方向的归约、合并多个 lane tile，都由这类指令拼成，不经过 XLU。</p>
+<figure>
+<img src="xlu.svg" id="fig-1" alt="图 1：一个 TC 中与 top-k 有关的两类运算。逐元素的指令在两个 TC VREG 的同一位置之间进行，结果下一个周期可用；跨通道的运算要把整个 TC VREG 提交给 XLU，79 个周期之后才能从队列取回，同一个队列每 8 个周期接受一次提交。" /><figcaption aria-hidden="true">图 1：一个 TC 中与 top-<span class="math inline"><em>k</em></span> 有关的两类运算。逐元素的指令在两个 TC VREG 的同一位置之间进行，结果下一个周期可用；跨通道的运算要把整个 TC VREG 提交给 XLU，79 个周期之后才能从队列取回，同一个队列每 8 个周期接受一次提交。</figcaption>
+</figure>
+<p>这些数字都是本文实测的，测法见 <a href="#sec-3-3">3.3 节</a>。由此得到一个简单的分析框架。一段 top-<span class="math inline"><em>k</em></span> 的时间由三者之一决定：XLU 运算前后依赖时，是依赖链的长度乘 79 个周期；XLU 运算很多而互不依赖时，是运算的条数乘发射间隔；完全不经过 XLU 时，是向量 ALU 的指令条数。后文每一种写法快或慢的原因，都归到这三类中的一类。它只用来判断瓶颈在哪一类，不预测精确的周期数；它给出的下限与实测相差多少，见 <a href="#sec-8-2">8.2 节</a>。</p>
+<h2 id="sec-2-3">2.3 两个基线各自怎样做</h2>
+<p>原生 XLA 对 <span class="math inline"><em>k</em> = 1</span> 调用一个通用的 top-<span class="math inline"><em>k</em></span> custom call，对其他的 <span class="math inline"><em>k</em></span> 多数时候把整行连同下标一起排序，再取前 <span class="math inline"><em>k</em></span> 个。它的周期数因此几乎不随 <span class="math inline"><em>k</em></span> 变化，随行数和行宽增长。</p>
+<p>官方 Pallas 循环 <span class="math inline"><em>k</em></span> 轮，每轮取一次最大值和它的下标，再把选中的位置改成 <code>-inf</code>：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>curr <span class="op">=</span> operand</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> lax.argmax(curr, axis<span class="op">=</span>axis, index_dtype<span class="op">=</span>index_dtype)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    val <span class="op">=</span> jnp.<span class="bu">max</span>(curr, axis<span class="op">=</span>axis)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> iota <span class="op">==</span> jnp.expand_dims(idx, axis)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    curr <span class="op">=</span> jnp.where(mask, min_val, curr)   <span class="co"># min_val 是 -inf</span></span></code></pre></div>
+<p>按 <a href="#sec-2-2">2.2 节</a>的框架看，每轮的 argmax 依赖上一轮的 <code>curr</code>，<span class="math inline"><em>k</em></span> 次 <code>vmax.index.xlane</code> 串成一条长度为 <span class="math inline"><em>k</em></span> 的链，每轮八十多个周期，其中 79 个在等 XLU。它的周期数与 <span class="math inline"><em>k</em></span> 成正比。</p>
+<h1 id="sec-3">3 方法与实验设置</h1>
+<h2 id="sec-3-1">3.1 tpuasm：TPU 指令包的汇编器</h2>
+<p>本文的大部分实验都要回答同一类问题：编译器到底生成了哪些指令，每条排在哪个 bundle 的哪个槽；把其中几条换掉、挪动或者插进几条之后，程序是不是更快。现成的手段做不到这件事。编译器可以把最终的 LLO 打印成文本（final bundles），但那是比机器程序高一层的表示：里面有不占指令槽的伪指令，不写物理槽，有些字段不同的机器指令在文本上无法区分，而且不能改了之后再汇编回去。想做单变量的对照实验，只能改更上层的源码，而那又会让编译器把别的指令也重排一遍。</p>
+<p>为此本文写了 tpuasm [<a href="#ref-5">5</a>]，一个直接工作在机器程序上的汇编器和反汇编器。它做四件事。</p>
+<ul>
+<li><strong>反汇编。</strong> 从编译出的 executable 里取出程序映像，解码成带物理槽的清单：一行一条指令，花括号是一个 bundle，<code>va0:</code>、<code>vx1:</code> 是它占的槽。只列实际占槽的指令。清单的注释里带着每条指令来自 Pallas 源码的哪一行，这是在编译期间从编译器里捕获的。</li>
+<li><strong>汇编。</strong> 清单可以原样汇编回去，逐字节相同；也可以改了再汇编，由它求解一个 bundle 里各条指令的槽位、立即数和读写端口怎样分配，分配不出来就报错。<a href="#sec-7-2">7.2 节</a>的重排工具就是靠反复询问这个求解器来决定一个 bundle 还能装什么。</li>
+<li><strong>改写 executable。</strong> 在指定的 bundle 之前插入一段清单，或者删掉若干个 bundle，分支目标和元数据随之重定位，得到的 executable 可以直接装载运行。本文的手写片段、占位改写和重排都是这样进到设备上的。</li>
+<li><strong>在真机上计时和取数。</strong> 两个建立在上面三样之上的工具：把一段手写的清单插进一个载体 kernel，读两端的周期计数器，或者把片段写进 TC VMEM 的结果取回主机（<a href="#sec-3-2">3.2</a>、<a href="#sec-3-3">3.3</a> 节）；在任意已编译的程序的指定位置插入读数，程序运行之后再取回（<a href="#sec-3-4">3.4 节</a>）。</li>
+</ul>
+<p><strong>指令的名字、操作数和编码从哪里来。</strong> TPU 的指令集没有公开的文档，读者有理由问 tpuasm 是怎么知道这些指令的。答案是：全部来自公开发行的 libtpu，没有用到任何未公开的资料。libtpu 是随 JAX 的 TPU 版本从 PyPI 安装的二进制包 [<a href="#ref-6">6</a>]，编译器和运行时都在里面。它内嵌了一份完整的 ISA 描述（protobuf descriptor），逐个物理槽列出每一种指令形式和它的字段；它也带着把指令编码成机器字、把机器字解码回指令的函数。tpuasm 的指令表从这份 descriptor 生成，TPU v4 TensorCore 一共 582 种槽内形式，已登记 573 种；程序映像的最终字节由 libtpu 自己的编码器生成，读取时由它自己的解码器解释。所以 tpuasm 接受的每一条指令都是这个 libtpu 能够编码的指令，反汇编出的清单与编译器实际生成的程序逐字节对应。0.0.49 版的 libtpu 可以查找到 C++ 一侧的类名和函数名（例如 <code>LloRegionBuilder::Vxpose</code>、<code>LatencyTablePufferfish</code>），<a href="#sec-7">第 7 章</a>定位编译器的各层时用的就是它。</p>
+<p><strong>部分指令在编译器内部已有实际用例。</strong> 第 <a href="#sec-6">6</a>、<a href="#sec-7">7</a> 章用到的 <code>vsxpose</code>、<code>vsetiar</code>、<code>vld.iar</code>、<code>vst.iar</code>、<code>vld.sshfl</code> 都在这张指令表里。其中一部分在编译器内部还有实际用例：XLA 的程序开头包含 <code>vsetiar</code> 指令；TPU dialect 中的 <code>tpu.gather</code> 在 TPU v4 上就编译成 <code>vst</code> 加 <code>vld.sshfl</code>（<a href="#sec-7-3">7.3 节</a>）。Pallas 编译不出它们，只是因为从 Pallas 到这些指令之间缺了几层入口。</p>
+<h2 id="sec-3-2">3.2 指令的语义怎样确认</h2>
+<p>第 <a href="#sec-6">6</a>、<a href="#sec-7">7</a> 章用到几条 Pallas 编译不出的指令。指令表只给出名字和操作数，不给语义；语义同样不靠任何内部资料，任何一个有 TPU v4 的人都能重复。</p>
+<p><strong>指令的语义由真机实验确定。</strong> 名字只是线索。做法是把一条指令插进一个只做搬运的载体 kernel，用随机输入在设备上执行，把结果取回主机，与用 NumPy 写的模型逐元素比较；模型不对就改模型，直到全部相同。<a href="#tbl-2">表 2</a> 是四条指令最后的模型，每条用 4 组随机的 <code>u32[8,128]</code> 输入核对，4096 个元素全部相同（<code>semantics.py</code>，输出在 <code>results/semantics.txt</code>）。</p>
+<div id="tbl-2" class="tbl">
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>指令</th>
+<th>实验确认的语义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>vsxpose</code>，宽度 8</td>
+<td>一个 TC VREG 内 16 个 <span class="math inline">8 × 8</span> 的小块各自转置：<span class="math inline"><em>y</em>[<em>s</em>,8<em>g</em>+<em>r</em>] = <em>x</em>[<em>r</em>,8<em>g</em>+<em>s</em>]</span></td>
+</tr>
+<tr class="even">
+<td><code>vld.sshfl</code>，模式 <span class="math inline"><em>P</em></span></td>
+<td>读一个 tile，第 <span class="math inline"><em>s</em></span> 个子通道取 <span class="math inline"><em>P</em></span> 的第 <span class="math inline"><em>s</em></span> 个十六进制位指定的那一行</td>
+</tr>
+<tr class="odd">
+<td><code>vsetiar.raw</code> 加 <code>vld.iar</code></td>
+<td>每个元素按自己的行偏移读：<span class="math inline"><em>y</em>[<em>s</em>,<em>l</em>] = <em>M</em>[<em>A</em>+<em>s</em>+<em>o</em><em>f</em><em>f</em><em>s</em><em>e</em><em>t</em>[<em>s</em>,<em>l</em>],<em>l</em>]</span></td>
+</tr>
+<tr class="even">
+<td><code>vsetiar.raw</code> 加 <code>vst.iar</code></td>
+<td>每个元素按自己的行偏移写：<span class="math inline"><em>M</em>[<em>A</em>+<em>s</em>+<em>o</em><em>f</em><em>f</em><em>s</em><em>e</em><em>t</em>[<em>s</em>,<em>l</em>],<em>l</em>] = <em>x</em>[<em>s</em>,<em>l</em>]</span></td>
+</tr>
+</tbody>
+</table>
+<p>表 2：本文用到而 Pallas 编译不出的指令，及其由实验确认的语义。<span class="math inline"><em>M</em></span> 是 TC VMEM，<span class="math inline"><em>A</em></span> 是指令给出的基址，<span class="math inline"><em>s</em></span> 是子通道号，<span class="math inline"><em>l</em></span> 是通道号。</p>
+</div>
+<p>指令的限制同样靠实验得到。例如 <code>vst.iar</code> 的同一列里两个元素写到同一行时 TensorCore 直接停机；带掩码的版本什么组合会停机，是逐组试出来的（<a href="#sec-b">附录 B</a>）。这类实验的风险只是一次停机，重新装载程序即可。</p>
+<h2 id="sec-3-3">3.3 延迟怎样测得</h2>
+<p><a href="#sec-2-2">2.2 节</a>的延迟和后文用到的各种等待，都用设备上的周期计数器 LCC 测得。LCC 可以用标量指令 <code>srdreg.lcclo</code>、<code>srdreg.lcchi</code> 读出。测法是在载体 kernel 中插入一段手写的片段：读一次计数器，执行被测的指令，再读一次。向量指令严格按序发射；一条指令要用的结果还没好时（取回 XLU 的结果、读刚写过的 tile），硬件把它挡住，后面的指令跟着等。所以在读数之前放一条 <code>sfence</code> 等向量指令全部发射完，两次读数之差就包含了这段等待。空片段的读数是 13 个周期，这是读数自身的固定开销。</p>
+<p>例如，“提交一次归约、取回”的读数是 92，减去 13 得到提交到可以取回的 79 个周期；同一个队列上连着提交 2 次、8 次再取回，读数是 100 和 148，每多一次多 8 个周期，这就是相邻两次提交的间隔；16 次分到两个队列上仍是 148，说明两个队列互不妨碍。<a href="#tbl-3">表 3</a> 是全部结果（<code>latency.py</code>，输出在 <code>results/latency.txt</code>）。每个读数重复 8 次，完全相同。</p>
+<div id="tbl-3" class="tbl">
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 40%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>被测的片段</th>
+<th style="text-align: right;">读数</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>空</td>
+<td style="text-align: right;">13</td>
+<td>读数的固定开销</td>
+</tr>
+<tr class="even">
+<td>16 条前后依赖的 <code>vadd</code></td>
+<td style="text-align: right;">29</td>
+<td>逐元素运算的结果下一个周期可用</td>
+</tr>
+<tr class="odd">
+<td>16 条前后依赖的 <code>vrot.slane.down</code></td>
+<td style="text-align: right;">43</td>
+<td>沿子通道旋转的结果要两个周期</td>
+</tr>
+<tr class="even">
+<td><code>vmax.xlane</code>、<code>vmax.index.xlane</code>、<code>vadd.xlane</code>，各提交一次再取回</td>
+<td style="text-align: right;">92</td>
+<td>归约从提交到取回 79 个周期</td>
+</tr>
+<tr class="odd">
+<td><code>vmax.xlane</code> 在一个队列上提交 2 次、8 次</td>
+<td style="text-align: right;">100、148</td>
+<td>同一个队列相邻两次提交隔 8 个周期</td>
+</tr>
+<tr class="even">
+<td><code>vmax.xlane</code> 在两个队列上各提交 8 次</td>
+<td style="text-align: right;">148</td>
+<td>两个队列互不妨碍</td>
+</tr>
+<tr class="odd">
+<td><code>vrot</code> 提交一次再取回</td>
+<td style="text-align: right;">82</td>
+<td>旋转从提交到取回 69 个周期</td>
+</tr>
+<tr class="even">
+<td><code>vrot</code> 8 次，XLU 编号 0 与 2 交替；0 与 1 交替</td>
+<td style="text-align: right;">138；107</td>
+<td>指令里的四个 XLU 编号只对应两个队列，由编号的最低位决定</td>
+</tr>
+<tr class="odd">
+<td><code>vsxpose</code> 宽度 8，提交一次再取回</td>
+<td style="text-align: right;">139</td>
+<td>分段转置从提交到取回 126 个周期</td>
+</tr>
+<tr class="even">
+<td><code>vxpose</code> 宽度 128，提交一次，取回第 1 个、全部 16 个结果</td>
+<td style="text-align: right;">139、264</td>
+<td>整体转置的第一个结果与分段转置同时出来，之后每 8 个周期一个 TC VREG</td>
+</tr>
+<tr class="odd">
+<td><code>vsxpose</code> 之后在同一个队列上做 4 次 <code>vrot</code>；换到另一个队列</td>
+<td style="text-align: right;">330；233</td>
+<td>转置的结果取回之后，它的队列还要被占用约 97 个周期，即提交后约 223 个周期</td>
+</tr>
+<tr class="even">
+<td>同一个队列上连着两次、四次 <code>vsxpose</code></td>
+<td style="text-align: right;">267、523</td>
+<td>每多一次多 128 个周期：前一次的结果出来，下一次才开始</td>
+</tr>
+<tr class="odd">
+<td>8 次（写 tile <span class="math inline"><em>A</em></span>，读 tile <span class="math inline"><em>A</em></span>）；8 次（写 tile <span class="math inline"><em>A</em></span>，读 tile <span class="math inline"><em>B</em></span>）</td>
+<td style="text-align: right;">77；29</td>
+<td>写一个 tile 之后读它，每对 8 个周期；读别的 tile 不用等</td>
+</tr>
+<tr class="even">
+<td>8 次（<code>vsetiar</code>，<code>vld.iar</code>）</td>
+<td style="text-align: right;">60</td>
+<td>装入 IAR 之后按索引读，每对约 6 个周期</td>
+</tr>
+<tr class="odd">
+<td>8 次（写 tile <span class="math inline"><em>B</em></span>，<code>vld.iar</code> 读 tile <span class="math inline"><em>A</em></span>）</td>
+<td style="text-align: right;">61</td>
+<td>任何一次写内存之后的按索引读都要等，不论写的是哪个 tile</td>
+</tr>
+</tbody>
+</table>
+<p>表 3：延迟的实测。读数包含 13 个周期的固定开销。</p>
+</div>
+<p>这些数还有一个独立的旁证：编译器自己有一张延迟表。libtpu 的排程器向 <code>LatencyTablePufferfish</code> 询问两条指令之间至少要隔几个周期；把这个虚函数接到一个记录询问和回答的钩子上（<code>latency_probe.py</code>，输出在 <code>results/latency-probe.txt</code>），编译 top-<span class="math inline"><em>k</em></span> 时它的回答是：归约提交到取回 79，旋转和按下标重排提交到取回 69，同一个 XLU 上相邻两次提交 8。与<a href="#tbl-3">表 3</a> 的前半部分一致。<a href="#tbl-3">表 3</a> 中与转置和 IAR 有关的等待，编译器的表里要么没有，要么偏小（<a href="#sec-7-3">7.3 节</a>），那是本文靠实测补上的部分。</p>
+<p>对一整段程序，同样的办法可以给出每个 bundle 实际发射的时刻：在同一个 executable 里只把第二次读数的位置逐个 bundle 往后挪（<code>issue_profile.py</code>）。<a href="#sec-7">第 7 章</a>用它校准排程用的时序模型，“任何一次写内存之后的按索引读都要等”这条规则就是这样发现的：实测与模型的差只在含 <code>vld.iar</code> 的 bundle 上跳变。</p>
+<p><strong>周期与时间。</strong> LCC 的频率以主机的 <code>CLOCK_MONOTONIC</code> 为参照测得（<code>clock_rate.py</code>，输出在 <code>results/clock-rate.txt</code>）。LCC 在两次运行之间也持续计数，所以可以把许多次运行串成一条时间轴：一个短 kernel 在约 20 秒内运行 200 次，每次在 kernel 两端读 LCC，主机在每次调用前后各读一次时钟。第一次读数与最后一次读数的真实时刻都夹在主机读数之间，整段 LCC 差除以主机区间的上下界，先后两次测量都得到 1049.989 至 1050.010 MHz 的包络，与 TPU v4 公开的 1050 MHz 一致 [<a href="#ref-27">27</a>]。所以一个周期约 0.95 ns，后文的 100 个周期约合 95 ns。全文的结果都以周期数给出，需要时按此换算。</p>
+<h2 id="sec-3-4">3.4 计时边界：起点和终点都在 TC VMEM</h2>
+<p>Pallas kernel 可以声明操作数和结果都在 TC VMEM。要让原生 XLA 的 top-<span class="math inline"><em>k</em></span> 也从 TC VMEM 开始、到 TC VMEM 结束，需要在程序里分别表达三件事，缺一样量到的就不是同一件事（<code>shell.py</code>）。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> jax._src.state <span class="im">import</span> primitives <span class="im">as</span> state</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> jax.experimental.layout <span class="im">import</span> Layout, with_layout_constraint</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ROW <span class="op">=</span> Layout(major_to_minor<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1</span>), tiling<span class="op">=</span>((<span class="dv">8</span>, <span class="dv">128</span>),))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pinned_row(x):</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> with_layout_constraint(state.unpin(state.pin(x, to<span class="op">=</span><span class="st">&#39;vmem&#39;</span>)), ROW)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> program(x):</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    v, i <span class="op">=</span> top_k(pinned_row(x))          <span class="co"># 原生 XLA，或一个操作数与结果都声明为 pltpu.VMEM 的 Pallas kernel</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jax.lax.optimization_barrier((pinned_row(v), pinned_row(i)))</span></code></pre></div>
+<p><strong>内存空间。</strong> 编译后的 HLO 在每个数组的 layout 后面用 <code>S(n)</code> 标明它所在的内存空间：不写 <code>S</code> 的在 HBM，<code>S(1)</code> 是 TC VMEM，<code>S(3)</code> 是 CMEM，这是这一版 TPU 后端的编号。<code>pin(x, to='vmem')</code> 生成一条 <code>Pin</code> custom call，把结果的内存空间定为 TC VMEM，编译后它的 layout 带有 <code>S(1)</code>；<code>unpin</code> 把缓冲区句柄变回普通数组。这是 JAX 的内部接口。设备的 <code>memory_kind</code> 只有 <code>device</code>（HBM）和两种主机内存，不能表达 TC VMEM；公开的 <code>jax.ref.new_ref(x, memory_space=pltpu.VMEM, pin=True)</code> 在当前版本中没有把目标内存空间传给 Pin，结果正确但值仍在 HBM。</p>
+<p><strong>布局。</strong> XLA 用布局（layout）描述数组的元素在内存中怎样摆放。<a href="#sec-2-1">2.1 节</a>的摆放方式写作 <code>{1,0:T(8,128)}</code>：<code>{1,0}</code> 是从变化最快到最慢的维的次序，即第 1 维（列）变化最快；<code>T(8,128)</code> 是 tile 的形状，即按 8 个子通道乘 128 个通道切成 tile。Pallas kernel 在 TC VMEM 中的二维 f32 数组采用这种布局，再加上上一段的内存空间 <code>S(1)</code>，就是 <code>{1,0:T(8,128)S(1)}</code>。计时区间的三个端点（输入和两个结果）都要求是这个布局，原生 XLA 才与 Pallas kernel 从同样的数据出发、交出同样的结果。XLA 会为某些形状选择转置的布局（例如 <code>[16,8]</code> 转置之后只占一个 tile），于是在 Pin 与 Unpin 之间插入一条改变布局的 <code>copy</code>，而这个位置不允许复制，编译报错。<code>with_layout_constraint</code> [<a href="#ref-7">7</a>] 把布局固定下来；它必须加在 Unpin 之后，只约束 Pin 之前的输入不够。</p>
+<p><strong>共同的终点。</strong> 没有 <code>optimization_barrier</code> 时，XLA 可以先把一个结果写出到 HBM，再去整理另一个结果，“两个结果都在 TC VMEM”的时刻之前已经发生了一次对外的搬运。两个结果共同经过 barrier [<a href="#ref-8">8</a>] 之后，它们的 Pin 和 Unpin 都排在第一次对外写出之前。</p>
+<p>计时区间从输入的 Unpin 结束开始，到两个输出中较晚的那个 Unpin 结束为止，只在两端各读一次 LCC，两次读数相减后扣除 20 个周期的读数开销。这里的读数与 <a href="#sec-3-3">3.3 节</a>的不同：它要插进编译器生成的完整程序，不能占用编译器正在使用的标量寄存器，所以每次读数先把借用的两个标量寄存器存进 SMEM，读完再恢复，读数本身也写进 SMEM，连同 <code>sfence</code> 共 8 个 bundle；两次这样的读数之间什么都不放，读数是 20 个周期。<a href="#sec-3-3">3.3 节</a>的载体 kernel 是手写的，寄存器可以随意使用，一次读数只占一个 bundle，所以固定开销是 13 个周期。不采用“给每条 HLO 指令各插一对读数再相加”的做法：每次读数带一条 <code>sfence</code>，会打断向量指令的重叠，那样得到的总和不等于连续执行的时间。脚本对每个被测的程序核对：三个端点在编译后的 HLO 中都是 <code>{1,0:T(8,128)S(1)}</code>；属于 top-<span class="math inline"><em>k</em></span> 的指令（包括不依赖输入的 <code>iota</code>）全部落在区间内；区间内没有进出 HBM 的 DMA。</p>
+<p>所有实现用完全相同的外壳，只有中间的 top-<span class="math inline"><em>k</em></span> 不同。Pallas 的实现是一个没有 DMA、没有信号量的 kernel；本文改写过的 executable（第 <a href="#sec-6">6</a>、<a href="#sec-7">7</a> 章）也在这个外壳里改写和计时。原生 XLA 在区间内可能有自己的搬运，例如把它生成的下标数组从 CMEM 搬进 TC VMEM，或者经 CMEM 转置；这些搬运属于 XLA 所选算法的一部分，因此计入它的周期数。</p>
+<p>每个程序用 8 份输入各运行一次，每条排序轴上是 0 到 <span class="math inline"><em>n</em> − 1</span> 的随机排列，舍弃前两次，取后六次的中位数；插入读数前后的程序都逐元素核对全部的值和下标。</p>
+<p>所有 Pallas 实现的六次读数完全相同，原生 XLA 的多数程序却有 1 至 3 个周期的波动。区别在于区间里有没有 DMA。指令什么时候发射，由程序本身静态决定：一条指令等的是前面某条指令的结果，或者某个单元空出来，这些都与哪一次运行无关，所以只要区间里只有指令，每次的周期数都相同。原生 XLA 的大多数程序在区间里有 CMEM 与 TC VMEM 之间的 DMA，等待它完成的那条指令什么时候放行，取决于存储系统当时的状态，这一部分是动态的。这一点可以直接核对（<code>xla_inputs.py</code>，输出在 <code>results/xla-inputs.json</code>）：每个形状取 4 份不同的输入，每份在同一个程序上重复运行 6 次。区间里有 DMA 的 18 个形状，同一份输入重复运行也有 1 至 3 个周期的波动，波动与输入无关；没有 DMA 的 7 个形状里，6 个的读数无论换不换输入都恒定。剩下的一个是 <code>[8,4096]</code> 取前 8 名：XLA 在这个形状上用的是一个专门的 top-<span class="math inline"><em>k</em></span> custom call，同一份输入重复运行恒定，不同输入之间相差 2 个周期，说明它里面有按数据决定的分支。其余 24 个形状的周期数都与输入无关：它们多数是排序，区间里没有按数据决定的分支。</p>
+<p>这个边界比“只量 kernel 中间的一段”严格。与输入无关的准备工作（常数、掩码、下标数组）也算在区间内；如果把起点放在 kernel 内部某次等待之后，编译器会把这些工作排到起点之前，读数就偏小，而且不同的写法偏小的程度不同。</p>
+<p><strong>一处编译器缺陷。</strong> 行宽 256、<span class="math inline"><em>k</em> = 8</span> 与行宽 1024、<span class="math inline"><em>k</em> = 32</span> 两个形状上，原生 XLA 在这个外壳下编译失败：它把排序和取前 <span class="math inline"><em>k</em></span> 列融合成一条 fusion，Pin 的内存空间只加到了 fusion 的外层，没有传到内部的根节点。绕开它有两种现成的办法，但都会改变被测的东西：关掉这个融合，XLA 会改走普通的排序，量到的就不是它默认的实现；关掉 Pin 的预着色，三个端点就不再在 TC VMEM 中。所以本文改为在进程内补上缺少的这次传播，这两个形状保留了 XLA 原本的融合实现，表中标 ‡。细节见<a href="#sec-c-2">附录 C.2</a>。</p>
+<h2 id="sec-3-5">3.5 两个基线与对照形状</h2>
+<p>全文的每一项性能结论都同时与两个基线比较。</p>
+<ul>
+<li><strong>原生 XLA</strong>：<code>jax.lax.top_k(x, k)</code> 直接由 XLA 编译，取 <code>is_stable=False</code> 与 <code>is_stable=True</code> 中较快的一个。它是正确性的参照，也是不用 Pallas 时的性能。</li>
+<li><strong>官方 Pallas</strong>：未经修改的 <code>_top_k_impl</code>，放在一个只做 top-<span class="math inline"><em>k</em></span> 的 kernel 中。它是用 Pallas 时的现状。</li>
+</ul>
+<p>所有实现在同一个边界内比较：输入已经在 TC VMEM 中，两个结果也留在 TC VMEM 中，计时区间内没有任何进出 HBM 的搬运。这正是 top-<span class="math inline"><em>k</em></span> 接在别的计算后面时的情形。原生 XLA 也能放进这个边界，办法见 <a href="#sec-3-4">3.4 节</a>。全文只有这一种计时边界。</p>
+<p>性能对照用本文选定的 25 个形状（<code>compare.py</code> 中的 <code>TIME_CASES</code>），全部是 f32。上游 JAX 的 top-<span class="math inline"><em>k</em></span> 测试只检查正确性，没有可以沿用的性能基准，所以本文从基本形状 <code>f32[8,128]</code>（正好占满一个向量寄存器，<a href="#sec-2-1">2.1 节</a>）出发，每组主要改变一个维度，分别观察它对各个实现的影响。四组按<a href="#sec-5">第 5 章</a>的顺序排列，各对应一种瓶颈：</p>
+<ul>
+<li><strong>行宽</strong>：8 行，行宽 256、1024、4096 时 <span class="math inline"><em>k</em> = 8</span>，行宽 1024、4096、8192 时 <span class="math inline"><em>k</em> = 32</span>，共 6 个（<a href="#tbl-6">表 6</a>，<a href="#sec-5-1">5.1 节</a>）。</li>
+<li><strong>方向</strong>：沿第一维取 top-<span class="math inline"><em>k</em></span>，行宽 128；行数 8、16、128 时 <span class="math inline"><em>k</em> = 8</span>，行数 32、64、128、256 时 <span class="math inline"><em>k</em> = 32</span>，共 7 个（<a href="#tbl-7">表 7</a>，<a href="#sec-5-2">5.2 节</a>）。</li>
+<li><strong>基本形状</strong>：<code>f32[8,128]</code> 沿最后一维，<span class="math inline"><em>k</em></span> 为 1、8、16、32、128，共 5 个（<a href="#tbl-8">表 8</a>，<a href="#sec-5-3">5.3 节</a>）。</li>
+<li><strong>行数</strong>：行宽 128、<span class="math inline"><em>k</em> = 8</span>，行数为 16、32、64、96、128、256，另加 <code>[16,128]</code> 取前 16 名，共 7 个（<a href="#tbl-11">表 11</a>，<a href="#sec-5-4">5.4 节</a>）。</li>
+</ul>
+<p>行宽 128、<span class="math inline"><em>k</em> = 8</span> 这一组正好是 <a href="#sec-1-1">1.1 节</a> MoE 路由的形状。</p>
+<p><strong>三种部署形式。</strong> 本文的写法按怎样进到设备上分三种。<strong>Pallas 源码</strong>：只用 Pallas 现有的 API，通过替换 <code>_top_k_impl</code> 进入公开的编译路径。<strong>改写 executable</strong>：用 tpuasm 把手写的片段插进编译出的程序，或者重排其中一段。<strong>进程内补丁</strong>：修改进程内已经装载的 libtpu，让编译流程自己生成所需的指令。<a href="#sec-5">第 5 章</a>的全部写法和通用分派都属于第一种；第 <a href="#sec-6">6</a>、<a href="#sec-7">7</a> 章的折叠后数秩和败者树需要后两种之一。第 <a href="#sec-5">5</a>、<a href="#sec-6">6</a> 章各表中“本文”一列都指通用分派，用到后两种的结果另外成列，<a href="#sec-8-1">8.1 节</a>的汇总逐个形状标明部署形式。</p>
+<p>正确性检查另用一组范围更宽、包含不规整形状和三维数组的输入（<a href="#sec-4-5">4.5 节</a>）。</p>
+<h2 id="sec-3-6">3.6 正确性验证</h2>
+<p>所有写法都用 <a href="#sec-4-4">4.4 节</a>的四项检查验证，测试走公开的 Pallas 编译路径：编译期间替换 <code>_top_k_impl</code>，kernel 中仍调用 <code>jax.lax.top_k(..., is_stable=False)</code>。检查分四层：通用分派在一批覆盖特殊值的输入上做这四项检查（<a href="#sec-4-5">4.5 节</a>）；每一个计时程序，包括原生 XLA，都在插入读数前后逐元素核对全部值和下标；改写 executable 或依赖进程内补丁的写法，还要在计时的外壳里用含特殊值的输入另行核对；Pallas 编译不出的指令先与 NumPy 写的模型逐元素比较（<a href="#sec-3-2">3.2 节</a>）。各项的结果见<a href="#sec-8">第 8 章</a>。</p>
+<p>这是广泛的验证，不是对全部位型组合的证明；键变换是双射、两段分时处理和最小键秩修正的正确性由推导给出。</p>
+<h2 id="sec-3-7">3.7 范围与可复现性</h2>
+<p>本文只解决单芯片、单个 TensorCore 上的 top-<span class="math inline"><em>k</em></span>，不涉及多个 core 协作的算法；实验在 TPU v4 的一颗芯片、一个 TensorCore 上进行，libtpu 版本为 0.0.49。数据类型限定为 f32；<code>bfloat16</code> 的 top-<span class="math inline"><em>k</em></span> 需要更新的硬件，没有覆盖。</p>
+<p>本文用到的全部信息都来自公开发行的软件和在真机上做的实验，没有使用任何未公开的硬件或编译器资料：指令的名字和编码来自 libtpu 的发行包本身，指令的语义和延迟由实验确定，<a href="#sec-3-1">3.1</a> 至 <a href="#sec-3-3">3.3</a> 节说明具体的做法。本文的全部代码在本目录中，只依赖 JAX、libtpu 和本文为这项工作写的汇编器 tpuasm（<a href="#sec-3-1">3.1 节</a>）；每张表和图都有对应的脚本和原始记录，文件用途和复现命令列在仓库 README 中，实验环境见<a href="#sec-a">附录 A</a>。本文不修改磁盘上的 JAX 或 libtpu：按 <a href="#sec-3-5">3.5 节</a>的三种部署形式，第 <a href="#sec-4">4</a>、<a href="#sec-5">5</a> 章的写法通过替换 <code>_top_k_impl</code> 进入公开的 Pallas 编译路径；<a href="#sec-6">第 6 章</a>的手写片段和<a href="#sec-7">第 7 章</a>的一部分写法改写编译出的 executable；<a href="#sec-7">第 7 章</a>的补丁只作用于进程内已经装载的 libtpu。</p>
+<h1 id="sec-4">4 正确性：错在哪里，修正要多少周期</h1>
+<p>本章回答 RQ1。<a href="#sec-4-1">4.1</a> 至 <a href="#sec-4-3">4.3</a> 节是官方 Pallas 的三类错误，<a href="#sec-4-4">4.4 节</a>由此给出正确性的定义，<a href="#sec-4-5">4.5 节</a>在一批覆盖特殊值的输入上对照三个实现，<a href="#sec-4-6">4.6</a> 至 <a href="#sec-4-10">4.10</a> 节量出修正的开销。</p>
+<h2 id="sec-4-1">4.1 已选的位置被重新选中</h2>
+<p>官方 Pallas 用 <code>-inf</code> 这个值充当“已选”的标记。输入里本来就有 <code>-inf</code> 时，两者无法区分。取 <code>f32[8,128]</code>，每行只有通道 0、127、1 是有限值 3、2、1，其余都是 <code>-inf</code>，<span class="math inline"><em>k</em> = 8</span>。前三轮正常。第 4 轮整行都是 <code>-inf</code>，全部并列，argmax 返回通道 127；把它“改成” <code>-inf</code> 之后什么都没变，之后每一轮再次选中 127：</p>
+<pre class="text"><code>values:  [  3.   2.   1. -inf -inf -inf -inf -inf]
+indices: [  0 127   1 127 127 127 127 127]</code></pre>
+<p>注释说的是下标重复，实际的后果更重。通道 127 的输入是 2.0，它在第 2 轮作为真实的值返回，之后又以值 <code>-inf</code> 返回了 5 次，值与下标不再配对；按下标回到输入里取数，同一个得分被用了 6 次。同一个原因还有两种表现：行宽不是 128 的整数倍时，全部并列返回的是 TC VREG 的最后一个通道，它在数组之外，<code>f32[8,100]</code> 全是 <code>-inf</code> 时返回下标 127；<code>approx_max_k</code> 最后调用同一个函数，同样受影响（<a href="#sec-8-3">8.3 节</a>）。只有精确的 <code>-inf</code> 触发问题，换成 <code>-1e30</code> 这样很小的有限值，结果完全正确。</p>
+<h2 id="sec-4-2">4.2 argmax 的并列与 NaN 规则随数据的摆放变化</h2>
+<p>第二类错误不在 <code>_top_k_impl</code> 里，而在它调用的 argmax。argmax 在三种摆放下由不同的硬件通路完成：一行在一个 TC VREG 中时是一条 <code>vmax.index.xlane</code>；行宽超过 128 时先用向量 ALU 把各个 TC VREG 合并，再做一次 <code>vmax.index.xlane</code> 和一次 <code>vperm</code>；沿子通道时是由 <code>vrot.slane.down</code>、<code>vge</code>、<code>vsel</code> 拼出的淘汰树。三条通路的规则各不相同。</p>
+<p>并列时，一个 lane tile 返回通道号最大的一个；多个 lane tile 时返回并列项中“下标除以 128 的余数”最大的一个，既不是第一个也不是最后一个；沿子通道时由淘汰树的结构决定，没有简单的规律。JAX #34620 [<a href="#ref-2">2</a>] 把这个问题描述为“返回最后一个下标”，这只对一个 lane tile 成立。</p>
+<p>NaN 更成问题。合并 TC VREG 时，值用 <code>vmax</code> 取，它传播 NaN；下标却由 <code>vge</code> 的比较结果决定，任何与 NaN 的比较都是假。于是多个 lane tile 时只有落在最后一个 lane tile 中的 NaN 才被找到，沿子通道时测过的位置都没有被找到，<span class="math inline"><em>x</em>[argmax(<em>x</em>)] = max(<em>x</em>)</span> 不成立。这对 top-<span class="math inline"><em>k</em></span> 的影响比对单次 argmax 更大：NaN 没有被选中，也就没有被标为已选，每一轮的最大值都还是 NaN。</p>
+<pre class="text"><code>values:   [nan nan nan nan nan nan nan nan]
+indices:  [124 122 244 109 233 102  98  97]
+expected: [nan  3.  3.  3.  3.  3.  3.  3.]</code></pre>
+<p>这部分代码由闭源的 Mosaic 生成，JAX 仓库中没有对应的源码。本文的写法在这些摆放下不调用它。</p>
+<h2 id="sec-4-3">4.3 完整位型的顺序</h2>
+<p>第三类错误要先回答“在比较什么”。把输入构造成原始的 <code>uint32</code> 位型，原样解释成 f32，分别交给 CPU 和原生 XLA 的 <code>lax.top_k</code>，两端都按下面的顺序从大到小返回：</p>
+<pre class="text"><code>7fffffff 7fc00002 7fc00001 7f800001 7f800000 7f7fffff
+00000001 00000000 80000000 80000001 ff7fffff ff800000
+ff800001 ffc00001 ffc00002 ffffffff</code></pre>
+<p>NaN 不是一个“比无穷大更大”的统一值。正号 NaN 排在 <code>+inf</code> 之前，负号 NaN 排在 <code>-inf</code> 之后，同号 NaN 的 payload 也影响顺序；<code>+0</code> 排在 <code>-0</code> 之前。这就是 IEEE 754 的 <code>totalOrder</code> 谓词 [<a href="#ref-30">30</a>]：负号 NaN 最小，正号 NaN 最大，<span class="math inline">−0</span> 排在 <span class="math inline">+0</span> 之前；同号 NaN 之间，标准只规定 quiet NaN 比 signaling NaN 离零更远，其余留给实现决定，CPU 和原生 XLA 都按位型的大小排列。XLA 的操作语义文档为比较运算规定的全序（<code>EqTotalOrder</code> 等）[<a href="#ref-3">3</a>] 也是这个顺序：<span class="math inline">−NaN &lt; −Inf &lt; −有限值 &lt; −0 &lt; +0 &lt; +有限值 &lt; +Inf &lt; +NaN</span>。官方 Pallas 把 NaN 交给 XLU，XLU 把任何 NaN 都当作最大值，负号 NaN 因此被排到最前；每轮的值来自浮点 <code>max</code>，payload 也不保证保留。</p>
+<h2 id="sec-4-4">4.4 本文采用的正确性定义</h2>
+<p>本文以 <a href="#sec-4-3">4.3 节</a>的顺序定义正确：IEEE 754 的 <code>totalOrder</code>，同号 NaN 之间按位型的大小排列。原生 XLA 与 CPU 都满足它，所以这个定义也就是要求与原生 XLA 逐位一致。对每一条沿 top-<span class="math inline"><em>k</em></span> 轴的输入检查四件事：</p>
+<ol type="1">
+<li>下标没有越界；</li>
+<li><span class="math inline"><em>k</em></span> 个下标互不相同；</li>
+<li>按下标取回的输入与返回的值位型相同；</li>
+<li>返回的值的位型序列与参照相同，参照是按可逆整数键（<a href="#sec-4-9">4.9 节</a>）做稳定排序的结果，并已与 CPU 逐位核对。</li>
+</ol>
+<p>位型相同的元素之间，非稳定入口 <code>is_stable=False</code> 不规定下标的先后，检查也不要求。</p>
+<h2 id="sec-4-5">4.5 三个实现的对照</h2>
+<p><a href="#tbl-4">表 4</a> 是三个实现在同一批输入上的结果。输入覆盖 31 组形状、轴和 <span class="math inline"><em>k</em></span>（行宽 1 至 8192，行数 1 至 256，沿通道与沿子通道，二维与三维），每组包含正态随机数、均匀的原始 32 位位型、21 种特殊位型的随机混合、小整数并列、21 种恒定位型、非负元素个数从 0 到 <span class="math inline"><em>k</em> + 1</span> 的定向构造，以及有限值位于最后一个位置的反例，共 197592 条。</p>
+<div id="tbl-4" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>实现</th>
+<th style="text-align: right;">下标越界</th>
+<th style="text-align: right;">下标重复</th>
+<th style="text-align: right;">值与下标不配对</th>
+<th style="text-align: right;">值的位型序列与参照不同</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>原生 XLA</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>官方 Pallas</td>
+<td style="text-align: right;">1318</td>
+<td style="text-align: right;">36844</td>
+<td style="text-align: right;">67693</td>
+<td style="text-align: right;">65666</td>
+</tr>
+<tr class="odd">
+<td>本文</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p>表 4：197592 条输入中各类错误的条数。</p>
+</div>
+<p>原生 XLA 在全部输入上没有错误。官方 Pallas 的错误按输入类别的分布见<a href="#sec-c-3">附录 C.3</a> 的<a href="#tbl-22">表 22</a>：它在正态随机数、小整数并列和只含有限值的定向构造上全部正确，这正是上游测试覆盖的范围；错误集中在含 <code>-inf</code>、NaN 或原始位型的输入上。本文的通用分派（<a href="#sec-5-5">5.5 节</a>）在全部输入上没有错误。</p>
+<p>官方保留错误的理由是修正昂贵。<a href="#sec-4-6">4.6</a> 至 <a href="#sec-4-10">4.10</a> 节只修正、不加速，量出这个开销。数字都是 <code>f32[8,128]</code>、<span class="math inline"><em>k</em> = 8</span> 在 <a href="#sec-3-4">3.4 节</a>的计时区间内的周期数，官方 Pallas 是 685 个周期。</p>
+<h2 id="sec-4-6">4.6 冲突为什么躲不开</h2>
+<p>最直接的想法是换一个标记值，让已选的位置比任何输入都小。但 f32 里没有比 <code>-inf</code> 更小的非 NaN 值。反过来把输入的 <code>-inf</code> 换成别的值、把 <code>-inf</code> 留给已选，也不行：f32 的每一个非 NaN 位型都可能是输入，输入的取值比留给它们的位置多一个。XLU 的 argmax 只接受 f32，所以只要用值来标记已选，冲突就一定存在。</p>
+<p>出路有两条：让冲突的两个值不在同一时刻出现；或者在不经过 XLU 的地方改用整数，整数里有多余的值。</p>
+<h2 id="sec-4-7">4.7 抬高：让冲突的值分时出现</h2>
+<p>设一行有 <span class="math inline"><em>m</em></span> 个不等于 <code>-inf</code> 的元素。前 <span class="math inline"><em>m</em></span> 轮里总有未选的、不等于 <code>-inf</code> 的元素，argmax 不会选到原有的 <code>-inf</code>，这段时间用 <code>-inf</code> 表示已选是安全的。到第 <span class="math inline"><em>m</em></span> 轮，所有不等于 <code>-inf</code> 的元素都已选走，这时把原有的 <code>-inf</code> 抬到 f32 的最小有限值：真实的值都已不在，不会冲突；已选的位置仍是 <code>-inf</code>，排在它们后面。</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ninf <span class="op">=</span> operand <span class="op">==</span> <span class="op">-</span>jnp.inf</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> jnp.<span class="bu">sum</span>(jnp.where(ninf, <span class="fl">0.0</span>, <span class="fl">1.0</span>), axis<span class="op">=</span>axis, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>when <span class="op">=</span> jnp.where(ninf, jnp.maximum(m, <span class="fl">1.0</span>), <span class="op">-</span><span class="fl">1.0</span>)   <span class="co"># 每个位置被抬高的轮次</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>curr <span class="op">=</span> jnp.where(hit, <span class="op">-</span>jnp.inf, jnp.where(when <span class="op">==</span> j <span class="op">+</span> <span class="dv">1</span>, lowest, curr))</span></code></pre></div>
+<p><span class="math inline"><em>m</em></span> 是一次归约，与第 0 轮的 argmax 同时提交，不在链上；每个位置在第几轮被抬高是预先算好的，抬高那一步在等待本轮 argmax 的 79 个周期里完成。它是 697 个周期，比官方多 12 个。</p>
+<p>作为对照，最朴素的防御性掩码（已选位置记在单独的布尔掩码里，每轮先求未选位置的最大值，再在等于它的位置中取最小的下标，两次归约都在链上）是 1355 个周期，是官方的两倍。注释所说的昂贵，指的大概是这一类。</p>
+<h2 id="sec-4-8">4.8 把修正移出链</h2>
+<p>抬高仍然介入每一轮的工作数组。还有一种更彻底的做法，依据是官方实现的一个性质：即使下标开始重复，每轮返回的值仍然正确。所以修正可以只作用于输出的下标，原来的链原样执行。</p>
+<p>把原有的 <code>-inf</code> 按下标递增排在所有其他元素之后。对一个原有的 <code>-inf</code> 位置 <span class="math inline"><em>i</em></span>，它在完整次序中的名次是 <span class="math inline"><em>n</em> − 1</span> 减去它右侧 <code>-inf</code> 的个数，不依赖前面选出了什么。右侧 <code>-inf</code> 的个数是一个后缀和，可以写成掩码乘一个严格下三角矩阵，交给 MXU：输入和权重都只有 0 和 1，结果是 0 到 127 的整数，完全精确。矩阵的装入和乘法穿插在 argmax 链的等待中。</p>
+<p>它是 685 个周期，与官方的 685 个相比没有增加：修正的成本藏进了链的等待里。</p>
+<h2 id="sec-4-9">4.9 完整位型</h2>
+<p>前两种修正解决 <a href="#sec-4-1">4.1 节</a>的重选，不解决 <a href="#sec-4-3">4.3 节</a>的位型顺序。要逐位正确，先要有一个与参照顺序一致的整数键。设 <span class="math inline"><em>b</em></span> 是 f32 位型按 int32 解释的数：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>key <span class="op">=</span> jnp.where(b <span class="op">&lt;</span> <span class="dv">0</span>, b <span class="op">^</span> <span class="bn">0x7fffffff</span>, b)</span></code></pre></div>
+<p>这是一个双射：非负位型原样保留，负号位型翻转低 31 位，按有符号整数比较的顺序正好是 <a href="#sec-4-3">4.3 节</a>的顺序，反变换是同一个条件异或。这是基数排序中把浮点数变成可比整数的常用做法 [<a href="#ref-31">31</a>]。向量 ALU 上的比较直接用它。</p>
+<p>XLU 只接受 f32，键不能直接送进去：转成 f32 会舍入，直接解释成 f32 又会遇到 NaN 和次正规数。本文按符号把键分成两段，每段 <span class="math inline">2<sup>31</sup></span> 个取值，段内编码成一个正常的有限 f32：前一半映射到负的正常数，后一半映射到正的正常数，两个区间都不含 NaN、无穷大、零和次正规数，段内严格保序，可以反解。于是 <code>-inf</code> 可以专门表示“未激活或已选”，不再与任何真实输入冲突。设一行中非负键有 <span class="math inline"><em>m</em></span> 个，前 <span class="math inline"><em>m</em></span> 个输出必定来自非负键段，其余来自负键段；两段在同一条链上分时处理，选完第 <span class="math inline"><em>m</em></span> 个时把负键段的编码一次性放进工作数组。这与抬高的时间安排相同，只是处理的是两个无损的编码区间。</p>
+<p>这个写法称为 <code>phased</code>，是 717 个周期，没有按数据的分支：每行只有三个有限值、其余全是 <code>-inf</code> 的输入，读数相同。</p>
+<h2 id="sec-4-10">4.10 小结</h2>
+<div id="tbl-5" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>写法</th>
+<th>修正的范围</th>
+<th style="text-align: right;">周期数</th>
+<th style="text-align: right;">相对官方 Pallas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>官方 Pallas</td>
+<td>—</td>
+<td style="text-align: right;">685</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr class="even">
+<td>最朴素的掩码</td>
+<td>重选（含 NaN 时下标越界）</td>
+<td style="text-align: right;">1355</td>
+<td style="text-align: right;">+97.8%</td>
+</tr>
+<tr class="odd">
+<td>抬高</td>
+<td>重选</td>
+<td style="text-align: right;">697</td>
+<td style="text-align: right;">+1.8%</td>
+</tr>
+<tr class="even">
+<td>MXU 后缀补位</td>
+<td>重选</td>
+<td style="text-align: right;">685</td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr class="odd">
+<td><code>phased</code></td>
+<td>逐位正确</td>
+<td style="text-align: right;">717</td>
+<td style="text-align: right;">+4.7%</td>
+</tr>
+</tbody>
+</table>
+<p>表 5：<code>f32[8,128]</code>、<span class="math inline"><em>k</em> = 8</span> 上各种修正的周期数（<code>fixes.py</code>、<code>total_order.py</code>）。同一个区间内原生 XLA 是 2564 个周期。</p>
+</div>
+<p>对 RQ1 的回答是：官方实现的错误不止注释承认的重复下标，以 <code>totalOrder</code> 为定义，它在 197592 条输入中的 70706 条上出错；只修重选几乎不花周期（<a href="#tbl-5">表 5</a>），修到逐位正确多 32 个周期，仅 4.7%。“修正昂贵”只对最朴素的掩码写法成立。修正与否都不改变 Pallas 比原生 XLA 快得多这个次序。</p>
+<h1 id="sec-5">5 只用 Pallas 的加速</h1>
+<p>本章与<a href="#sec-6">第 6 章</a>回答 RQ2。修正之后，本章按 <a href="#sec-2-2">2.2 节</a>的分析框架逐一检查官方 Pallas 在哪里浪费，只用 Pallas 现有的 API。每一节对应一种瓶颈，候选都满足 <a href="#sec-4-4">4.4 节</a>的正确性定义。“本文”一列是通用分派（<a href="#sec-5-5">5.5 节</a>）在该形状上选中的写法，部署形式是 Pallas 源码（<a href="#sec-3-5">3.5 节</a>）。最后两列是本文相对两个基线的周期数变化，负数表示更快。原生 XLA 一栏取非稳定与稳定两个入口中较快的一个，稳定入口较快时标 †；‡ 的含义见 <a href="#sec-3-4">3.4 节</a>。</p>
+<h2 id="sec-5-1">5.1 宽行：链上多了一次 XLU</h2>
+<p>行宽超过 128 时，官方 Pallas 每轮约 165 个周期，是行宽 128 时的两倍。合并各个 TC VREG 之后做一次 <code>vmax.index.xlane</code>，得到的只是通道号，还要用一次 <code>vperm</code> 查出这个通道来自哪个 TC VREG，下一轮才知道该把哪个元素标为已选。两次都要进出 XLU，都在链上。</p>
+<p>标记已选其实不需要完整的下标。本文换一种数据组织：先在每个通道内，把各个 TC VREG 在这个通道上的键从大到小排好，得到若干层。排序只是 TC VREG 之间逐元素的整数比较和选择，用裁剪到前 <span class="math inline"><em>k</em></span> 个输出的 Batcher 奇偶归并网络 [<a href="#ref-4">4</a>] 完成，做一次。之后每一轮只对第 0 层做一次 argmax，得到通道号 <span class="math inline"><em>p</em></span>，把通道 <span class="math inline"><em>p</em></span> 的整列上移一层。链上只剩一次 argmax。选中的元素来自哪个 TC VREG，由随排序一起移动的位置数组查出，不在链上。比较在整数键上进行，<a href="#sec-4-2">4.2 节</a>丢失 NaN 的问题在这里不存在；列首用 <a href="#sec-4-9">4.9 节</a>的编码送进 XLU。</p>
+<div id="tbl-6" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>形状</th>
+<th style="text-align: right;"><span class="math inline"><em>k</em></span></th>
+<th style="text-align: right;">原生 XLA</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">本文</th>
+<th style="text-align: right;">本文相对原生 XLA</th>
+<th style="text-align: right;">本文相对官方 Pallas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[8,256]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2325†‡</td>
+<td style="text-align: right;">1325</td>
+<td style="text-align: right;">922</td>
+<td style="text-align: right;">−60.3%</td>
+<td style="text-align: right;">−30.4%</td>
+</tr>
+<tr class="even">
+<td><code>[8,1024]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">6101</td>
+<td style="text-align: right;">1445</td>
+<td style="text-align: right;">943</td>
+<td style="text-align: right;">−84.5%</td>
+<td style="text-align: right;">−34.7%</td>
+</tr>
+<tr class="odd">
+<td><code>[8,4096]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5967</td>
+<td style="text-align: right;">2223</td>
+<td style="text-align: right;">1318</td>
+<td style="text-align: right;">−77.9%</td>
+<td style="text-align: right;">−40.7%</td>
+</tr>
+<tr class="even">
+<td><code>[8,1024]</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">4103‡</td>
+<td style="text-align: right;">5733</td>
+<td style="text-align: right;">3129</td>
+<td style="text-align: right;">−23.7%</td>
+<td style="text-align: right;">−45.4%</td>
+</tr>
+<tr class="odd">
+<td><code>[8,4096]</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">23111</td>
+<td style="text-align: right;">9275</td>
+<td style="text-align: right;">3899</td>
+<td style="text-align: right;">−83.1%</td>
+<td style="text-align: right;">−58.0%</td>
+</tr>
+<tr class="even">
+<td><code>[8,8192]</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">28327</td>
+<td style="text-align: right;">14411</td>
+<td style="text-align: right;">4715</td>
+<td style="text-align: right;">−83.4%</td>
+<td style="text-align: right;">−67.3%</td>
+</tr>
+</tbody>
+</table>
+<p>表 6：宽行，沿最后一维。</p>
+</div>
+<p>本文在六个形状上都比两个基线快（<a href="#tbl-6">表 6</a>）。官方 Pallas 在 <code>[8,1024]</code>、<span class="math inline"><em>k</em> = 32</span> 上比原生 XLA 慢：它的周期数随 <span class="math inline"><em>k</em></span> 线性增长，而 XLA 在这个形状上用的是排序后取前缀的融合实现。</p>
+<h2 id="sec-5-2">5.2 纵向：不经过 XLU</h2>
+<p>top-<span class="math inline"><em>k</em></span> 沿子通道方向或更靠前的轴时，归约全部由向量 ALU 完成，XLU 只接受 f32 的限制不存在，可以从头到尾用整数键。这是 <a href="#sec-4-6">4.6 节</a>说的第二条出路：单独记一个位置数组，用 −1 表示无效，连分段都不需要。官方 Pallas 在这个方向上用的是编译器生成的淘汰树，遇到 NaN 会出错。</p>
+<p>本文在这个方向上用了三种写法，按行数和 <span class="math inline"><em>k</em></span> 选择。</p>
+<ul>
+<li><strong>整数键的秩计数</strong>：行数不超过 8 时，直接在整数键上数秩（见 <a href="#sec-5-3">5.3 节</a>），沿子通道的移位不经过 XLU。</li>
+<li><strong>候选层</strong>：行数更多时，把各个 sublane tile 用同一个比较网络排成层，每轮只归约最上面八行，选中的列弹出一个元素。</li>
+<li><strong>归并</strong>：列排好之后不再逐个弹出，把每层沿子通道旋转 4、2、1 行，三次归并把八条有序的列并成一条。它没有长度为 <span class="math inline"><em>k</em></span> 的串行结构，但归并时同时活着的层数随行数增长，128 行起超过 32 个 TC VREG，大量溢出到 TC VMEM。分派在 16 至 64 行时选它。</li>
+</ul>
+<div id="tbl-7" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>形状</th>
+<th style="text-align: right;"><span class="math inline"><em>k</em></span></th>
+<th style="text-align: right;">原生 XLA</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">本文</th>
+<th style="text-align: right;">本文相对原生 XLA</th>
+<th style="text-align: right;">本文相对官方 Pallas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[8,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">485.5</td>
+<td style="text-align: right;">473</td>
+<td style="text-align: right;">365</td>
+<td style="text-align: right;">−24.8%</td>
+<td style="text-align: right;">−22.8%</td>
+</tr>
+<tr class="even">
+<td><code>[16,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">990</td>
+<td style="text-align: right;">499</td>
+<td style="text-align: right;">234</td>
+<td style="text-align: right;">−76.4%</td>
+<td style="text-align: right;">−53.1%</td>
+</tr>
+<tr class="odd">
+<td><code>[32,128]</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">822.5</td>
+<td style="text-align: right;">2033</td>
+<td style="text-align: right;">653</td>
+<td style="text-align: right;">−20.6%</td>
+<td style="text-align: right;">−67.9%</td>
+</tr>
+<tr class="even">
+<td><code>[64,128]</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">1915.5</td>
+<td style="text-align: right;">2433</td>
+<td style="text-align: right;">1305</td>
+<td style="text-align: right;">−31.9%</td>
+<td style="text-align: right;">−46.4%</td>
+</tr>
+<tr class="odd">
+<td><code>[128,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3547</td>
+<td style="text-align: right;">936</td>
+<td style="text-align: right;">564</td>
+<td style="text-align: right;">−84.1%</td>
+<td style="text-align: right;">−39.7%</td>
+</tr>
+<tr class="even">
+<td><code>[128,128]</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">3559.5</td>
+<td style="text-align: right;">3678</td>
+<td style="text-align: right;">1825</td>
+<td style="text-align: right;">−48.7%</td>
+<td style="text-align: right;">−50.4%</td>
+</tr>
+<tr class="odd">
+<td><code>[256,128]</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">9236</td>
+<td style="text-align: right;">6420</td>
+<td style="text-align: right;">2467</td>
+<td style="text-align: right;">−73.3%</td>
+<td style="text-align: right;">−61.6%</td>
+</tr>
+</tbody>
+</table>
+<p>表 7：纵向，沿 axis 0。</p>
+</div>
+<p>这个方向上原生 XLA 是一个强得多的对手（<a href="#tbl-7">表 7</a>）：<span class="math inline"><em>k</em> = 32</span> 时官方 Pallas 在 32、64、128 行上都比它慢，32 行时慢到约 2.5 倍。本文在七个形状上都比两者快，其中 <code>[32,128]</code> 取前 32 名相对原生 XLA 的优势最小。</p>
+<h2 id="sec-5-3">5.3 大 <span class="math inline"><em>k</em></span>：消除串行依赖</h2>
+<p>前面的写法在行宽 128 时仍是一条长度为 <span class="math inline"><em>k</em></span> 的链。<span class="math inline"><em>k</em></span> 大时应当换一种互不依赖的算法，让时间由发射间隔而不是延迟决定。</p>
+<p>秩计数就是枚举排序（比较计数）[<a href="#ref-32">32</a>]：一个元素的秩是排在它前面的元素个数，秩小于 <span class="math inline"><em>k</em></span> 的元素就是结果，秩正好是它在输出中的位置。把整行循环移动 <span class="math inline"><em>d</em></span> 个通道，与原来的行逐元素比较，就完成了所有相距 <span class="math inline"><em>d</em></span> 的元素对；<span class="math inline"><em>d</em></span> 从 1 到 <span class="math inline"><em>n</em> − 1</span> 各做一次，这 <span class="math inline"><em>n</em> − 1</span> 次 <code>vrot</code> 互不依赖，可以连续提交。</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>count <span class="op">=</span> jnp.where(key <span class="op">==</span> INT_MIN, position, <span class="dv">0</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>lower <span class="op">=</span> key <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> distance <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n):</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    other <span class="op">=</span> jnp.roll(key, distance, axis<span class="op">=</span>axis)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    count <span class="op">+=</span> jnp.where(other <span class="op">&gt;</span> jnp.where(position <span class="op">&gt;=</span> distance, lower, key), <span class="dv">1</span>, <span class="dv">0</span>)</span></code></pre></div>
+<p>比较用整数键。相等的元素规定下标小的在前，写成与 <span class="math inline"><em>k</em><em>e</em><em>y</em> − 1</span> 比较；键等于 <code>INT_MIN</code> 时减一会回绕，这些位置的秩用自己的下标预先补上。所有元素的秩互不相同，结果是稳定的，连下标都与 CPU 逐个相同，<code>-inf</code> 与 NaN 只是键的一个取值，没有特例。</p>
+<p>秩计数的周期数几乎与 <span class="math inline"><em>k</em></span> 无关，在这一点上与原生 XLA 的整行排序相同，只是不必真的把整行排出来。它的弱点是行数：每个 TC VREG 都要自己的 127 次移位，一个 TC VREG 就已经让 XLU 满负荷。</p>
+<div id="tbl-8" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>形状</th>
+<th style="text-align: right;"><span class="math inline"><em>k</em></span></th>
+<th style="text-align: right;">原生 XLA</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">本文</th>
+<th style="text-align: right;">本文相对原生 XLA</th>
+<th style="text-align: right;">本文相对官方 Pallas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[8,128]</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1992</td>
+<td style="text-align: right;">117</td>
+<td style="text-align: right;">149</td>
+<td style="text-align: right;">−92.5%</td>
+<td style="text-align: right;">+27.4%</td>
+</tr>
+<tr class="even">
+<td><code>[8,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2564</td>
+<td style="text-align: right;">685</td>
+<td style="text-align: right;">717</td>
+<td style="text-align: right;">−72.0%</td>
+<td style="text-align: right;">+4.7%</td>
+</tr>
+<tr class="odd">
+<td><code>[8,128]</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">2564.5</td>
+<td style="text-align: right;">1341</td>
+<td style="text-align: right;">830</td>
+<td style="text-align: right;">−67.6%</td>
+<td style="text-align: right;">−38.1%</td>
+</tr>
+<tr class="even">
+<td><code>[8,128]</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">2564.5</td>
+<td style="text-align: right;">2653</td>
+<td style="text-align: right;">894</td>
+<td style="text-align: right;">−65.1%</td>
+<td style="text-align: right;">−66.3%</td>
+</tr>
+<tr class="odd">
+<td><code>[8,128]</code></td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">2560.5</td>
+<td style="text-align: right;">10525</td>
+<td style="text-align: right;">1278</td>
+<td style="text-align: right;">−50.1%</td>
+<td style="text-align: right;">−87.9%</td>
+</tr>
+</tbody>
+</table>
+<p>表 8：<code>f32[8,128]</code> 沿最后一维，<span class="math inline"><em>k</em></span> 从 1 到 128。<span class="math inline"><em>k</em></span> 不超过 8 时本文选 <code>phased</code>，其余选秩计数。</p>
+</div>
+<figure>
+<img src="basic.svg" id="fig-2" alt="图 2：表 8 的三条曲线。横轴按 \log_2 k 等距。" /><figcaption aria-hidden="true">图 2：<a href="#tbl-8">表 8</a> 的三条曲线。横轴按 <span class="math inline">log<sub>2</sub><em>k</em></span> 等距。</figcaption>
+</figure>
+<p>三条曲线的形状各不相同（<a href="#tbl-8">表 8</a>、<a href="#fig-2">图 2</a>）。原生 XLA 排序整行，周期数与 <span class="math inline"><em>k</em></span> 无关（<span class="math inline"><em>k</em> = 1</span> 时走另一个实现）。官方 Pallas 与 <span class="math inline"><em>k</em></span> 成正比，<span class="math inline"><em>k</em> = 32</span> 时被原生 XLA 反超，<span class="math inline"><em>k</em> = 128</span> 时是它的四倍。本文在 <span class="math inline"><em>k</em></span> 不小于 16 时改用秩计数，比两者都快。<span class="math inline"><em>k</em></span> 为 1 和 8 时本文比官方 Pallas 多 32 个周期，这是 <a href="#sec-4-9">4.9 节</a>逐位正确的开销，相对值在 <span class="math inline"><em>k</em> = 1</span> 时最显眼。</p>
+<h2 id="sec-5-4">5.4 多行：XLU 排不下</h2>
+<p>行宽 128、行数从 8 增加到 64 时，官方 Pallas 的周期数几乎不变：等待上一轮结果的 79 个周期里，两个 XLU 队列足够为 8 个 TC VREG 各提交两条归约。再多就排不下了，周期数开始正比于归约的总数。</p>
+<p>这时有两种办法。</p>
+<p><strong>减少归约的条数。</strong> 每轮求值的那次归约可以不要：循环只求下标，结束后用一次沿通道的 gather（一条 <code>vperm</code>）把 <span class="math inline"><em>k</em></span> 个值一起取回，归约从每轮 2 条减到 1 条。gather 取回的是原输入的位型，不需要解码。它要等最后一轮的下标，行数少时反而多出一次 XLU 的延迟。</p>
+<p><strong>干脆不走 XLU。</strong> 行宽恰好是 128、行数不超过 128 时，把 <span class="math inline">f32[<em>R</em>,128]</span> 整体转置，每条输入行就落在一个通道上，问题变成了 <a href="#sec-5-2">5.2 节</a>的纵向问题：沿子通道用整数键归并出前 <span class="math inline"><em>k</em></span> 名，再把两个结果转置回来。中间没有 XLU 的链，所有的行共用同一批逐元素指令，周期数随行数涨得很慢；两头的转置是固定的开销，行数少时不划算。</p>
+<div id="tbl-9" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>行数</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;"><code>phased</code></th>
+<th style="text-align: right;"><code>phased_gather</code></th>
+<th style="text-align: right;"><code>transposed</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>16</td>
+<td style="text-align: right;">704</td>
+<td style="text-align: right;">752</td>
+<td style="text-align: right;">790</td>
+<td style="text-align: right;">788</td>
+</tr>
+<tr class="even">
+<td>32</td>
+<td style="text-align: right;">733</td>
+<td style="text-align: right;">785</td>
+<td style="text-align: right;">825</td>
+<td style="text-align: right;">804</td>
+</tr>
+<tr class="odd">
+<td>64</td>
+<td style="text-align: right;">766</td>
+<td style="text-align: right;">909</td>
+<td style="text-align: right;">885</td>
+<td style="text-align: right;">836</td>
+</tr>
+<tr class="even">
+<td>96</td>
+<td style="text-align: right;">925</td>
+<td style="text-align: right;">1246</td>
+<td style="text-align: right;">950</td>
+<td style="text-align: right;">869</td>
+</tr>
+<tr class="odd">
+<td>128</td>
+<td style="text-align: right;">1235</td>
+<td style="text-align: right;">1714</td>
+<td style="text-align: right;">1069</td>
+<td style="text-align: right;">937</td>
+</tr>
+<tr class="even">
+<td>256</td>
+<td style="text-align: right;">2379</td>
+<td style="text-align: right;">3546</td>
+<td style="text-align: right;">1813</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table>
+<p>表 9：行宽 128、<span class="math inline"><em>k</em> = 8</span>，沿最后一维：官方的链、<code>phased</code>、只求下标并在结束后取值的 <code>phased_gather</code>，以及转置之后沿子通道归并的 <code>transposed</code>。</p>
+</div>
+<p><span class="math inline"><em>k</em> = 8</span> 时，分派按<a href="#tbl-9">表 9</a> 选择：64 至 128 行用转置，行数更多时用结束后取值的链，其余用 <code>phased</code>。</p>
+<p>转置对别的 <span class="math inline"><em>k</em></span> 是否划算，要看 <span class="math inline"><em>k</em></span> 的大小。<a href="#tbl-10">表 10</a> 在 16、64、128 行上各量了 <span class="math inline"><em>k</em></span> 为 2、4、16、32 的情形，“不转置”一列是没有转置时分派选中的写法。</p>
+<div id="tbl-10" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>行数</th>
+<th><span class="math inline"><em>k</em></span></th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">不转置</th>
+<th style="text-align: right;"><code>transposed</code></th>
+<th style="text-align: right;"><code>transposed</code> 相对官方 Pallas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>16</td>
+<td>2</td>
+<td style="text-align: right;">212</td>
+<td style="text-align: right;">260</td>
+<td style="text-align: right;">530</td>
+<td style="text-align: right;">+150.0%</td>
+</tr>
+<tr class="even">
+<td>64</td>
+<td>2</td>
+<td style="text-align: right;">273</td>
+<td style="text-align: right;">392</td>
+<td style="text-align: right;">627</td>
+<td style="text-align: right;">+129.7%</td>
+</tr>
+<tr class="odd">
+<td>128</td>
+<td>2</td>
+<td style="text-align: right;">380</td>
+<td style="text-align: right;">529</td>
+<td style="text-align: right;">754</td>
+<td style="text-align: right;">+98.4%</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>4</td>
+<td style="text-align: right;">376</td>
+<td style="text-align: right;">424</td>
+<td style="text-align: right;">610</td>
+<td style="text-align: right;">+62.2%</td>
+</tr>
+<tr class="odd">
+<td>64</td>
+<td>4</td>
+<td style="text-align: right;">439</td>
+<td style="text-align: right;">556</td>
+<td style="text-align: right;">689</td>
+<td style="text-align: right;">+56.9%</td>
+</tr>
+<tr class="even">
+<td>128</td>
+<td>4</td>
+<td style="text-align: right;">636</td>
+<td style="text-align: right;">684</td>
+<td style="text-align: right;">814</td>
+<td style="text-align: right;">+28.0%</td>
+</tr>
+<tr class="odd">
+<td>16</td>
+<td>16</td>
+<td style="text-align: right;">1360</td>
+<td style="text-align: right;">1408</td>
+<td style="text-align: right;">1062</td>
+<td style="text-align: right;">−21.9%</td>
+</tr>
+<tr class="even">
+<td>64</td>
+<td>16</td>
+<td style="text-align: right;">1475</td>
+<td style="text-align: right;">1541</td>
+<td style="text-align: right;">1271</td>
+<td style="text-align: right;">−13.8%</td>
+</tr>
+<tr class="odd">
+<td>128</td>
+<td>16</td>
+<td style="text-align: right;">2510</td>
+<td style="text-align: right;">1822</td>
+<td style="text-align: right;">1323</td>
+<td style="text-align: right;">−47.3%</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>32</td>
+<td style="text-align: right;">2672</td>
+<td style="text-align: right;">1638</td>
+<td style="text-align: right;">1598</td>
+<td style="text-align: right;">−40.2%</td>
+</tr>
+<tr class="odd">
+<td>64</td>
+<td>32</td>
+<td style="text-align: right;">2903</td>
+<td style="text-align: right;">2905</td>
+<td style="text-align: right;">1998</td>
+<td style="text-align: right;">−31.2%</td>
+</tr>
+<tr class="even">
+<td>128</td>
+<td>32</td>
+<td style="text-align: right;">5057</td>
+<td style="text-align: right;">3299</td>
+<td style="text-align: right;">2045</td>
+<td style="text-align: right;">−59.6%</td>
+</tr>
+</tbody>
+</table>
+<p>表 10：行宽 128，沿最后一维，其他的 <span class="math inline"><em>k</em></span>：官方 Pallas、不转置时的通用分派，以及 <code>transposed</code>。</p>
+</div>
+<p><span class="math inline"><em>k</em></span> 为 16 和 32 时，转置从 16 行起就比官方和不转置的写法都快，分派因此对 16 至 128 行、<span class="math inline"><em>k</em></span> 不小于 16 的情形一律用转置。<span class="math inline"><em>k</em></span> 为 2 和 4 时相反：官方的链只有两趟、四趟 XLU 往返，而转置两头的固定开销已经比整条链还长，不划算。这时本文只能用 <code>phased</code>，它比官方慢 8% 至 44%。<span class="math inline"><em>k</em></span> 很小的情形本文没有解决，<a href="#sec-8-1">8.1 节</a>再说。</p>
+<div id="tbl-11" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>形状</th>
+<th style="text-align: right;"><span class="math inline"><em>k</em></span></th>
+<th style="text-align: right;">原生 XLA</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">本文</th>
+<th style="text-align: right;">本文相对原生 XLA</th>
+<th style="text-align: right;">本文相对官方 Pallas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[16,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2606.5</td>
+<td style="text-align: right;">704</td>
+<td style="text-align: right;">752</td>
+<td style="text-align: right;">−71.1%</td>
+<td style="text-align: right;">+6.8%</td>
+</tr>
+<tr class="even">
+<td><code>[32,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2619.5</td>
+<td style="text-align: right;">733</td>
+<td style="text-align: right;">785</td>
+<td style="text-align: right;">−70.0%</td>
+<td style="text-align: right;">+7.1%</td>
+</tr>
+<tr class="odd">
+<td><code>[64,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2681</td>
+<td style="text-align: right;">766</td>
+<td style="text-align: right;">836</td>
+<td style="text-align: right;">−68.8%</td>
+<td style="text-align: right;">+9.1%</td>
+</tr>
+<tr class="even">
+<td><code>[96,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3296</td>
+<td style="text-align: right;">925</td>
+<td style="text-align: right;">869</td>
+<td style="text-align: right;">−73.6%</td>
+<td style="text-align: right;">−6.1%</td>
+</tr>
+<tr class="odd">
+<td><code>[128,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5259.5</td>
+<td style="text-align: right;">1235</td>
+<td style="text-align: right;">937</td>
+<td style="text-align: right;">−82.2%</td>
+<td style="text-align: right;">−24.1%</td>
+</tr>
+<tr class="even">
+<td><code>[256,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">8063</td>
+<td style="text-align: right;">2379</td>
+<td style="text-align: right;">1813</td>
+<td style="text-align: right;">−77.5%</td>
+<td style="text-align: right;">−23.8%</td>
+</tr>
+<tr class="odd">
+<td><code>[16,128]</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">2605.5</td>
+<td style="text-align: right;">1360</td>
+<td style="text-align: right;">1062</td>
+<td style="text-align: right;">−59.2%</td>
+<td style="text-align: right;">−21.9%</td>
+</tr>
+</tbody>
+</table>
+<p>表 11：多行，行宽 128，沿最后一维。</p>
+</div>
+<p><a href="#tbl-11">表 11</a> 里有通用分派没有做好的部分，如实列出。96 行以上，本文比官方 Pallas 快。64 行以下，本文反而比官方 Pallas 慢 7% 至 9%。这一段为什么难、又怎样解决，放在<a href="#sec-6">第 6 章</a>。相对原生 XLA，全部形状都少 45% 以上。</p>
+<h2 id="sec-5-5">5.5 分派</h2>
+<p>通用分派的签名与 <code>_top_k_impl</code> 相同，可以直接替换它（<code>total_order.py</code> 中的 <code>fast</code>）。它按形状和 <span class="math inline"><em>k</em></span> 在上述写法之间选择：沿通道且只占一个 lane tile 时，先在链与秩计数之间按估计的周期数取较小者，选链时再按行数在 <code>phased</code>、转置和结束后取值三者之间选（<a href="#sec-5-4">5.4 节</a>）；沿通道且跨多个 lane tile 时用候选列；其余用纵向的三种写法。估计式是对实测的拟合，换一代硬件需要重新测。</p>
+<h2 id="sec-5-6">5.6 小结</h2>
+<p>三方对照一共 25 个形状（<a href="#sec-3-5">3.5 节</a>；<a href="#tbl-6">表 6</a>、<a href="#tbl-7">表 7</a>、<a href="#tbl-8">表 8</a>、<a href="#tbl-11">表 11</a>）。</p>
+<ul>
+<li>相对原生 XLA，本文在全部 25 个形状上更快，周期数少 21% 至 93%。</li>
+<li>相对官方 Pallas，本文在 20 个形状上更快，少 6% 至 88%；在 5 个形状上更慢，多 5% 至 27%。这 5 个形状是同一种情形，即行宽 128、沿最后一维、行数不超过 64 并且仍然用链的那些：<code>[8,128]</code> 的 <span class="math inline"><em>k</em> = 1</span> 与 8，16、32、64 行的 <span class="math inline"><em>k</em> = 8</span>。在这些形状上官方 Pallas 的链已经贴着 XLU 的延迟，本文多出来的主要是逐位正确所需的指令。</li>
+<li>官方 Pallas 自己在 6 个形状上比原生 XLA 慢，都是 <span class="math inline"><em>k</em></span> 较大的情形。</li>
+</ul>
+<p>所以 RQ2 的前一半可以这样回答：宽行、行数很多、纵向、<span class="math inline"><em>k</em></span> 较大这四种情形，可以在保持正确的同时比两个基线都快，而且只用 Pallas 现有的 API。剩下的是行宽 128、沿最后一维、仍然用 XLU 的链的情形：一个 TC VREG 上取前 8 名的基本情形由 <a href="#sec-6-2">6.2 节</a>的折叠后数秩解决；16 至 64 行取前 8 名由 <a href="#sec-6-3">6.3</a> 至 <a href="#sec-6-5">6.5</a> 节的整体转置加败者树解决；只有 <span class="math inline"><em>k</em></span> 很小的情形没有解决（<a href="#sec-8-1">8.1 节</a>）。</p>
+<h1 id="sec-6">6 两种新算法</h1>
+<h2 id="sec-6-1">6.1 剩下的两个难点</h2>
+<p>本章回答 RQ2 的后一半。<a href="#sec-5">第 5 章</a>之后剩下两处：一是基本形状 <code>f32[8,128]</code> 取前 8 名，二是行宽 128、16 至 64 行、<span class="math inline"><em>k</em> = 8</span>。两处的根源相同：官方的写法是一条每轮经过一次 XLU 的链，而这条链在这两处都已经贴近硬件的下限。</p>
+<p><strong>基本形状。</strong> 这个形状上，官方 Pallas 是 685 个周期，逐位正确的 <code>phased</code> 是 717 个。难处在于它的结构已经没有余量。</p>
+<ul>
+<li><strong>链的下限就在眼前。</strong> 八轮 argmax 前后依赖，每轮必须等满 XLU 的 79 个周期，八轮是 632 个周期，这是任何“每轮经过一次 XLU”的写法都躲不开的。官方的 685 个周期里，除了这 632 个，只剩每轮取回、比较、选择的几条指令和进出 kernel 的开销。也就是说，只要还是这条链，可以省的不到 8%。</li>
+<li><strong>正确只会往上加。</strong> 逐位正确需要键的变换、分段的编码和解码，这些指令大多能藏进 79 个周期的等待里，但藏不干净，所以 <code>phased</code> 比官方多 32 个周期。沿着这条链走，正确的写法不可能比官方快。</li>
+<li><strong>现成的不走链的算法在这里不划算。</strong> <a href="#sec-5-3">5.3 节</a>的秩计数没有依赖链，但它要 127 次旋转，一个队列每 8 个周期收一次，两个队列光提交就要五百多个周期，再加上取回和计数，<span class="math inline"><em>k</em> = 8</span> 时不如八轮链，要到 <span class="math inline"><em>k</em> = 16</span> 才反超（<a href="#tbl-8">表 8</a>）。</li>
+</ul>
+<p>所以这个形状要更快，XLU 的往返必须远少于 <span class="math inline"><em>k</em></span> 趟，同时跨通道的运算必须远少于 127 次。<a href="#sec-6-2">6.2 节</a>的折叠后数秩只用三趟往返、15 次旋转。</p>
+<p><strong>行数居中、<span class="math inline"><em>k</em></span> 较小。</strong> <a href="#tbl-11">表 11</a> 中，16 至 64 行、<span class="math inline"><em>k</em> = 8</span> 时，本文的通用分派比官方 Pallas 慢 7% 至 9%。原因有三个。</p>
+<ul>
+<li><strong>链在这里被许多行分摊。</strong> 官方的链每轮等一次 XLU，这 79 个周期是所有行共用的：8 行是 685 个周期，64 行只有 766 个，摊到每个 TC VREG 上不到 100 个周期。行数越多，链越便宜，直到 XLU 排满为止（<a href="#tbl-9">表 9</a> 中官方在 96 行开始明显变慢）。</li>
+<li><strong>不走链的算法分摊不了。</strong> 秩计数每个 TC VREG 要 127 次旋转；<a href="#sec-6-2">6.2 节</a>的折叠后数秩每个 TC VREG 也要自己的三趟 XLU 往返，转置还要占住队列，各个 TC VREG 只能在两个队列上排队。它们的周期数大致正比于行数，8 行时赢，16 行时已经输给链（<a href="#sec-7-4">7.4 节</a>的<a href="#tbl-17">表 17</a>）。</li>
+<li><strong>沿着 XLU 的链走，正确的写法比官方慢。</strong> 这与基本形状的第二点相同，而且更重：行数多了以后，等待里能藏的指令被各个 TC VREG 瓜分，<code>phased</code> 每轮每个 TC VREG 比官方多出的几条逐元素指令开始占周期，64 行时比官方多 143 个周期，96 行时多 321 个。去掉每轮求值的归约可以抵消一部分，但要多付结尾的一次 gather，64 行才开始划算，128 行才超过官方（<a href="#tbl-9">表 9</a>）。</li>
+</ul>
+<p>这三条合起来像是一个死局：链便宜是因为各行共用等待，不走链的算法都要按 TC VREG 付 XLU 的往返，而正确的链又必然比官方多做事。出路在于这三条都默认了同一件事，即每一轮的依赖要经过 XLU。<a href="#sec-5-4">5.4 节</a>的转置已经绕开了这一点，它在 96 行以上胜出；<a href="#sec-6-3">6.3</a> 至 <a href="#sec-6-5">6.5</a> 节把同一个思路推到行数少的一侧。它保留 <span class="math inline"><em>k</em></span> 轮，但每一轮不经过 XLU；在基本形状上它也比官方快，只是不如折叠后数秩（<a href="#sec-6-5">6.5 节</a>）。</p>
+<p>两种算法都用到 Pallas 编译不出的指令（<a href="#tbl-2">表 2</a>）。本章先用手写的片段证明它们可行，部署形式是改写 executable；<a href="#sec-7">第 7 章</a>再让编译器生成其中的折叠后数秩。</p>
+<h2 id="sec-6-2">6.2 折叠后数秩</h2>
+<p>折叠后数秩先把同一行的元素从通道方向换到子通道方向，之后的比较交给向量 ALU 和 TC VMEM。<a href="#tbl-2">表 2</a> 中的 <code>vsxpose</code> 在宽度为 8 时把一个 TC VREG 内十六个 <span class="math inline">8 × 8</span> 的小块各自转置，也就是把通道号的低三位换到子通道方向。算法分五步。</p>
+<ol type="1">
+<li><strong>折叠。</strong> 一次 <code>vsxpose</code>，第 <span class="math inline"><em>r</em></span> 行的 128 个元素变成 16 列，每列 8 个子通道。</li>
+<li><strong>列内排序。</strong> 7 次带子通道重排的读（<code>vld.sshfl</code>）数出每个元素在自己那一列中的名次 <span class="math inline"><em>ρ</em></span>；把 <span class="math inline"><em>ρ</em></span> 减去子通道号装进 IAR，一条 <code>vst.iar</code> 把每个元素写到第 <span class="math inline"><em>ρ</em></span> 行，整列降序。</li>
+<li><strong>跨组数秩。</strong> 15 次按 8 的倍数的 <code>vrot</code> 把其余各组的列对齐过来。对方的列是降序的，“对方的第 <span class="math inline"><em>i</em></span> 行排在我前面”随 <span class="math inline"><em>i</em></span> 只变一次，所以用二分：三次读、三次比较数出对方一列中有几个排在我前面，最后一次读的行号因元素而异，用 <code>vld.iar</code>。</li>
+<li><strong>下标送回。</strong> 名次小于 <span class="math inline"><em>k</em></span> 的元素把原通道号按名次放进不同的字节，沿通道精确求和（<code>vadd.xlane</code>），各字段互不重叠，和不超过 <span class="math inline">2<sup>24</sup></span>，浮点加法是精确的。</li>
+<li><strong>值送回。</strong> 前 8 名把键的段内编码按名次写到不同的行，每个名次一次 <code>vmax.xlane</code> 带回原布局；<span class="math inline"><em>k</em></span> 更大时改用一次 <code>vperm</code> 按下标取回。</li>
+</ol>
+<figure>
+<img src="fold.svg" id="fig-3" alt="图 3：折叠后数秩的前三步，图中只画一行的 128 个元素。折叠把通道号的低三位换到子通道方向；列内排序之后每列降序；跨组数秩时，把别的组的列旋转过来，用二分数出其中有几个排在自己前面。" /><figcaption aria-hidden="true">图 3：折叠后数秩的前三步，图中只画一行的 128 个元素。折叠把通道号的低三位换到子通道方向；列内排序之后每列降序；跨组数秩时，把别的组的列旋转过来，用二分数出其中有几个排在自己前面。</figcaption>
+</figure>
+<p>跨通道的运算从 127 次旋转减到 15 次，XLU 的往返只有三趟（折叠、旋转、送回），按<a href="#tbl-3">表 3</a> 是 <span class="math inline">126 + 69 + 79 = 274</span> 个周期；其余是向量 ALU 和读写槽上的工作（<a href="#fig-3">图 3</a>）。</p>
+<p>要让它真的比链快，光有算法还不够，还要按<a href="#tbl-3">表 3</a> 的那些等待来排程。向量发射严格按序，一个 bundle 在等，后面的全部跟着等：读刚写过的 tile 要等，<code>vsetiar</code> 之后的按索引读要等，<code>vsxpose</code> 之后它所在的队列还要被占用近一百个周期，这时提交到那个队列上的旋转连同后面所有的指令都被堵住。手写的版本把这些等待写成指令之间的最小间隔，用一个小排程器把别的指令填进去，并让折叠之后的旋转都走另一个队列。</p>
+<p>这个手写的程序（<code>folded_select.py</code>）放进同一个计时区间：载体 kernel 的操作数、结果和工作区都在 TC VMEM 的固定地址上，手写的片段插在 kernel 的结尾，直接读输入、写两个结果。</p>
+<div id="tbl-12" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th><span class="math inline"><em>k</em></span></th>
+<th style="text-align: right;">原生 XLA</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">本文的通用分派</th>
+<th style="text-align: right;">手写的折叠后数秩</th>
+<th style="text-align: right;">相对原生 XLA</th>
+<th style="text-align: right;">相对官方 Pallas</th>
+<th style="text-align: right;">相对通用分派</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8</td>
+<td style="text-align: right;">2564</td>
+<td style="text-align: right;">685</td>
+<td style="text-align: right;">717</td>
+<td style="text-align: right;">579</td>
+<td style="text-align: right;">−77.4%</td>
+<td style="text-align: right;">−15.5%</td>
+<td style="text-align: right;">−19.2%</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td style="text-align: right;">2564.5</td>
+<td style="text-align: right;">1341</td>
+<td style="text-align: right;">830</td>
+<td style="text-align: right;">656</td>
+<td style="text-align: right;">−74.4%</td>
+<td style="text-align: right;">−51.1%</td>
+<td style="text-align: right;">−21.0%</td>
+</tr>
+<tr class="odd">
+<td>32</td>
+<td style="text-align: right;">2564.5</td>
+<td style="text-align: right;">2653</td>
+<td style="text-align: right;">894</td>
+<td style="text-align: right;">689</td>
+<td style="text-align: right;">−73.1%</td>
+<td style="text-align: right;">−74.0%</td>
+<td style="text-align: right;">−22.9%</td>
+</tr>
+</tbody>
+</table>
+<p>表 12：<code>f32[8,128]</code> 上手写的折叠后数秩，部署形式是改写 executable。</p>
+</div>
+<p>它没有按数据的分支，不需要回退，含特殊值的输入读数相同，位型相同时下标是稳定的。所以基本形状也可以更快（<a href="#tbl-12">表 12</a>）：<span class="math inline"><em>k</em> = 8</span> 时比官方 Pallas 少 15%，比原生 XLA 少 77%。代价是整段手写，形状固定为 8 行；<a href="#sec-7">第 7 章</a>处理这个代价。</p>
+<h2 id="sec-6-3">6.3 整体转置：保留 <span class="math inline"><em>k</em></span> 轮，换掉每一轮走的路</h2>
+<p><span class="math inline"><em>k</em></span> 轮的依赖本身不是问题，问题是每一轮要等 XLU 的 79 个周期。如果每一轮只用逐元素的指令和 TC VMEM 的读写，一轮就只要几个周期；如果同时让每条输入行落在一个通道上，那么 128 个通道就是 128 条输入行，所有行共用同一条向量指令，分摊比官方的链更彻底。</p>
+<p><a href="#sec-5-4">5.4 节</a>的 <code>transposed</code> 是这个思路用 Pallas 源码能写出的样子：整体转置，沿子通道归并，再转回来。它在 16 行时是 788 个周期，128 行时是 937 个，随行数涨得确实很慢，但起点就比官方在 16 行的 704 个高。要在行数少的一侧也胜出，转置之后的那一段必须再便宜近一百个周期。那一段借用的是为一般的纵向问题写的归并：它把八条候选列两两合并三次，每次是一整套比较网络，把整条列都合并出来。数一遍编译出的清单（<code>merge_profile.py</code>，输出在 <code>results/merge-profile.txt</code>），16 行时这个 kernel 有 497 个 bundle、904 条向量 ALU 指令，另有 135 次读和 134 次写 TC VMEM，其中大部分是寄存器放不下之后编译器加的溢出和读回。这里只要前 8 名，而且可以用 Pallas 源码用不上的按索引读。于是做法分三步，前两步与 <code>transposed</code> 相同，第三步换掉。</p>
+<ol type="1">
+<li><strong>整体转置。</strong> 把 <span class="math inline">f32[<em>R</em>,128]</span> 转成 <span class="math inline">[128,<em>R</em>]</span>，不足 128 列的补齐。原来的第 <span class="math inline"><em>r</em></span> 行现在是第 <span class="math inline"><em>r</em></span> 个通道，它的 128 个元素沿子通道方向排在 16 个 TC VREG 里。这是普通的 <code>x.T</code>，由编译器生成 <code>vxpose</code>；结果每 8 个周期出来一个 TC VREG（<a href="#tbl-3">表 3</a>），后面的排序可以边出边做。</li>
+<li><strong>每个子通道排出候选列。</strong> 16 个 TC VREG 在同一个子通道、同一个通道上的 16 个元素，用 <a href="#sec-5-1">5.1 节</a>的比较网络按整数键排好，只保留前 8 层。这样每条输入行得到八条降序的候选列，每列 8 个元素。截断不会丢掉全局的前八名：一个元素如果在自己那一列里排在八名之后，单是这一列就有八个元素排在它前面。</li>
+<li><strong>八路合并，每轮只取一个。</strong> 每轮比较八个列首，输出最大的一个，再把它所在的那一列推进一格。下一个列首的位置因行而异，用 <code>vsetiar</code> 加 <code>vld.iar</code> 按每个通道自己的偏移从候选表里读。八轮之后得到的值和下标都是 <span class="math inline">[8,<em>R</em>]</span> 的数组，第 <span class="math inline"><em>r</em></span> 列是第 <span class="math inline"><em>r</em></span> 行按名次排好的前 8 名；两者各整体转置一次，就是要求的 <span class="math inline">[<em>R</em>,8]</span> 输出。</li>
+</ol>
+<p>整个过程里 XLU 只在两头各用一次（转置进来，转置回去），中间的排序和八轮合并全是通道之内的整数比较。位型的顺序由整数键保证，NaN、<code>-inf</code> 都只是键的一个取值；每轮只推进一条候选列，已经输出的位置不会被再次选中，不需要任何“已选”的标记。</p>
+<h2 id="sec-6-4">6.4 败者树：每轮只重赛三场</h2>
+<p>直接做八路合并，每轮要把八个列首各广播一遍、比较七次，这些工作全压在每一轮上。合并的每一轮其实只有一个列首变了，其余七个列首之间的比较结果可以留着用。</p>
+<p>败者树 [<a href="#ref-32">32</a>] 正是为此而设（<a href="#fig-4">图 4</a>）。八个列首两两比赛，四个胜者再赛，共三层七场；每个内部节点记下这一场的败者，根上的胜者就是全局最大。输出它之后，只有它所在的那一列换了列首。这条从叶到根的路径旁边的三棵子树都没有变，它们各自的胜者恰好就是路径上三个节点记下的败者。所以新的列首只要沿这条路径依次与三个败者比赛，就重建了整棵树，其余四个节点原样有效。每轮从七次比较减到三次，也不再需要广播八个列首。</p>
+<figure>
+<img src="loser.svg" id="fig-4" alt="图 4：整体转置加败者树。转置之后一条输入行占一个通道；每个通道的 16 个 TC VREG 排出八条降序的候选列；每一轮只让新的列首沿胜者的路径与三个败者重赛。所有通道同时进行，图中只画一个通道。" /><figcaption aria-hidden="true">图 4：整体转置加败者树。转置之后一条输入行占一个通道；每个通道的 16 个 TC VREG 排出八条降序的候选列；每一轮只让新的列首沿胜者的路径与三个败者重赛。所有通道同时进行，图中只画一个通道。</figcaption>
+</figure>
+<p>三个节点的位置取决于上一轮的胜者是哪一列，同样因行而异。为了不给每一层各装一次 IAR，底层四个节点的败者放在 TC VMEM 里，每个节点的败者复制到它管的两个子通道上：胜者列为 <span class="math inline"><em>c</em></span> 时，偏移 <span class="math inline"><em>c</em> − <em>s</em></span> 读到的正好是 <span class="math inline"><em>c</em></span> 所在的那个节点，更新时用带掩码的写把两份副本一起改掉。中层的两个节点和根节点一共只有三个，直接留在 TC VREG 里，中层按胜者列是否小于 4 用一条选择挑出要重赛的那个。每个候选的下标字里另带六位它在候选表中的行号，加 8 就是同一列的下一个候选，输出时把这六位移走。</p>
+<p>转置和候选列的排序是普通的 Pallas 源码；合并和转回是手写的片段（<code>transpose_merge.py</code>），与 <a href="#sec-6-2">6.2 节</a>的手写程序一样插进编译出的 executable，合并那一段再用 <a href="#sec-7-2">7.2 节</a>的工具按实测的时序重排。它不需要给 libtpu 打补丁。</p>
+<h2 id="sec-6-5">6.5 结果</h2>
+<div id="tbl-13" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>行数</th>
+<th style="text-align: right;">原生 XLA</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">本文的通用分派</th>
+<th style="text-align: right;"><code>transposed</code></th>
+<th style="text-align: right;">转置加败者树</th>
+<th style="text-align: right;">相对原生 XLA</th>
+<th style="text-align: right;">相对官方 Pallas</th>
+<th style="text-align: right;">相对 <code>transposed</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>16</td>
+<td style="text-align: right;">2606.5</td>
+<td style="text-align: right;">704</td>
+<td style="text-align: right;">752</td>
+<td style="text-align: right;">788</td>
+<td style="text-align: right;">685</td>
+<td style="text-align: right;">−73.7%</td>
+<td style="text-align: right;">−2.7%</td>
+<td style="text-align: right;">−13.1%</td>
+</tr>
+<tr class="even">
+<td>32</td>
+<td style="text-align: right;">2619.5</td>
+<td style="text-align: right;">733</td>
+<td style="text-align: right;">785</td>
+<td style="text-align: right;">804</td>
+<td style="text-align: right;">701</td>
+<td style="text-align: right;">−73.2%</td>
+<td style="text-align: right;">−4.4%</td>
+<td style="text-align: right;">−12.8%</td>
+</tr>
+<tr class="odd">
+<td>64</td>
+<td style="text-align: right;">2681</td>
+<td style="text-align: right;">766</td>
+<td style="text-align: right;">836</td>
+<td style="text-align: right;">836</td>
+<td style="text-align: right;">741</td>
+<td style="text-align: right;">−72.4%</td>
+<td style="text-align: right;">−3.3%</td>
+<td style="text-align: right;">−11.4%</td>
+</tr>
+<tr class="even">
+<td>96</td>
+<td style="text-align: right;">3296</td>
+<td style="text-align: right;">925</td>
+<td style="text-align: right;">869</td>
+<td style="text-align: right;">869</td>
+<td style="text-align: right;">773</td>
+<td style="text-align: right;">−76.5%</td>
+<td style="text-align: right;">−16.4%</td>
+<td style="text-align: right;">−11.0%</td>
+</tr>
+<tr class="odd">
+<td>128</td>
+<td style="text-align: right;">5259.5</td>
+<td style="text-align: right;">1235</td>
+<td style="text-align: right;">937</td>
+<td style="text-align: right;">937</td>
+<td style="text-align: right;">802</td>
+<td style="text-align: right;">−84.8%</td>
+<td style="text-align: right;">−35.1%</td>
+<td style="text-align: right;">−14.4%</td>
+</tr>
+</tbody>
+</table>
+<p>表 13：行宽 128、<span class="math inline"><em>k</em> = 8</span>，沿最后一维：整体转置加败者树（改写 executable），与两个基线、本文的通用分派和 <a href="#sec-5-4">5.4 节</a>用 Pallas 源码写的 <code>transposed</code>。</p>
+</div>
+<p><a href="#sec-5">第 5 章</a>留下的缺口补上了：16 至 64 之间的每一个行数上（<a href="#fig-5">图 5</a>），它都比官方 Pallas 少 2.7% 至 6.4%，<a href="#tbl-13">表 13</a> 中的 16、32、64 行是其中三个；到 96 行，少 16.4%。它的周期数随行数涨得很慢，从 16 行到 128 行只多了 117 个周期，因为多出来的行只是多占几个通道，增加的只有两头转置的搬运量；官方的链在 XLU 排满之后则快速变慢。与同样先转置、但用 Pallas 源码归并的 <code>transposed</code> 相比，它在每个行数上都少一百多个周期，这就是把合并换成败者树的收益。清单的条数与此相符：16 行时败者树的 kernel 是 394 个 bundle，比 <code>transposed</code> 少 103 个；向量 ALU 指令 726 条，少 178 条；读 67 次，其中 44 次是算法自己的按索引读和按模式读，留给溢出读回的只有 23 次。</p>
+<p>不是 8 的倍数的行数同样适用，输出转置按 8 行向上取整。<a href="#fig-5">图 5</a> 的左图是 8 到 128 之间全部 121 个行数的结果，每个行数都单独编译、核对和计时，逐行的数字见<a href="#sec-c-5">附录 C.5</a> 的<a href="#tbl-23">表 23</a>。同一个 TC VREG 数之内它的周期数几乎不变，官方的略有起伏。全部 121 个形状上它都比官方快，最少少 1.2%，最多少 35.1%。</p>
+<figure>
+<img src="rows.svg" id="fig-5" alt="图 5：行宽 128，沿最后一维，行数从 8 到 128。左：k = 8，另标出 5.4 节的 transposed；右：k = 16（6.6 节）。" /><figcaption aria-hidden="true">图 5：行宽 128，沿最后一维，行数从 8 到 128。左：<span class="math inline"><em>k</em> = 8</span>，另标出 <a href="#sec-5-4">5.4 节</a>的 <code>transposed</code>；右：<span class="math inline"><em>k</em> = 16</span>（<a href="#sec-6-6">6.6 节</a>）。</figcaption>
+</figure>
+<p>8 行时它也比官方快，但只快 8 个周期：只有一个 TC VREG 时没有别的行可以分摊两头的转置。这个形状上该用的是 <a href="#sec-6-2">6.2 节</a>和<a href="#sec-7">第 7 章</a>的折叠后数秩（<a href="#tbl-16">表 16</a>）。</p>
+<h2 id="sec-6-6">6.6 推广与边界</h2>
+<p><strong><span class="math inline"><em>k</em> = 16</span>。</strong> 每条候选列一共只有 16 个元素，<span class="math inline"><em>k</em> = 16</span> 时 16 层全留，候选表从 64 行变成 128 行，合并从 8 轮变成 16 轮，下标字里的行号从六位变成七位，其余不变。一条候选列只有在第 16 名恰好取走它最后一个元素时才会取完，而那之后不再读，所以不需要“取完”的标记。</p>
+<p><a href="#fig-5">图 5</a> 的右图是结果，逐行的数字见<a href="#sec-c-5">附录 C.5</a> 的<a href="#tbl-24">表 24</a>。它在 8 到 128 行上都比官方快，少 36% 至 61%。16 行时它与 <a href="#sec-7-4">7.4 节</a>的折叠后数秩相当（864 对 840），而它的周期数几乎不随行数涨，折叠后数秩则正比于行数。</p>
+<p><strong>没有做的。</strong> 合并目前是手写的片段，原因见 <a href="#sec-7-5">7.5 节</a>。<span class="math inline"><em>k</em> = 32</span> 时一条候选列会在合并中途取完，需要一个比任何键都小的哨兵；整数键已经用满了 32 位，哨兵要靠下标字里多带一位、每场比赛多比一次来实现，本文没有做。<span class="math inline"><em>k</em></span> 小于 8 时转置两头的固定开销比官方的整条链还长（<a href="#sec-5-4">5.4 节</a>），这个办法无从下手。行数超过 128 时一个通道放不下一条输入行，需要分批。</p>
+<p>所以行数居中、<span class="math inline"><em>k</em></span> 较小的情形也可以更快。<a href="#sec-6-1">6.1 节</a>“不走链就要按 TC VREG 付 XLU 的往返”“正确的链必然更慢”两个判断都没有错，但它们都以每一轮经过 XLU 为前提；把每一轮换到通道之内，<span class="math inline"><em>k</em></span> 轮的依赖可以原样保留。</p>
+<h2 id="sec-6-7">6.7 没有走通的路</h2>
+<p>为了避免重复，记下试过而没有胜出的方向。</p>
+<p><strong>成对提取。</strong> 按下标的每一个二进制位把一行分成两半，各求最大值，由这十四个最大值可以同时得到第一名和第二名，三趟 XLU 往返得到前六名。但由值恢复下标要求两名都唯一，并列时整个 TC VREG 要回退到 <code>phased</code>。验证通过时它是 686 个周期，与官方的 685 个持平；回退时是 1362 个，是官方的两倍，每行只有三个有限值的输入就会触发。推导见<a href="#sec-c-4">附录 C.4</a>。</p>
+<p><strong>其他方向。</strong> 一趟 XLU 往返选出两名并同时恢复下标：每趟要 30 条归约，提交本身就超过一轮链的时间，撞上的是 XLU 的吞吐。分段归约：一条指令可以给出许多段各自的结果，但结果留在各段自己的通道上，用到整行还要再跨通道搬一次。MXU：它能做沿通道的线性运算，<a href="#sec-4-8">4.8 节</a>用它求后缀和，但比较和取最大不是线性的。</p>
+<h1 id="sec-7">7 回到编译器</h1>
+<p><a href="#sec-6-2">6.2 节</a>的程序比两个基线都快，代价是整段手写：寄存器、掩码、工作区和指令间的依赖都由人分配，形状固定。这一章回答 RQ3：能不能只把那几条 Pallas 编译不出的指令交给人，其余仍由编译器负责。<a href="#sec-7-1">7.1</a>、<a href="#sec-7-2">7.2</a> 节仍在编译之后改写 executable，<a href="#sec-7-3">7.3 节</a>改为进程内补丁，让编译流程自己生成这些指令。</p>
+<h2 id="sec-7-1">7.1 占位改写</h2>
+<p>最直接的办法是注册一个 JAX primitive，在它的 Mosaic lowering rule 里直接生成底层的 <code>llo.*</code> op。这条路不通（<code>llo_op_probe.py</code>）：Mosaic 的布局推导只认识 <code>tpu</code>、<code>vector</code>、<code>arith</code> 几个 dialect 的 op，带向量操作数或结果的 <code>llo.*</code> op 一律在 <code>infer-vector-layout</code> 这一遍被拒绝，连 Mosaic 自己会生成的 <code>llo.vxpose</code> 也不例外；而且 LLO dialect 里没有与 IAR 有关的 op，转置的模式属性也只有三种，不含分段转置。</p>
+<p>可行的是反过来：在 Pallas 源码里该用那条指令的地方写一个编译器认识的运算当占位，编译之后用 tpuasm 只把占位换掉。数组的形状、值放在哪个寄存器、指令排在哪个 bundle，都是编译器已经决定好的。占位是带唯一立即数的异或 <code>x ^ M</code>：编译器对 <span class="math inline"><em>M</em></span> 一无所知，无法化简，改写时能从清单中认出它并读出源和目的寄存器。两个操作数的指令用“先异或再相减”，两种不同的运算之间编译器不会重新结合。本文做了<a href="#tbl-14">表 14</a> 中的四个 intrinsic（<code>asm_intrinsics.py</code>）：</p>
+<div id="tbl-14" class="tbl">
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>函数</th>
+<th>语义</th>
+<th>换上的指令</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>fold(x)</code></td>
+<td><span class="math inline"><em>y</em>[<em>s</em>,8<em>g</em>+<em>r</em>] = <em>x</em>[<em>r</em>,8<em>g</em>+<em>s</em>]</span></td>
+<td><code>vsxpose</code>、<code>vpop</code></td>
+</tr>
+<tr class="even">
+<td><code>sublane_shuffle(x, pattern)</code></td>
+<td>第 <span class="math inline"><em>s</em></span> 个子通道取 <code>pattern</code> 指定的那一行</td>
+<td><code>vst</code>、<code>vld.sshfl</code></td>
+</tr>
+<tr class="odd">
+<td><code>sublane_gather(x, offset)</code></td>
+<td><span class="math inline"><em>y</em>[<em>s</em>,<em>l</em>] = <em>x</em>[<em>s</em>+<em>o</em><em>f</em><em>f</em><em>s</em><em>e</em><em>t</em>[<em>s</em>,<em>l</em>],<em>l</em>]</span></td>
+<td><code>vst</code>、<code>vsetiar</code>、<code>vld.iar</code></td>
+</tr>
+<tr class="even">
+<td><code>sublane_scatter(x, offset, fill)</code></td>
+<td><span class="math inline"><em>y</em>[<em>s</em>+<em>o</em><em>f</em><em>f</em><em>s</em><em>e</em><em>t</em>[<em>s</em>,<em>l</em>],<em>l</em>] = <em>x</em>[<em>s</em>,<em>l</em>]</span></td>
+<td><code>vsetiar</code>、<code>vst.iar</code>、<code>vld</code></td>
+</tr>
+</tbody>
+</table>
+<p>表 14：四个 intrinsic。</p>
+</div>
+<p>改写器要处理的不只是一对一的替换。要经过 TC VMEM 的值，在它被算出来之后立刻存进工作区，同一个值只存一次；两个 IAR 按使用的区间轮流分配，装不下时把偏移先存起来、轮到时再装。编译器会把一个值溢出到 TC VMEM 再读回别的寄存器，所以找一个值的读者和定义都要顺着溢出和复制去追，不能按寄存器名。这些规则每一条都对应一次实际出过的错，整理在<a href="#sec-b">附录 B</a>。</p>
+<p>有了它们，折叠后数秩写成了一个约六十行的 Pallas 函数（<code>folded_top_k.py</code>），行数和 <span class="math inline"><em>k</em></span> 是普通的参数：</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>key <span class="op">=</span> fold(jnp.where(bits <span class="op">&lt;</span> <span class="dv">0</span>, bits <span class="op">^</span> <span class="bn">0x7fffffff</span>, bits))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rank <span class="op">=</span> jnp.where(key <span class="op">==</span> INT_MIN, sublane, <span class="dv">0</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> e <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">8</span>):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    other <span class="op">=</span> sublane_shuffle(key, pattern(e))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    rank <span class="op">=</span> rank <span class="op">+</span> jnp.where(other <span class="op">&gt;</span> jnp.where(sublane <span class="op">&gt;=</span> e, below, key), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>column <span class="op">=</span> sublane_scatter(key, rank <span class="op">-</span> sublane)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">16</span>):</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    other <span class="op">=</span> jnp.roll(column, <span class="dv">8</span> <span class="op">*</span> d, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    last <span class="op">=</span> sublane_gather(other, offset) <span class="op">&gt;</span> threshold</span></code></pre></div>
+<p>跨通道的旋转是普通的 <code>jnp.roll</code>，沿通道的精确求和是普通的 <code>jnp.sum</code>；只有折叠、按行重排、按索引读写四处用到 intrinsic。它在 <code>f32[8,128]</code> 上取前 8、16、32 名是 714、765、838 个周期（<a href="#tbl-16">表 16</a> 的“占位加改写”一列）：结果正确，<span class="math inline"><em>k</em></span> 较大时比两个基线快，但 <span class="math inline"><em>k</em> = 8</span> 时比官方 Pallas 还慢，离手写的版本很远。</p>
+<h2 id="sec-7-2">7.2 差距在排程，不在指令</h2>
+<p>占位加改写的版本比手写的多出一百多个周期。两者的指令并不完全相同，但差距主要来自空等：编译器的排程器不知道<a href="#tbl-3">表 3</a> 中与转置和 IAR 有关的那几种等待，把指令排在一起，硬件只好在按序发射的流水上一条条地等。验证这个判断的办法很直接：指令一条不改，只换先后，看周期数少多少。</p>
+<p>这可以在编译之后补救，并且做成与 top-<span class="math inline"><em>k</em></span> 无关的工具（<code>reschedule.py</code>）。它分四步。</p>
+<ol type="1">
+<li>把 kernel 的清单读成依赖图：每条指令读写哪些寄存器、哪些 tile、哪个 IAR、哪个 XLU 队列，都从清单的文本里读出来；只接受读写关系已经核对过的指令，不认识的直接拒绝。</li>
+<li>丢掉编译器的寄存器分配。TC VREG、掩码和 IAR 上“先用完旧值才能写新值”的先后关系是分配带进来的假依赖；把每次写入看成一个新的值，排程时再从空闲的寄存器里现取。XLU 的队列也不沿用，每次提交挑先空出来的那个。</li>
+<li>按<a href="#tbl-3">表 3</a> 的时序逐周期填 bundle，每个周期从就绪的指令里按到结尾的最长路径挑。一个 bundle 能装什么不由这个工具判断：每放一条指令就让 tpuasm 的求解器试编一次，编不出来就换下一条。</li>
+<li>用新的清单整段替换原来的那一段。</li>
+</ol>
+<p>重排的程序不会像编译器那样在寄存器不够时溢出，所以只在“原清单里最早的那条还没排的指令”往后若干条之内挑，窗口限制了与原顺序的偏离。时序模型用 <a href="#sec-3-3">3.3 节</a>逐个 bundle 测发射时刻的办法校准。重排之后三个 <span class="math inline"><em>k</em></span> 是 595、626、671 个周期（<a href="#tbl-16">表 16</a>）：同一份指令，只是换了先后，少了 119 至 167 个周期，与手写的版本相差 −4.6% 至 +2.8%。</p>
+<h2 id="sec-7-3">7.3 进程内给 libtpu 打补丁</h2>
+<p>改写 executable 始终是编译之后的补救。更接近“修好”的做法是沿着 Mosaic 的编译链路往下，找到缺的那一层。Pallas 的维护者如果要支持这些指令，改的也是这些地方，只是他们能改源码，本文只能改进程里已经装载的机器码。<a href="#tbl-15">表 15</a> 逐层清点，前两层是 MLIR 的 dialect，第三层是 libtpu 内部用 C++ 表示的 LLO，结果是越往下越全：</p>
+<div id="tbl-15" class="tbl">
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>层</th>
+<th>分段转置</th>
+<th>按固定模式重排</th>
+<th>按索引读</th>
+<th>按索引写</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TPU dialect（Mosaic 的输入）</td>
+<td>没有</td>
+<td><code>tpu.gather</code>（下标是常量）</td>
+<td><code>tpu.dynamic_gather</code></td>
+<td>没有对值的 op</td>
+</tr>
+<tr class="even">
+<td>LLO dialect</td>
+<td>模式枚举中没有</td>
+<td>有</td>
+<td><code>VectorSublanePermuteOp</code></td>
+<td>没有</td>
+</tr>
+<tr class="odd">
+<td>C++ 一层的 LLO</td>
+<td><code>Vxpose</code> 的模式中有</td>
+<td><code>VldSshfl</code></td>
+<td><code>VldHelper</code> 接受 IAR 编号</td>
+<td><code>CreateVectorStoreIndexed</code></td>
+</tr>
+<tr class="even">
+<td>指令编码</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+</tr>
+</tbody>
+</table>
+<p>表 15：四样操作在编译链路各层的支持情况（<code>tpu_op_probe.py</code>）。</p>
+</div>
+<p>缺的只是上面两层的入口，补法如下（<code>libtpu_patch.py</code>、<code>front_door.py</code>）。</p>
+<ul>
+<li><strong>按固定模式重排不需要补丁。</strong> <code>tpu.gather</code> 在 TPU v4 上本来就编译成 <code>vst</code> 加 <code>vld.sshfl</code>，只是 Pallas 没有哪一条 lowering rule 会生成它。</li>
+<li><strong>按索引读差一个判断。</strong> <code>jnp.take_along_axis(axis=0)</code> 在 Pallas 里已经被降为 <code>tpu.dynamic_gather</code>，一路通过布局推导，到 lower-to-LLO 才以 <code>Sublane gather not supported by this TPU generation</code> 被拒绝。把这个判断去掉（一条 6 字节的条件跳转），并把下一层的那次调用改接到自己的函数上，由它生成“存、<code>vsetiar</code>、<code>vld.iar</code>”。函数体只是按地址调用 libtpu 自己的 <code>LloRegionBuilder</code> 方法；钩子用 Python 写，由 ctypes 包成函数指针。</li>
+<li><strong>折叠与按索引写借同一个入口。</strong> TPU dialect 里没有能表达它们的 op，借“沿子通道、下标的写法特殊的 gather”当载体，钩子按下标的写法分辨要生成哪一种。</li>
+<li><strong>排程器把 <code>vsetiar</code> 当作内存屏障。</strong> 它与 fence、DMA 同类：屏障之前的内存读写必须先做完，之后的每一次读都要等。编译器原本只在程序开头生成 <code>vsetiar</code>；本文的补丁在 kernel 里每做一次按索引读就生成一条，也就每次立一道屏障，周围的读写全被隔开。把 IAR 登记成一个有先后依赖的寄存器、从屏障中拿掉，并在延迟表里补上间隔。</li>
+<li><strong>延迟表低估了转置之后队列的占用。</strong> 表里是 104 个周期，实测约 223 个（<a href="#tbl-3">表 3</a>）。补上之后，编译器自己就会把折叠之后的旋转排到另一个队列上。</li>
+</ul>
+<p>做完这些，四个 intrinsic 全部由编译流程生成，不再改写 executable（<a href="#tbl-16">表 16</a> 的“编译流程生成”一列）。这时编译生成的程序比手写的慢 1% 至 10%：指令已经齐了，排程仍按编译器原来的策略。再往前一步：编译器的排程按关键路径排优先级，不按时间；在它的 VLIW 排程那一步之后接一个钩子（<code>vliw_reorder.py</code>），拿 libtpu 自己的依赖图按时间重排一遍，IAR 的编号和 XLU 的队列都改为排程时再分配，之后的打包、寄存器分配和溢出仍由编译器完成。</p>
+<div id="tbl-16" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th><span class="math inline"><em>k</em></span></th>
+<th style="text-align: right;">原生 XLA</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">本文的通用分派</th>
+<th style="text-align: right;">手写</th>
+<th style="text-align: right;">占位加改写</th>
+<th style="text-align: right;">再重排</th>
+<th style="text-align: right;">编译流程生成</th>
+<th style="text-align: right;">再加流程内重排</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8</td>
+<td style="text-align: right;">2564</td>
+<td style="text-align: right;">685</td>
+<td style="text-align: right;">717</td>
+<td style="text-align: right;">579</td>
+<td style="text-align: right;">714</td>
+<td style="text-align: right;">595</td>
+<td style="text-align: right;">637</td>
+<td style="text-align: right;">568</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td style="text-align: right;">2564.5</td>
+<td style="text-align: right;">1341</td>
+<td style="text-align: right;">830</td>
+<td style="text-align: right;">656</td>
+<td style="text-align: right;">765</td>
+<td style="text-align: right;">626</td>
+<td style="text-align: right;">664</td>
+<td style="text-align: right;">605</td>
+</tr>
+<tr class="odd">
+<td>32</td>
+<td style="text-align: right;">2564.5</td>
+<td style="text-align: right;">2653</td>
+<td style="text-align: right;">894</td>
+<td style="text-align: right;">689</td>
+<td style="text-align: right;">838</td>
+<td style="text-align: right;">671</td>
+<td style="text-align: right;">699</td>
+<td style="text-align: right;">650</td>
+</tr>
+</tbody>
+</table>
+<p>表 16：<code>f32[8,128]</code> 上的折叠后数秩，同一个算法的五种来源，以及两个基线和本文的通用分派。按 <a href="#sec-3-5">3.5 节</a>的部署形式，“手写”“占位加改写”“再重排”三列是改写 executable，“编译流程生成”“再加流程内重排”两列是进程内补丁，通用分派是 Pallas 源码。</p>
+</div>
+<p>最后一种方式下，编译器从一个六十行的 Pallas 函数生成的程序，在三个 <span class="math inline"><em>k</em></span> 上都比手写的版本快（少 2% 至 8%），比官方 Pallas 少 17% 至 75%，比原生 XLA 少 75% 至 78%。四种编译方式的次序也说明了差距的来源：从“占位加改写”到“再重排”、从“编译流程生成”到“再加流程内重排”，指令没有变，变的只是先后。需要说明，“快于手写”靠的是最后这一步重排，它是本文写的、接在编译器内部的一个排程器；只改正延迟表和依赖关系还不够。</p>
+<h2 id="sec-7-4">7.4 多个 TC VREG</h2>
+<p><a href="#tbl-17">表 17</a> 给出这个算法在更多行上的表现。</p>
+<div id="tbl-17" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>形状</th>
+<th style="text-align: right;"><span class="math inline"><em>k</em></span></th>
+<th style="text-align: right;">原生 XLA</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">本文的通用分派</th>
+<th style="text-align: right;">折叠后数秩</th>
+<th style="text-align: right;">折叠后数秩，重排</th>
+<th style="text-align: right;">重排相对官方 Pallas</th>
+<th style="text-align: right;">重排相对通用分派</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[16,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2606.5</td>
+<td style="text-align: right;">704</td>
+<td style="text-align: right;">752</td>
+<td style="text-align: right;">1022</td>
+<td style="text-align: right;">820</td>
+<td style="text-align: right;">+16.5%</td>
+<td style="text-align: right;">+9.0%</td>
+</tr>
+<tr class="even">
+<td><code>[16,128]</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">2605.5</td>
+<td style="text-align: right;">1360</td>
+<td style="text-align: right;">1062</td>
+<td style="text-align: right;">1022</td>
+<td style="text-align: right;">840</td>
+<td style="text-align: right;">−38.2%</td>
+<td style="text-align: right;">−20.9%</td>
+</tr>
+<tr class="odd">
+<td><code>[32,128]</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2619.5</td>
+<td style="text-align: right;">733</td>
+<td style="text-align: right;">785</td>
+<td style="text-align: right;">1507</td>
+<td style="text-align: right;">1437</td>
+<td style="text-align: right;">+96.0%</td>
+<td style="text-align: right;">+83.1%</td>
+</tr>
+</tbody>
+</table>
+<p>表 17：多个 TC VREG 时的折叠后数秩（由编译流程生成，“重排”指再加流程内的重排，部署形式都是进程内补丁），沿最后一维。每个形状另用含特殊值的输入在同一个外壳里核对了值的位型和稳定下标，没有错误。</p>
+</div>
+<p><code>[16,128]</code> 取前 16 名时，折叠后数秩比官方 Pallas 少 38%，比通用分派（这个形状上是 <a href="#sec-5-4">5.4 节</a>的转置）少 21%。取前 8 名时它输给链，行数越多输得越多。相对原生 XLA，这些形状都更快。</p>
+<h2 id="sec-7-5">7.5 败者树为什么还是手写的</h2>
+<p><a href="#sec-7-1">7.1 节</a>的 intrinsic 把一个 TC VREG 的值存进一个 tile 再按索引读，读的范围是这一个 tile；败者树要读的候选表有 8 个或 16 个 tile，下一个列首在哪个 tile 因行而异。Mosaic 的输入里有表达“从一块内存里按索引读”的 op（<code>tpu.vector_load_idx</code>），但它在 TensorCore 上从布局推导那一遍就被拒绝（<code>results/tpu-op-probe.txt</code>），补上它需要改三遍编译，本文没有做。所以 <a href="#sec-6-4">6.4 节</a>的合并只能以手写片段的形式存在；它用到的重排工具和计时外壳与 <a href="#sec-6-2">6.2 节</a>和 <a href="#sec-7-2">7.2 节</a>相同，不需要给 libtpu 打补丁。</p>
+<p>对 RQ3 的回答是：可以，缺的是 TPU dialect 和 LLO dialect 这两层入口，以及排程器的延迟表和依赖关系。补齐之后，单个 TC VREG 时编译器生成的程序比手写的慢 1% 至 10%；再按时间重排一遍就超过了手写的水平。多个 TC VREG、<span class="math inline"><em>k</em></span> 较小时这个算法本身不占优，那一段由 <a href="#sec-6-3">6.3</a> 至 <a href="#sec-6-5">6.5</a> 节的败者树解决，而败者树的合并还需要 Mosaic 支持从多个 tile 中按索引读。</p>
+<h1 id="sec-8">8 评估汇总</h1>
+<h2 id="sec-8-1">8.1 25 个形状的总体结果</h2>
+<p><a href="#fig-6">图 6</a> 把 25 个形状放在一起，每个形状取本文最快的办法，按部署形式着色；<a href="#tbl-18">表 18</a> 按情形归纳。</p>
+<figure>
+<img src="overview.svg" id="fig-6" alt="图 6：25 个形状上本文最快的办法相对官方 Pallas 的周期数之比，按 3.5 节的部署形式着色。比值小于 1 表示更快，横轴为对数刻度。四组的顺序与第 5 章相同。" /><figcaption aria-hidden="true">图 6：25 个形状上本文最快的办法相对官方 Pallas 的周期数之比，按 <a href="#sec-3-5">3.5 节</a>的部署形式着色。比值小于 1 表示更快，横轴为对数刻度。四组的顺序与<a href="#sec-5">第 5 章</a>相同。</figcaption>
+</figure>
+<div id="tbl-18" class="tbl">
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 19%" />
+<col style="width: 19%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>情形</th>
+<th>最快的办法</th>
+<th>部署形式</th>
+<th style="text-align: right;">形状数</th>
+<th style="text-align: right;">相对官方 Pallas</th>
+<th style="text-align: right;">相对原生 XLA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>行宽超过 128</td>
+<td>通道内排出候选列（<a href="#sec-5-1">5.1 节</a>）</td>
+<td>Pallas 源码</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">−67% 至 −30%</td>
+<td style="text-align: right;">−85% 至 −24%</td>
+</tr>
+<tr class="even">
+<td>沿子通道</td>
+<td>整数键的秩计数、候选层、归并（<a href="#sec-5-2">5.2 节</a>）</td>
+<td>Pallas 源码</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">−68% 至 −23%</td>
+<td style="text-align: right;">−84% 至 −21%</td>
+</tr>
+<tr class="odd">
+<td>行宽 128、8 行、<span class="math inline"><em>k</em></span> 为 128</td>
+<td>秩计数（<a href="#sec-5-3">5.3 节</a>）</td>
+<td>Pallas 源码</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">−88%</td>
+<td style="text-align: right;">−50%</td>
+</tr>
+<tr class="even">
+<td>行宽 128、256 行、<span class="math inline"><em>k</em> = 8</span></td>
+<td>只求下标、结束后取值的链（<a href="#sec-5-4">5.4 节</a>）</td>
+<td>Pallas 源码</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">−24%</td>
+<td style="text-align: right;">−78%</td>
+</tr>
+<tr class="odd">
+<td>行宽 128、8 行、<span class="math inline"><em>k</em></span> 为 8 至 32</td>
+<td>折叠后数秩（<a href="#sec-6-2">6.2 节</a>、<a href="#sec-7">第 7 章</a>）</td>
+<td>进程内补丁（最快）；改写 executable 也快于两个基线</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">−75% 至 −17%</td>
+<td style="text-align: right;">−78% 至 −75%</td>
+</tr>
+<tr class="even">
+<td>行宽 128、16 行、<span class="math inline"><em>k</em> = 16</span></td>
+<td>折叠后数秩（<a href="#sec-7-4">7.4 节</a>）</td>
+<td>进程内补丁</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">−38%</td>
+<td style="text-align: right;">−68%</td>
+</tr>
+<tr class="odd">
+<td>行宽 128、16 至 128 行、<span class="math inline"><em>k</em> = 8</span></td>
+<td>整体转置加败者树（<a href="#sec-6-3">6.3</a> 至 <a href="#sec-6-5">6.5</a> 节）</td>
+<td>改写 executable</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">−35% 至 −3%</td>
+<td style="text-align: right;">−85% 至 −72%</td>
+</tr>
+<tr class="even">
+<td>行宽 128、8 行、<span class="math inline"><em>k</em> = 1</span></td>
+<td><code>phased</code></td>
+<td>Pallas 源码</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">+27%</td>
+<td style="text-align: right;">−93%</td>
+</tr>
+</tbody>
+</table>
+<p>表 18：各种情形下本文最快的办法、它的部署形式，以及相对两个基线的周期数变化。</p>
+</div>
+<p>本文的加速比定义为基线的周期数除以本文的周期数，25 个形状等权取几何平均。只用 Pallas 源码时，即<a href="#sec-5">第 5 章</a>的通用分派，相对官方 Pallas 是 1.67×，相对原生 XLA 是 3.34×；每个形状取本文最快的办法时，分别是 1.79× 和 3.57×。后一组数不是一个现成的实现给出的：通用分派没有包含折叠后数秩和败者树，它们目前要改写 executable 或打进程内补丁。按 <a href="#sec-3-3">3.3 节</a>的 1050 MHz 换算，<code>f32[8,128]</code> 取前 8 名从官方的 685 个周期（约 652 ns）降到 568 个（约 541 ns）。</p>
+<p>回到 <a href="#sec-1-3">1.3 节</a>的问题：能不能既完全正确，又更快？</p>
+<ul>
+<li><strong>正确不贵（RQ1）。</strong> 只修注释里承认的重选几乎不花周期；修到与原生 XLA 逐位一致，基本形状多 32 个周期，仅 4.7%。官方保留错误所依据的“修正昂贵”不成立。</li>
+<li><strong>多数情形可以两者兼得，而且只用 Pallas 现有的 API（RQ2）。</strong> 宽行、行数在 96 以上、纵向、<span class="math inline"><em>k</em></span> 不小于 16 这四种情形，逐位正确的写法比官方 Pallas 和原生 XLA 都快（<a href="#sec-5-6">5.6 节</a>）。</li>
+<li><strong>基本情形可以，但今天要靠 Pallas 编译不出的指令（RQ2、RQ3）。</strong> 行宽 128、8 行、<span class="math inline"><em>k</em> = 8</span> 时，只用 Pallas 现有 API 的正确写法比官方慢 4.7%；用上 <code>vsxpose</code> 与 IAR 读写之后，比官方少 17%。</li>
+<li><strong>行数居中、<span class="math inline"><em>k</em></span> 较小的情形可以，办法是换掉链走的路（RQ2）。</strong> 行宽 128、16 至 64 行、<span class="math inline"><em>k</em> = 8</span> 时，只用 Pallas 现有 API 的正确写法比官方慢 7% 至 9%；整体转置之后用败者树合并，在这一段的每一个行数上都比官方少 2.7% 至 6.4%（<a href="#sec-6-5">6.5 节</a>）。</li>
+<li><strong>把这些办法合在一起，三方对照的 25 个形状中 24 个比官方 Pallas 快，全部比原生 XLA 快。</strong> 唯一的例外是 <code>[8,128]</code> 取前 1 名：只有一轮，没有可以分摊、也没有可以换路的地方，逐位正确多出的 32 个周期（官方 117，本文 149）还在。<a href="#tbl-10">表 10</a> 中 <span class="math inline"><em>k</em></span> 为 2 和 4 的情形是同一回事：链太短，转置和折叠两头的固定开销都比它长，逐位正确的开销无处可藏。<a href="#sec-1-1">1.1 节</a>提到的取前 1 名、前 2 名的路由正属于这一类，本文在这里没有比官方更快的写法。</li>
+</ul>
+<p>与原生 XLA 的对照给出一个附带的结论：官方 Pallas 并不总比原生 XLA 快，25 个形状中有 6 个更慢，都是 <span class="math inline"><em>k</em></span> 较大的情形；它为性能放弃的正确性，换来的性能优势在这些形状上并不存在。原生 XLA 在全部输入上正确，本文的通用分派在全部 25 个形状上比它快。</p>
+<h2 id="sec-8-2">8.2 分析框架与实测</h2>
+<p><a href="#sec-2-2">2.2 节</a>的分析框架只判断瓶颈属于哪一类，并给出这一类的下限。<a href="#tbl-19">表 19</a> 把几种写法的下限与实测放在一起。</p>
+<div id="tbl-19" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>写法</th>
+<th>形状</th>
+<th>框架判断的瓶颈</th>
+<th style="text-align: right;">下限</th>
+<th style="text-align: right;">实测</th>
+<th style="text-align: right;">下限占实测</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>官方的链，每轮</td>
+<td><code>[8,128]</code></td>
+<td>XLU 往返</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">96%</td>
+</tr>
+<tr class="even">
+<td>官方的链，每轮</td>
+<td><code>[8,1024]</code></td>
+<td>XLU 往返，两次</td>
+<td style="text-align: right;">148</td>
+<td style="text-align: right;">178.7</td>
+<td style="text-align: right;">83%</td>
+</tr>
+<tr class="odd">
+<td>秩计数，<span class="math inline"><em>k</em> = 16</span></td>
+<td><code>[8,128]</code></td>
+<td>XLU 发射</td>
+<td style="text-align: right;">573</td>
+<td style="text-align: right;">830</td>
+<td style="text-align: right;">69%</td>
+</tr>
+<tr class="even">
+<td>折叠后数秩，<span class="math inline"><em>k</em> = 8</span></td>
+<td><code>[8,128]</code></td>
+<td>XLU 往返，三趟</td>
+<td style="text-align: right;">274</td>
+<td style="text-align: right;">568</td>
+<td style="text-align: right;">48%</td>
+</tr>
+</tbody>
+</table>
+<p>表 19：分析框架给出的下限与实测。官方链的两行取相邻两个 <span class="math inline"><em>k</em></span> 之差除以轮数，即每轮的周期数；其余是整个计时区间的周期数。</p>
+</div>
+<p>链是框架最准的一类：<code>f32[8,128]</code> 上官方的链每轮比 XLU 的往返多 3 个周期，即每轮取回结果、比较和选择的几条指令；宽行时链上有两次 XLU 往返，下限也随之翻倍，实测与它相差不到两成。秩计数的下限只算了 127 次旋转的提交，实测高出的部分是旋转之后逐元素的比较和累加，以及按秩整理出 <span class="math inline"><em>k</em></span> 个结果；分派里秩计数的估计式因此加了与 <span class="math inline"><em>k</em></span> 成正比的一项（<a href="#sec-5-5">5.5 节</a>）。折叠后数秩离下限最远：XLU 的三趟往返只占实测的一半左右，其余是<a href="#tbl-3">表 3</a> 中 TC VMEM 写后读、<code>vsetiar</code> 之后按索引读这类等待，以及向量 ALU 上的工作。也就是说，一旦 XLU 不再是瓶颈，“向量 ALU 的指令条数”这一类就不足以描述时间，必须把<a href="#tbl-3">表 3</a> 中的各种等待都算进来，<a href="#sec-7">第 7 章</a>的重排做的正是这件事。框架用于判断该换哪一类算法，具体的分派界线仍要靠实测拟合。</p>
+<h2 id="sec-8-3">8.3 用作近似 top-<span class="math inline"><em>k</em></span></h2>
+<p>TPU-KNN [<a href="#ref-17">17</a>] 的两阶段近似算法在 Pallas 中也有实现。kernel 中调用 <code>jax.lax.approx_max_k</code> 时，Pallas 先把一行切成若干片，每片 <span class="math inline"><em>b</em></span> 个元素，逐元素比较，在每个位置上留下各片中的最大值和它的下标；再对这 <span class="math inline"><em>b</em></span> 个候选调用 <code>_top_k_impl</code>，把下标作为 <code>carried_idx</code> 一并带上 [<a href="#ref-1">1</a>]。<span class="math inline"><em>b</em></span> 由召回率 <span class="math inline"><em>r</em></span> 决定，是 <span class="math inline">⌈(<em>k</em>−1)/(1−<em>r</em>)⌉</span> 向上取整到 128 的倍数：<span class="math inline"><em>r</em> = 0.95</span> 时，<span class="math inline"><em>k</em> = 8</span> 的候选数是 256，<span class="math inline"><em>k</em> = 32</span> 是 640；<span class="math inline"><em>r</em> = 1</span> 时整个调用就是 <code>_top_k_impl</code>。所以第二阶段的输入正落在 <a href="#sec-5-1">5.1 节</a>宽行的范围内，而本文的通用分派本来就接受 <code>carried_idx</code>，可以原样替换它。</p>
+<p>第一阶段也有 <a href="#sec-4-2">4.2 节</a>的问题。它用 <code>seg &gt; best_val</code> 合并各片，与 NaN 的比较总是假：后面各片中的 NaN 永远不会被选中；第一片中的负号 NaN 一旦占住某个位置，就不会被替换，同一位置上其他片的元素全被挡住。本文把第一阶段也换到整数键上（<code>approx.py</code>）：逐元素比较键，只保留键和下标，候选的值最后由键还原；严格大于才替换，所以键相等时保留下标较小的一片，与原来的规则相同；尾片的填充取最小的键 <code>INT_MIN</code>，不会被选中。</p>
+<p>近似算法的结果不唯一，所以正确性按两部分检查。第一部分对所有实现适用：<a href="#sec-4-4">4.4 节</a>的前三项，加上全局最大值（按 <a href="#sec-4-3">4.3 节</a>的顺序）必须排在第一位，任何按位置分桶的算法都应满足这一点，因为全局最大值一定是它所在位置的候选。第二部分只对 Pallas 的实现适用：与参照逐位比较，参照是同一个分桶算法在整数键上的精确结果。输入沿用 <a href="#sec-4-5">4.5 节</a>的类别，4 组形状，共 2752 条。</p>
+<div id="tbl-20" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>实现</th>
+<th style="text-align: right;">下标越界</th>
+<th style="text-align: right;">下标重复</th>
+<th style="text-align: right;">值与下标不配对</th>
+<th style="text-align: right;">最大值不在第一位</th>
+<th style="text-align: right;">与参照不同</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>原生 XLA</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">601</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr class="even">
+<td>官方 Pallas</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">1060</td>
+<td style="text-align: right;">1150</td>
+<td style="text-align: right;">1150</td>
+</tr>
+<tr class="odd">
+<td>只换第二阶段</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">254</td>
+<td style="text-align: right;">347</td>
+</tr>
+<tr class="even">
+<td>两阶段都换</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p>表 20：Pallas 的 <code>approx_max_k</code>（召回率 0.95）在 2752 条输入中各类错误的条数，以及原生 XLA 的 <code>approx_max_k</code>。“只换第二阶段”把 <code>_top_k_impl</code> 换成本文的通用分派，“两阶段都换”另把第一阶段换到整数键上。</p>
+</div>
+<p><a href="#tbl-20">表 20</a> 中，官方 Pallas 在 1230 条上出错。只换第二阶段，下标重复和不配对都消失了，但第一阶段丢掉的 NaN 仍在，还有 347 条；两阶段都换之后没有错误。原生 XLA 的 <code>approx_max_k</code> 有自己的分桶方式，不能与参照比较；它的下标都合法、互不相同并与值配对，但在原始位型和特殊位型混合的输入上，有 601 条没有把全局最大值排在第一：在原始位型上它跳过正号 NaN，返回最大的有限值；在特殊位型的混合中，它可能把负号 NaN 排在 <code>+inf</code> 之前。XLA 的文档没有规定 <code>approx_max_k</code> 怎样处理 NaN，这里只记录它与 <a href="#sec-4-3">4.3 节</a>顺序的差别，不算作错误。</p>
+<div id="tbl-21" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>形状</th>
+<th><span class="math inline"><em>k</em></span></th>
+<th>候选数</th>
+<th style="text-align: right;">原生 XLA</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">只换第二阶段</th>
+<th style="text-align: right;">两阶段都换</th>
+<th style="text-align: right;">两阶段都换相对官方</th>
+<th style="text-align: right;">精确：本文的通用分派</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[8,1024]</code></td>
+<td>8</td>
+<td>256</td>
+<td style="text-align: right;">3340‡</td>
+<td style="text-align: right;">1529</td>
+<td style="text-align: right;">975</td>
+<td style="text-align: right;">986</td>
+<td style="text-align: right;">−35.5%</td>
+<td style="text-align: right;">943</td>
+</tr>
+<tr class="even">
+<td><code>[8,4096]</code></td>
+<td>8</td>
+<td>256</td>
+<td style="text-align: right;">3395‡</td>
+<td style="text-align: right;">1588</td>
+<td style="text-align: right;">1037</td>
+<td style="text-align: right;">1068</td>
+<td style="text-align: right;">−32.7%</td>
+<td style="text-align: right;">1318</td>
+</tr>
+<tr class="odd">
+<td><code>[64,4096]</code></td>
+<td>8</td>
+<td>256</td>
+<td style="text-align: right;">5663‡</td>
+<td style="text-align: right;">3430</td>
+<td style="text-align: right;">3288</td>
+<td style="text-align: right;">3518</td>
+<td style="text-align: right;">+2.6%</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr class="even">
+<td><code>[8,4096]</code></td>
+<td>32</td>
+<td>640</td>
+<td style="text-align: right;">4749‡</td>
+<td style="text-align: right;">7146</td>
+<td style="text-align: right;">3279</td>
+<td style="text-align: right;">3346</td>
+<td style="text-align: right;">−53.2%</td>
+<td style="text-align: right;">3899</td>
+</tr>
+<tr class="odd">
+<td><code>[8,8192]</code></td>
+<td>32</td>
+<td>640</td>
+<td style="text-align: right;">4813.5‡</td>
+<td style="text-align: right;">7228</td>
+<td style="text-align: right;">3328</td>
+<td style="text-align: right;">3479</td>
+<td style="text-align: right;">−51.9%</td>
+<td style="text-align: right;">4715</td>
+</tr>
+</tbody>
+</table>
+<p>表 21：<code>approx_max_k</code>（召回率 0.95）在 <a href="#sec-3-4">3.4 节</a>的计时区间内的周期数。“精确”一列是同一形状上本文的通用分派求精确 top-<span class="math inline"><em>k</em></span> 的周期数（<a href="#tbl-6">表 6</a>），这一组形状没有测的标 —。‡ 的含义见 <a href="#sec-3-4">3.4 节</a>。</p>
+</div>
+<p>两阶段都换之后（<a href="#tbl-21">表 21</a>），除 <code>[64,4096]</code> 外都比官方 Pallas 快 33% 至 53%，<span class="math inline"><em>k</em> = 32</span> 时快一半以上：这时官方的第二阶段在 640 个候选上逐轮求最大，正是<a href="#tbl-6">表 6</a> 中宽行、<span class="math inline"><em>k</em></span> 较大的情形。<code>[64,4096]</code> 上第一阶段占了大头，每个元素先变换成整数键，比官方慢 2.6%；只换第二阶段则快 4.1%，但留着第一阶段丢失 NaN 的问题。原生 XLA 在区间里先排序再取前缀，并经 CMEM 搬运，两阶段都换之后比它少 28% 至 70%。</p>
+<p>最后一列把近似与精确放在一起：都用本文的写法时，近似相对精确的周期数变化是 <code>[8,1024]</code> 取前 8 名 +5%、<code>[8,4096]</code> 取前 8 名 −19%、<code>[8,4096]</code> 取前 32 名 −14%、<code>[8,8192]</code> 取前 32 名 −26%。在这一行宽范围内，召回率 0.95 只把候选减到行宽的十六分之一至四分之一，第一阶段本身又要逐元素比较一遍，用召回率换来的速度不超过四分之一，行宽 1024、<span class="math inline"><em>k</em> = 8</span> 时甚至比精确更慢。</p>
+<h2 id="sec-8-4">8.4 正确性验证</h2>
+<p><a href="#sec-3-6">3.6 节</a>各层检查的结果如下。</p>
+<ul>
+<li>通用分派：<a href="#tbl-4">表 4</a> 的 31 组、197592 条输入，四类错误均为零；同一批输入上官方 Pallas 与原生 XLA 的结果见<a href="#tbl-4">表 4</a>。</li>
+<li>每一个计时程序，包括原生 XLA，都在插入读数前后逐元素核对了 8 份输入的全部值和下标。</li>
+<li>手写的折叠后数秩（<a href="#sec-6-2">6.2 节</a>）在计时的外壳里另用含特殊值的输入核对（随机原始位型、小整数并列、恒定位型、非负键个数从 0 到 <span class="math inline"><em>k</em> + 1</span>、三个有限值其余 <code>-inf</code>、特殊位型混合）。</li>
+<li>由占位改写和由编译流程生成的折叠后数秩（<a href="#sec-7">第 7 章</a>），每个形状、每种编译方式都在计时的外壳里用同样几类输入核对值的位型和稳定下标，没有错误。</li>
+<li>整体转置加败者树（<a href="#sec-6-3">6.3</a> 至 <a href="#sec-6-5">6.5</a> 节）：8 到 128 的每个行数，在计时的外壳里另用 80 组输入核对，共 658240 行。其中 64 组与<a href="#tbl-4">表 4</a> 的类别相同，16 组是定向的：让前 8 名全部来自同一条候选列（连续推进到候选表的最后一层），或者每轮换一条候选列（每轮走一条不同的胜者路径）。<span class="math inline"><em>k</em> = 16</span> 的 16 个行数同样核对，共 95744 行。</li>
+<li><a href="#tbl-2">表 2</a> 的四条指令各用 4 组随机输入与模型逐元素比较。</li>
+</ul>
+<p>有两条方法上的教训值得写明。其一，片段的检查不能代替完整程序的检查：一段手写片段在测试载体里全部正确，放进完整程序后出错，因为载体恰好在某个寄存器里留着零，掩盖了一条漏写的依赖。其二，小形状上正确不说明规则被遵守：改写器的几个错误都要到寄存器紧张、编译器开始复用和溢出寄存器时才出现。</p>
+<h1 id="sec-9">9 讨论与局限</h1>
+<h2 id="sec-9-1">9.1 可以推广的发现</h2>
+<ul>
+<li><strong>比较要先固定边界。</strong> 把原生 XLA 放进与 Pallas 相同的区间，需要同时指定内存空间、布局和两个结果的共同终点（<a href="#sec-3-4">3.4 节</a>）。固定边界之后，原生 XLA 在纵向和 <span class="math inline"><em>k</em></span> 较大时比通常以为的强；与输入无关的准备工作也必须算在区间内，否则不同写法之间的比较会失真。</li>
+<li><strong>链不一定要拆，可以换它走的路。</strong> 官方的链慢在每一轮要等 XLU，而不在有 <span class="math inline"><em>k</em></span> 轮。把数据转置到让每一行占一个通道，每一轮就只剩通道之内的整数比较和按索引读，许多行还能共用同一条指令（<a href="#sec-6-3">6.3 节</a>）。</li>
+<li><strong>在折叠后数秩上，编译器与手写的差距主要在排程。</strong> 同一份指令，按真实的时序重排之后就能达到手写的水平。libtpu 的排程器缺的是三样具体的东西：延迟表里转置之后队列的占用，IAR 被当作内存屏障，以及 XLU 队列和 IAR 编号在排程之前就定死。这三条本身与 top-<span class="math inline"><em>k</em></span> 无关，但本文只在折叠后数秩这一个 kernel 上量过它们的收益，对别的 kernel 有多大作用还没有验证。</li>
+<li><strong>闭源的工具链并不妨碍这类工作，但需要一个能在机器程序上动手的工具。</strong> 指令表、编码器和符号都在公开发行的二进制里，语义和延迟可以在真机上量出来。本文把这些做成了 tpuasm：读清单、改一条指令、插一段片段、装回去运行并读周期数，每一步都不需要重新编译，对照实验因此可以只变一个量（<a href="#sec-3-1">3.1</a> 至 <a href="#sec-3-3">3.3</a> 节）。tpuasm 本身与 top-<span class="math inline"><em>k</em></span> 无关；<a href="#sec-7">第 7 章</a>的重排工具和<a href="#sec-3">第 3 章</a>的延迟测法在设计上也不依赖 top-<span class="math inline"><em>k</em></span>，但本文只在 top-<span class="math inline"><em>k</em></span> 的几个 kernel 上用过它们。</li>
+<li><strong>精确 top-<span class="math inline"><em>k</em></span> 与产生得分的矩阵乘相比并不便宜。</strong> 按 TPU v4 公开的峰值 [<a href="#ref-27">27</a>] 估算，每个 TC 每周期做 <span class="math inline">4 × 128 × 128</span> 次 bf16 乘加，产生一块 <code>[128,128]</code> 的得分，维度 <span class="math inline"><em>d</em> = 128</span> 时约需 32 个周期，<span class="math inline"><em>d</em> = 4096</span> 时约需 1024 个周期；本文对这样一块取前 8 名最快也要 802 个周期（<a href="#sec-6-5">6.5 节</a>）。所以 TPU-KNN [<a href="#ref-17">17</a>] 的判断在它的场景中仍然成立：最近邻搜索的维度小、数据量大，精确选择比矩阵乘贵一个数量级以上，近似算法有它的必要，而近似算法的两个阶段同样可以用本文的写法（<a href="#sec-8-3">8.3 节</a>）。MoE 路由是另一种情形：以 Qwen3-235B-A22B 为例，隐藏维度 4096、128 个专家取前 8 名 [<a href="#ref-29">29</a>, <a href="#ref-38">38</a>]，路由的矩阵乘与 top-<span class="math inline"><em>k</em></span> 的周期数在同一量级，top-<span class="math inline"><em>k</em></span> 的写法直接影响路由 kernel 的耗时，这与 SonicMoE [<a href="#ref-15">15</a>] 在 GPU 上观察到的比例一致。这里只是按峰值的估算，本文没有实测完整的路由 kernel。</li>
+<li><strong>正确性的定义要从位型出发。</strong> “NaN 当作最大值”“-0 等于 +0”这类数值层面的约定，与原生 XLA 的实际行为并不一致；以位型的全序为定义，特殊值就不再是特例，整数键的比较既简单又不会丢失 NaN。</li>
+</ul>
+<h2 id="sec-9-2">9.2 给上游的建议</h2>
+<p>正确性方面，对 Pallas 的 <code>_top_k_impl</code>：已选位置被重新选中可以用 <a href="#sec-4-7">4.7 节</a>的抬高修正，它只多一次不在链上的归约，“修正昂贵”的顾虑不成立；要与原生 XLA 逐位一致，可以采用 <a href="#sec-4-9">4.9 节</a>的整数键与分段编码，代价是基本形状多 32 个周期。对 Mosaic 生成的 argmax：多个 lane tile 和沿子通道时会丢失 NaN（<a href="#sec-4-2">4.2 节</a>），原因是值和下标由两次不同的比较选出，应当改成用同一个比较同时选值和下标；并列时返回哪个下标，JAX #34620 的描述只对一个 lane tile 成立，规则应当在文档或实现中统一。</p>
+<p>编译器方面，按在折叠后数秩上的收益排序：修正延迟表中转置之后 XLU 的占用；把 IAR 登记成有依赖的寄存器而不是内存屏障；XLU 队列和 IAR 编号在排程时分配；放开 TPU v4 上沿子通道的 gather，并为 <code>vsxpose</code>、<code>vld.sshfl</code>、<code>vst.iar</code> 各提供一个 TPU dialect 的 op。前三条与 top-<span class="math inline"><em>k</em></span> 无关，用到转置和按索引读写的 kernel 都会碰到，但本文没有在别的 kernel 上量过。另外，Pin 的着色应当传播到 fusion 内部，公开的 <code>jax.ref.new_ref(..., pin=True)</code> 应当把目标内存空间传给 Pin（<a href="#sec-3-4">3.4 节</a>）。</p>
+<h2 id="sec-9-3">9.3 局限</h2>
+<ul>
+<li><strong>只在 TPU v4、libtpu 0.0.49 上实验。</strong> 本文能用到的只有 TPU v4，无法在更新的世代上实验；延迟是在这个版本上测出的，补丁的地址写死在脚本里。不过本文的结论大多不依赖这些具体的数：官方的 <code>_top_k_impl</code> 是各世代共用的同一段源码，<a href="#sec-4">第 4 章</a>的正确性定义和检查方法与硬件无关；性能分析按瓶颈进行，而 TensorCore 的基本结构在 TPU v2 至 TPU v7x (Ironwood) 五代之间保持稳定，指令一直是 VLIW 指令包 [<a href="#ref-28">28</a>]；向量寄存器在 TPU v2 至 v5p 都是 <span class="math inline">8 × 128</span>，到 TPU v7x 才扩大为 <span class="math inline">16 × 256</span> [<a href="#ref-28">28</a>]。tpuasm 从 TPU v6e 的 libtpu 中得到的指令索引 [<a href="#ref-5">5</a>] 里，跨通道归约、循环移位和转置同样是 <span class="math inline">8 × 128</span> 的提交—取回式指令。所以哪种情形该用哪种算法的判断大体可以沿用，寄存器形状改变的世代则需要重新检验。换到新世代时，需要用 <a href="#sec-3-1">3.1</a> 至 <a href="#sec-3-3">3.3</a> 节的方法重测指令延迟，确认用到的指令仍然存在，并重新定位补丁。</li>
+<li><strong>数据类型只覆盖 f32。</strong> 这是 TPU v4 上 Pallas top-<span class="math inline"><em>k</em></span> 唯一接受的类型：它的 lowering 只接受 f32 和 <code>bfloat16</code>，后者要求 TPU v6 或更新的世代。</li>
+<li><strong>只考虑单个 TC 上的算法。</strong> Pallas kernel 本身也可以写成多个 TC 乃至多颗芯片并行的程序，本文只研究单个 TC 这一基本情形，没有考虑多 core 并行的写法。按行把工作分给多个 TC 时，每个 TC 上仍是本文的情形，本文的结果可以直接用上；把同一行拆给多个 TC 则还要在 TC 之间交换和合并部分结果，是另一个问题。</li>
+<li><strong>只讨论数据已经在 TC VMEM 中的计算。</strong> 不涉及它与 HBM 之间的搬运。kernel 内的 top-<span class="math inline"><em>k</em></span> 通常接在别的计算后面，数据已经在 TC VMEM 中，搬运由 kernel 的其他部分决定（<a href="#sec-3-5">3.5 节</a>）。</li>
+<li><strong><span class="math inline"><em>k</em></span> 很小、行宽小于 128 的情形没有更快的写法。</strong> <span class="math inline"><em>k</em></span> 为 1 至 4、行宽 128 时，本文的正确写法都比官方慢（<a href="#sec-8-1">8.1 节</a>、<a href="#tbl-10">表 10</a>）；行宽小于 128 的形状只做了正确性检查，没有测量周期数。取前 1 名、前 2 名的 MoE 路由正落在这一区间。</li>
+<li><strong>行宽超过 8192、行数超过 256 的情形没有测。</strong> 测过的输入从一个 TC VREG 到 256 KiB，kernel 内的 top-<span class="math inline"><em>k</em></span> 处理的是能放进 TC VMEM 的一个块，通常在这个量级。按 <a href="#sec-2-2">2.2 节</a>的分析框架，更大的形状只是 TC VREG 更多，瓶颈的种类不变，但各写法之间的比例需要另测。</li>
+<li><strong>没有放开稳定入口。</strong> <code>is_stable=True</code> 在 Pallas 中仍然报错。是否放开是上游的接口决定，本文没有改；秩计数与折叠后数秩已经能给出稳定的结果，放开时可以直接使用。</li>
+<li><strong>折叠后数秩依赖进程内补丁。</strong> 它只在行数少的一侧有优势，最快的两种形式依赖进程内补丁，不是可以直接合入上游的形式：它用到的指令编译器目前不生成，而 libtpu 不开源，本文只能在进程内补上，以证明这条路走得通，真正的修改要由上游完成（<a href="#sec-9-2">9.2 节</a>）。三方对照中原生 XLA 有两格也依赖一个进程内修复才能编译，这个错误只在把端点固定到 TC VMEM 时出现（<a href="#sec-3-4">3.4 节</a>），不影响 XLA 的默认用法。</li>
+<li><strong>败者树只做了一部分。</strong> <a href="#sec-6">第 6 章</a>的转置加败者树只做了 <span class="math inline"><em>k</em></span> 为 8 和 16、不超过 128 行，合并是手写的片段。这正是<a href="#sec-5">第 5 章</a>之后剩下的区间：行数更多、<span class="math inline"><em>k</em></span> 更大的情形<a href="#sec-5">第 5 章</a>已经快于两个基线，而整体转置把每行放到一个通道上，一次最多容纳 128 行。合并只能手写的原因见 <a href="#sec-7-5">7.5 节</a>。纵向的候选层同样可以改成按索引读的合并，本文没有做。</li>
+<li><strong>计时的输入是没有并列的随机排列。</strong> 本文的各种写法没有按数据的分支，原生 XLA 只在 <code>[8,4096]</code> 取前 8 名时有，相差 2 个周期（<a href="#sec-3-4">3.4 节</a>），所以换一种输入分布不改变本文的比较。</li>
+<li><strong>没有证明任何一种写法是最快的。</strong> 本文的加速都是相对两个基线而言的；延迟下限只对 XLU 链这一类算法给出（<a href="#sec-6-1">6.1 节</a>、<a href="#sec-8-2">8.2 节</a>），不是对所有算法的下限。</li>
+</ul>
+<h1 id="sec-10">10 相关工作</h1>
+<p><strong>GPU 上的精确 top-<span class="math inline"><em>k</em></span>。</strong> Shanbhag 等 [<a href="#ref-10">10</a>] 最早系统地研究 GPU 上的 top-<span class="math inline"><em>k</em></span>，提出 bitonic top-<span class="math inline"><em>k</em></span>：先用部分 bitonic 排序得到长为 <span class="math inline"><em>k</em></span> 的有序段，再两两归并并丢弃较小的一半，直到只剩 <span class="math inline"><em>k</em></span> 个；<span class="math inline"><em>k</em></span> 不超过 256 时，它比整体排序快至多 15 倍。Faiss 的 WarpSelect [<a href="#ref-11">11</a>] 把候选全部放在寄存器中，比较交换由 warp shuffle 完成，可以与产生数据的 kernel 融合，支持 <span class="math inline"><em>k</em> ≤ 1024</span>。Dr. Top-<span class="math inline"><em>k</em></span> [<a href="#ref-12">12</a>] 把输入分成子区间，取每段的最大值作代表，只有代表进入前 <span class="math inline"><em>k</em></span> 名的子区间才需要细看，以此去掉绝大部分工作量；RadiK [<a href="#ref-13">13</a>] 改用基数选择，使 <span class="math inline"><em>k</em></span> 不再受片上存储容量的限制；Zhang 等 [<a href="#ref-33">33</a>] 的 AIR Top-K 把基数选择的各趟融合进同一个 kernel，并按数据分布自适应地减少访存，GridSelect 则边读入边维护候选队列。这些工作面对的是 GPU 全局内存中的大数组，Shanbhag 等、Dr. Top-<span class="math inline"><em>k</em></span> 和 RadiK 的评测规模达到 <span class="math inline">2<sup>29</sup></span> 至 <span class="math inline">2<sup>30</sup></span> 个元素，目标是减少访存和工作量。基数选择都要先把浮点数变成可比的整数，用的是与 <a href="#sec-4-9">4.9 节</a>相同的条件异或 [<a href="#ref-31">31</a>]。本文的输入已经在 TC VMEM 中，是 kernel 内的一个块，瓶颈是 <a href="#sec-2-2">2.2 节</a>的三样资源，尤其是 XLU 的往返延迟。这些论文都没有讨论 NaN。</p>
+<p><strong>逐行、行很短的 top-<span class="math inline"><em>k</em></span>。</strong> 神经网络中的 top-<span class="math inline"><em>k</em></span> 常常是对矩阵逐行做，每行不长，这与本文的设定最接近。RTop-K [<a href="#ref-14">14</a>] 用二分搜索逐行确定阈值，评测的行长为 256 至 768，<span class="math inline"><em>k</em></span> 为 16 至 128；阈值精度 <span class="math inline"><em>ϵ</em></span> 取 0 时结果精确，另有提前停止的近似模式，对照的是 PyTorch 的 <code>torch.topk</code>。SonicMoE [<a href="#ref-15">15</a>] 指出，MoE 路由中 <code>torch.topk</code> 约占路由计算时间的 40%，为此写了 <span class="math inline"><em>E</em> ≤ 4096</span>、<span class="math inline"><em>K</em> ≤ 16</span> 的专用 kernel：每行做 bitonic 排序，排序前把列号写进 f32 尾数的低 <span class="math inline">log<sub>2</sub><em>E</em></span> 位，这样不会出现相等的键，结果总是稳定的。按 <a href="#sec-4-4">4.4 节</a>的定义，这种做法比较的已经不是原值：只在这几位上不同的元素按列号而不是按值排序。该文对比的 Tilelang 官方示例逐轮求最大值，与官方 Pallas 的结构相同，该文认为它更适合很小的 <span class="math inline"><em>K</em></span>。Key 等 [<a href="#ref-16">16</a>] 的代价模型同样把 <span class="math inline"><em>k</em></span> 轮扫描求最大（ScanMax）列为并行机器上 <span class="math inline"><em>k</em></span> 较小时的精确算法。本文在 TPU 上回答了这类逐轮求最大的写法怎样才正确（<a href="#sec-4">第 4 章</a>），以及它什么时候已经贴近硬件的下限（<a href="#sec-6-1">6.1 节</a>）。</p>
+<p><strong>TPU 上的 top-<span class="math inline"><em>k</em></span>。</strong> TPU-KNN [<a href="#ref-17">17</a>] 分析了 top-<span class="math inline"><em>k</em></span> 与矩阵乘融合时的指令预算：在 TPU v4 上，维度为 128 时每个点积只能负担约 4 条逐元素指令，据此认为精确、通用的 <span class="math inline"><em>k</em></span> 选择无法高效实现，转而采用两阶段的近似算法：先分桶、每桶取最大，再对候选做 bitonic 排序取前 <span class="math inline"><em>k</em></span> 名，这就是 JAX 的 <code>approx_max_k</code>。Samaga 等 [<a href="#ref-18">18</a>] 报告，在 TPU v5e 上用 <code>jax.lax.top_k</code> 求 Gemma 2 9B 前馈层激活的前 2%，耗时是产生这些激活的矩阵乘的 27 倍；他们把第一阶段推广为每桶取前 <span class="math inline"><em>K</em>′</span> 名，用 Pallas 实现。Key 等 [<a href="#ref-16">16</a>] 在 GPU 上研究了同一类分桶算法。这些工作以召回率换取并行度，本文研究的是精确、逐位正确的 top-<span class="math inline"><em>k</em></span>。两者并不冲突：两阶段算法的第二阶段仍是对候选的精确 top-<span class="math inline"><em>k</em></span>，JAX 中 Pallas 的 <code>approx_max_k</code> 就是先分桶，再对候选调用官方 Pallas 的 top-<span class="math inline"><em>k</em></span>。<a href="#sec-8-3">8.3 节</a>把本文的写法放进它的两个阶段，<a href="#sec-9-1">9.1 节</a>估算精确 top-<span class="math inline"><em>k</em></span> 与产生得分的矩阵乘的相对开销。Dr. Top-<span class="math inline"><em>k</em></span> 的代表元素与第一阶段的结构相似，但它回头细看入选的子区间，因此结果是精确的。</p>
+<p><strong>寄存器内的排序网络。</strong> 比较网络排序与奇偶归并来自 Batcher [<a href="#ref-4">4</a>]，本文把它用在不同 TC VREG 的同一位置上，并按前 <span class="math inline"><em>k</em></span> 个输出反向裁剪。CPU 的 SIMD 上也有同样的做法：Chhugani 等 [<a href="#ref-19">19</a>] 的寄存器内排序先在 <span class="math inline"><em>K</em></span> 个寄存器之间逐通道比较，把每个通道内的值排好，再用一串 shuffle 转置；vqsort [<a href="#ref-20">20</a>] 先排好各列，再直接用 bitonic 归并合并，省掉转置。<a href="#sec-5-4">5.4 节</a>与 <a href="#sec-6-3">6.3 节</a>先转置、再沿子通道归并的做法与此同源。不同的是，TPU 上的转置要经过 XLU 的往返（<a href="#tbl-3">表 3</a>），值不值得转置取决于行数能否分摊这笔固定开销。秩计数是枚举排序 [<a href="#ref-32">32</a>] 在循环移位上的实现，败者树来自外部归并 [<a href="#ref-32">32</a>]；本文的贡献不在这些算法本身，而在于找出它们在 TPU 上分别受哪一样资源限制，以及怎样借分段转置和按索引读写把它们放到合适的单元上。</p>
+<p><strong>浮点全序与上游问题。</strong> 本文的正确性定义是 IEEE 754 的 <code>totalOrder</code> [<a href="#ref-30">30</a>]，XLA 为比较运算规定的全序 [<a href="#ref-3">3</a>] 与它一致。Pallas 在并列时 argmax 的行为已有上游 issue [<a href="#ref-2">2</a>]，本文补充了多个 lane tile 与沿子通道的规则，并指出 NaN 丢失的问题。</p>
+<p><strong>指令集逆向与指令级优化。</strong> GPU 厂商同样不公开机器指令集。Jia 等 [<a href="#ref-21">21</a>] 用微基准和反汇编得出 Volta 的指令编码、控制信息与延迟，并在二进制层面改写寄存器分配，使一个代表矩阵乘内层循环的 kernel 快了 15.4%；Hayes 等 [<a href="#ref-22">22</a>] 系统地解码了多代 NVIDIA GPU 的指令集，并据此生成汇编器。uops.info [<a href="#ref-23">23</a>] 用自动生成的微基准测量 x86 指令的延迟、吞吐量和端口占用，以机器可读的形式提供给编译器和性能预测工具，并指出了已有资料中的错误。SIP [<a href="#ref-24">24</a>] 和 CuAsmRL [<a href="#ref-25">25</a>] 在编译后的 SASS 上搜索更好的指令排程，以实测的运行时间为反馈。为 GPU 编写汇编器以便在机器程序上直接调优，也有 KeplerAs [<a href="#ref-34">34</a>]、maxas [<a href="#ref-35">35</a>]、TuringAs [<a href="#ref-36">36</a>] 等先例。在 TPU 上，Kaufman 等 [<a href="#ref-37">37</a>] 用学习的方法从 XLA 的程序图预测 kernel 的耗时，服务于 tile 大小和融合的选择，粒度是整个 kernel，不涉及指令级的延迟。本文在 TPU 上做了对应的几件事。此前观察 TPU 编译结果的手段是编译器自己打印的 LLO 文本，它不能无歧义地对应到机器指令，也不能汇编回去；本文的 tpuasm [<a href="#ref-5">5</a>] 直接在机器程序上工作，是本文所有指令级实验的基础（<a href="#sec-3-1">3.1 节</a>）。指令的语义和延迟由真机实验确定（<a href="#sec-3-2">3.2</a>、<a href="#sec-3-3">3.3</a> 节），其中与转置和 IAR 有关的等待，编译器的延迟表里要么没有，要么偏小。编译之后的重排不做搜索，而是按实测延迟建立的时序模型逐周期填 bundle（<a href="#sec-7-2">7.2 节</a>）；<a href="#sec-7-3">7.3 节</a>再把实测的延迟补进编译器自己的延迟表。</p>
+<p><strong>TPU 的体系结构。</strong> TPU 的公开资料只到体系结构层面。Norrie 等 [<a href="#ref-26">26</a>] 描述了 TPU v2 的 TensorCore：标量单元取 322 位的 VLIW 指令包（亦见 [<a href="#ref-28">28</a>]），向量单元有 128 个通道、每个通道 8 个子通道，矩阵单元的结果进入 Result FIFO，由专门的取回槽取出，另有一组单元做转置、行归约和列置换。Jouppi 等 [<a href="#ref-27">27</a>] 给出了 TPU v4 的参数：每个 TC 有 4 个 MXU 和 16 MiB 的 VMEM，两个 TC 共享 128 MiB 的 CMEM，与<a href="#sec-c-1">附录 C.1</a> 的实测一致。Jouppi 等 [<a href="#ref-28">28</a>] 回顾了 TPU v2 至 TPU v7x 五代的演变，认为 TensorCore 的基本结构一直保持稳定（<a href="#sec-9-3">9.3 节</a>）。这些资料没有给出指令的编码、语义和延迟；本文的指令级信息全部来自 libtpu 本身和真机实验。</p>
+<h1 id="sec-11">11 结论</h1>
+<p>本文检验了 JAX 官方 Pallas top-<span class="math inline"><em>k</em></span> 的一个前提：正确与快不可兼得。以 IEEE 754 的 <code>totalOrder</code> 定义逐位正确之后，官方实现的错误远不止注释承认的重复下标，而修正它们只让基本形状慢 4.7%。在此基础上，本文按 XLU 的往返延迟、XLU 的发射间隔和向量 ALU 的指令条数选择写法：只用 Pallas 源码，在选定的 25 个形状中的 20 个上快于官方实现；在官方的串行链已经贴近 XLU 延迟下限的地方换掉链所走的路之后，快于官方实现的形状增加到 24 个，全部形状都快于原生 XLA。其中最难的部分依赖编译器目前不生成的指令；以折叠后数秩为例，把这些指令封装成原语、在进程内补齐编译链路的入口和排程器的延迟之后，编译器生成的程序接近手写的速度，再按实测延迟重排一遍就快于手写。<span class="math inline"><em>k</em></span> 很小的情形仍然没有更快的写法。因此，Pallas 的 top-<span class="math inline"><em>k</em></span> 应当修正，编译器也应当补上这几条指令和准确的延迟（<a href="#sec-9-2">9.2 节</a>）。tpuasm 和本文测定语义与延迟的方法不限于 top-<span class="math inline"><em>k</em></span>，可以用于其他需要在指令层面理解 TPU 的工作。</p>
+<h1 id="致谢">致谢</h1>
+<p>本研究得到 Google TPU Research Cloud（TRC）提供的 Cloud TPU 支持。</p>
+<h1 id="参考">参考</h1>
+<ol type="1">
+<li><span id="ref-1"></span>JAX，<code>jax/_src/pallas/mosaic/lowering.py</code> 中的 <code>_top_k_impl</code>，提交 <code>7fc69a22c2</code>，<a href="https://github.com/jax-ml/jax" class="uri">https://github.com/jax-ml/jax</a>。</li>
+<li><span id="ref-2"></span>JAX issue #34620，<a href="https://github.com/jax-ml/jax/issues/34620" class="uri">https://github.com/jax-ml/jax/issues/34620</a>。</li>
+<li><span id="ref-3"></span>OpenXLA，Operation Semantics：Compare，<a href="https://openxla.org/xla/operation_semantics#compare" class="uri">https://openxla.org/xla/operation_semantics#compare</a>。</li>
+<li><span id="ref-4"></span>K. E. Batcher，Sorting networks and their applications，AFIPS Spring Joint Computer Conference，1968，<a href="https://doi.org/10.1145/1468075.1468121" class="uri">https://doi.org/10.1145/1468075.1468121</a>。</li>
+<li><span id="ref-5"></span>tpuasm，本文给出的 TPU 指令包汇编器与反汇编器，源码在 <a href="https://github.com/ayaka14732/tpuasm" class="uri">https://github.com/ayaka14732/tpuasm</a>，各目标的指令索引和设计文档在 <a href="https://ayaka14732.github.io/tpuasm/" class="uri">https://ayaka14732.github.io/tpuasm/</a>。</li>
+<li><span id="ref-6"></span>libtpu，<a href="https://pypi.org/project/libtpu/" class="uri">https://pypi.org/project/libtpu/</a>。</li>
+<li><span id="ref-7"></span>JAX，Layout 文档，<a href="https://docs.jax.dev/en/latest/notebooks/layout.html" class="uri">https://docs.jax.dev/en/latest/notebooks/layout.html</a>。</li>
+<li><span id="ref-8"></span>JAX，Pallas Async Operations：Scheduling，<a href="https://docs.jax.dev/en/latest/pallas/design/async_note.html#scheduling" class="uri">https://docs.jax.dev/en/latest/pallas/design/async_note.html#scheduling</a>。</li>
+<li><span id="ref-9"></span>OpenXLA，<code>xla/hlo/transforms/memory_space_propagation.cc</code>，<a href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/memory_space_propagation.cc" class="uri">https://github.com/openxla/xla/blob/main/xla/hlo/transforms/memory_space_propagation.cc</a>。</li>
+<li><span id="ref-10"></span>A. Shanbhag、H. Pirk、S. Madden，Efficient Top-K Query Processing on Massively Parallel Hardware，SIGMOD，2018，<a href="https://doi.org/10.1145/3183713.3183735" class="uri">https://doi.org/10.1145/3183713.3183735</a>。</li>
+<li><span id="ref-11"></span>J. Johnson、M. Douze、H. Jégou，Billion-Scale Similarity Search with GPUs，IEEE Transactions on Big Data 7(3)，535–547，2021，<a href="https://doi.org/10.1109/TBDATA.2019.2921572" class="uri">https://doi.org/10.1109/TBDATA.2019.2921572</a>。</li>
+<li><span id="ref-12"></span>A. Gaihre 等，Dr. Top-k: Delegate-Centric Top-k on GPUs，SC，2021，Article 39，<a href="https://dl.acm.org/doi/10.1145/3458817.3476141" class="uri">https://dl.acm.org/doi/10.1145/3458817.3476141</a>。</li>
+<li><span id="ref-13"></span>Y. Li 等，RadiK: Scalable and Optimized GPU-Parallel Radix Top-K Selection，ICS，2024，537–548，<a href="https://doi.org/10.1145/3650200.3656596" class="uri">https://doi.org/10.1145/3650200.3656596</a>。</li>
+<li><span id="ref-14"></span>X. Xie、Y. Luo、H. Peng、C. Ding，RTop-K: Ultra-Fast Row-Wise Top-K Selection for Neural Network Acceleration on GPUs，ICLR，2025，<a href="https://arxiv.org/abs/2409.00822" class="uri">https://arxiv.org/abs/2409.00822</a>。</li>
+<li><span id="ref-15"></span>W. Guo、M. Mishra、X. Cheng、I. Stoica、T. Dao，SonicMoE: Accelerating MoE with IO and Tile-aware Optimizations，ICLR，2026，附录 D，<a href="https://arxiv.org/abs/2512.14080" class="uri">https://arxiv.org/abs/2512.14080</a>。</li>
+<li><span id="ref-16"></span>O. Key、L. Ribar、A. Cattaneo、L. Hudlass-Galley、D. Orr，Approximate Top-k for Increased Parallelism，NeurIPS 2024 Workshop on Adaptive Foundation Models，2024，<a href="https://arxiv.org/abs/2412.04358" class="uri">https://arxiv.org/abs/2412.04358</a>。</li>
+<li><span id="ref-17"></span>F. Chern 等，TPU-KNN: K Nearest Neighbor Search at Peak FLOP/s，NeurIPS，2022，<a href="https://arxiv.org/abs/2206.14286" class="uri">https://arxiv.org/abs/2206.14286</a>。</li>
+<li><span id="ref-18"></span>Y. Samaga B L、V. Yerram、S. R. Babbula、P. Jain、P. Netrapalli，A Faster Generalized Two-Stage Approximate Top-K，TMLR，2026，<a href="https://arxiv.org/abs/2506.04165" class="uri">https://arxiv.org/abs/2506.04165</a>。</li>
+<li><span id="ref-19"></span>J. Chhugani 等，Efficient Implementation of Sorting on Multi-Core SIMD CPU Architecture，PVLDB，2008，<a href="https://doi.org/10.14778/1454159.1454171" class="uri">https://doi.org/10.14778/1454159.1454171</a>。</li>
+<li><span id="ref-20"></span>J. Wassenberg、M. Blacher、J. Giesen、P. Sanders，Vectorized and Performance-Portable Quicksort，Software: Practice and Experience 52(12)，2684–2699，2022，<a href="https://doi.org/10.1002/spe.3142" class="uri">https://doi.org/10.1002/spe.3142</a>。</li>
+<li><span id="ref-21"></span>Z. Jia、M. Maggioni、B. Staiger、D. P. Scarpazza，Dissecting the NVIDIA Volta GPU Architecture via Microbenchmarking，技术报告，arXiv:1804.06826，2018，<a href="https://arxiv.org/abs/1804.06826" class="uri">https://arxiv.org/abs/1804.06826</a>。</li>
+<li><span id="ref-22"></span>A. B. Hayes、F. Hua、J. Huang、Y. Chen、E. Z. Zhang，Decoding CUDA Binary，CGO，2019，229–241，<a href="https://doi.org/10.1109/CGO.2019.8661186" class="uri">https://doi.org/10.1109/CGO.2019.8661186</a>。</li>
+<li><span id="ref-23"></span>A. Abel、J. Reineke，uops.info: Characterizing Latency, Throughput, and Port Usage of Instructions on Intel Microarchitectures，ASPLOS，2019，<a href="https://doi.org/10.1145/3297858.3304062" class="uri">https://doi.org/10.1145/3297858.3304062</a>。</li>
+<li><span id="ref-24"></span>G. He、E. Yoneki，SIP: Autotuning GPU Native Schedules via Stochastic Instruction Perturbation，EuroMLSys，2024，<a href="https://arxiv.org/abs/2403.16863" class="uri">https://arxiv.org/abs/2403.16863</a>。</li>
+<li><span id="ref-25"></span>G. He、E. Yoneki，CuAsmRL: Optimizing GPU SASS Schedules via Deep Reinforcement Learning，CGO，2025，<a href="https://doi.org/10.1145/3696443.3708943" class="uri">https://doi.org/10.1145/3696443.3708943</a>。</li>
+<li><span id="ref-26"></span>T. Norrie 等，The Design Process for Google’s Training Chips: TPUv2 and TPUv3，IEEE Micro 41(2)，2021，<a href="https://doi.org/10.1109/MM.2021.3058217" class="uri">https://doi.org/10.1109/MM.2021.3058217</a>。</li>
+<li><span id="ref-27"></span>N. P. Jouppi 等，TPU v4: An Optically Reconfigurable Supercomputer for Machine Learning with Hardware Support for Embeddings，ISCA，2023，<a href="https://doi.org/10.1145/3579371.3589350" class="uri">https://doi.org/10.1145/3579371.3589350</a>。</li>
+<li><span id="ref-28"></span>N. P. Jouppi、S. Lakshmanamurthy、C. Young、D. Patterson，Google’s Training Supercomputers from TPU v2 to Ironwood: Architectural Stability, Scale, Resilience, Power Efficiency, and Sustainability Across Five Generations，arXiv:2606.15870，2026，<a href="https://arxiv.org/abs/2606.15870" class="uri">https://arxiv.org/abs/2606.15870</a>。</li>
+<li><span id="ref-29"></span>Qwen Team，Qwen3 Technical Report，arXiv:2505.09388，2025，<a href="https://arxiv.org/abs/2505.09388" class="uri">https://arxiv.org/abs/2505.09388</a>。</li>
+<li><span id="ref-30"></span>IEEE Standard for Floating-Point Arithmetic，IEEE Std 754-2019，§5.10 totalOrder，<a href="https://doi.org/10.1109/IEEESTD.2019.8766229" class="uri">https://doi.org/10.1109/IEEESTD.2019.8766229</a>。</li>
+<li><span id="ref-31"></span>M. Herf，Radix Tricks，2001，<a href="https://stereopsis.com/radix.html" class="uri">https://stereopsis.com/radix.html</a>。</li>
+<li><span id="ref-32"></span>D. E. Knuth，The Art of Computer Programming, Volume 3: Sorting and Searching，第 2 版，Addison-Wesley，1998，§5.2（比较计数）与 §5.4.1（败者树）。</li>
+<li><span id="ref-33"></span>J. Zhang、A. Naruse、X. Li、Y. Wang，Parallel Top-K Algorithms on GPU: A Comprehensive Study and New Methods，SC，2023，<a href="https://doi.org/10.1145/3581784.3607062" class="uri">https://doi.org/10.1145/3581784.3607062</a>。</li>
+<li><span id="ref-34"></span>X. Zhang、G. Tan、S. Xue、J. Li、K. Zhou、M. Chen，Understanding the GPU Microarchitecture to Achieve Bare-Metal Performance Tuning，PPoPP，2017，31–43，<a href="https://doi.org/10.1145/3018743.3018755" class="uri">https://doi.org/10.1145/3018743.3018755</a>。</li>
+<li><span id="ref-35"></span>Nervana Systems，maxas: Assembler for NVIDIA Maxwell architecture，<a href="https://github.com/NervanaSystems/maxas" class="uri">https://github.com/NervanaSystems/maxas</a>。</li>
+<li><span id="ref-36"></span>D. Yan，TuringAs: An open-source SASS assembler for NVIDIA Volta and Turing GPUs，<a href="https://github.com/daadaada/turingas" class="uri">https://github.com/daadaada/turingas</a>。</li>
+<li><span id="ref-37"></span>S. J. Kaufman 等，A Learned Performance Model for Tensor Processing Units，MLSys，2021，<a href="https://arxiv.org/abs/2008.01040" class="uri">https://arxiv.org/abs/2008.01040</a>。</li>
+<li><span id="ref-38"></span>Qwen Team，Qwen3-235B-A22B 的模型配置 <code>config.json</code>，<a href="https://huggingface.co/Qwen/Qwen3-235B-A22B/blob/main/config.json" class="uri">https://huggingface.co/Qwen/Qwen3-235B-A22B/blob/main/config.json</a>。</li>
+</ol>
+<h1 id="sec-a">附录 A 环境与复现</h1>
+<p>Python 3.14.7t，JAX <code>0.12.0.dev20261002+7fc69a22c2</code>，jaxlib <code>0.12.0.dev20261002</code>，libtpu <code>0.0.49</code>，tpuasm <code>0.2.1</code>；机器整体拓扑为 TPU v4 (2x2x2)，包含 2 个 host，每个 host 有 4 颗芯片；本文的实验只使用 host 0 本地的一颗芯片。<code>chip.py</code> 让这颗芯片的两个 TC 各作为一个设备出现，实验只用其中一个；环境变量 <code>TOP_K_CHIP</code> 选择本地芯片，不同芯片上的进程可以同时运行。</p>
+<p>各文件的用途、完整复现命令及其与正文各表的对应关系，以及报告和论文的生成方法，见仓库 README：<a href="https://github.com/ayaka14732/tpu-v4-top-k/blob/main/README.md" class="uri">https://github.com/ayaka14732/tpu-v4-top-k/blob/main/README.md</a>。</p>
+<p>各次运行的原始记录保存在 <code>results/</code>，包含每个计时程序的端点布局、区间内的指令和 DMA。</p>
+<h1 id="sec-b">附录 B 改写和重排时要守的硬件与编译器规则</h1>
+<p>这些规则每一条都来自一次实际出过的错，供以后写新的 intrinsic 或改写器的人参考。</p>
+<ol type="1">
+<li>占位必须是编译器无法化简、也不会与相邻运算重新结合的形式。带唯一立即数的异或可以；两个操作数时用两种不同的运算。</li>
+<li>一个 bundle 里可能有同一个占位的两条指令（两个 ALU 槽、两个 TC VREG），要按指令处理，不能按 bundle 处理。</li>
+<li>同一个 bundle 里读先于写，编译器会让别的指令在这个 bundle 里改写刚读完的寄存器。所以改写出来的指令要读原占位的操作数，只能放在那个 bundle 之内或之前；要写原占位的结果，只能放在那个 bundle 之内或之后。</li>
+<li>不要按寄存器名跟踪一个值。编译器会把它溢出、读回别的寄存器、复制。</li>
+<li>要经过 TC VMEM 的值，在它真正算出来之后立刻存，同一个值只存一次。</li>
+<li>两个 IAR 是资源，编译器不知道它们的存在；在途的按索引读可能超过两个，要有装不进去时的退路，退路不能假设偏移还在寄存器里。</li>
+<li>XLU 的队列先进先出。挪动提交或取回时要保持每个队列上的先后一致，同一个 bundle 不能从同一个队列取回两次。</li>
+<li>已经确认可以排进同一个 bundle 的只有 TC VREG 与掩码的“读先于写”。同一个 IAR 在一个 bundle 里既被读又被装入新值不行。没有证据的组合一律隔开。</li>
+<li>不带掩码的 <code>vst.iar</code>，同一列 8 个元素的目的行必须互不相同；带掩码时，放行的元素不能与子通道号更小的元素（放行与否都算）同行。违反时 TensorCore 停机，没有别的信息。</li>
+<li>程序算错时 TensorCore 可能直接停机而不是给出错的结果：名次错了，<code>vst.iar</code> 的目的行就会重复。停机不说明问题出在 <code>vst.iar</code> 上。</li>
+<li>XLA 默认两个 IAR 在整个程序里保持开头装好的值。kernel 改过 IAR 之后，同一个程序里 XLA 自己生成的隔行读写会读到错的偏移；只含 Pallas kernel 的程序没有这个问题。</li>
+<li>在小例子上正确不说明规则被遵守。第 3、4、6 条的错误都要到寄存器紧张时才出现，每次改动都要用 16 行以上的输入重新核对。</li>
+</ol>
+<h1 id="sec-c">附录 C 补充材料</h1>
+<p>正文为了连贯而略去的细节放在这里。</p>
+<h2 id="sec-c-1">C.1 CMEM 与 HBM 的容量</h2>
+<p><a href="#tbl-1">表 1</a> 中的容量来自 <code>memory_capacity.py</code>，输出在 <code>results/memory-capacity.txt</code>。CMEM 不能由 Pallas 分配，只能直接测：它以 512 B 的 granule 编址，实验把一个 tile 写到地址 0，把它的按位取反写到地址 <span class="math inline"><em>A</em></span>，再把两处读回。<span class="math inline"><em>A</em></span> 取到 <code>0x3fff8</code>（最后一个 tile）时两处互不干扰，<span class="math inline"><em>A</em></span> 取 <code>0x40000</code> 和 <code>0x80000</code> 时地址 0 被改写，所以 CMEM 共 <code>0x40000</code> 个 granule，即 128 MiB，与公开资料一致 [<a href="#ref-27">27</a>]；超出容量的地址不报错，而是按 <code>0x40000</code> 回绕。HBM 一侧，两个设备的 <code>memory_stats()</code> 报告同一个上限 32745977856 字节，即 32 GiB [<a href="#ref-27">27</a>] 中运行时可分配的部分。<code>pltpu.get_tpu_info()</code> 报告的 <code>cmem_capacity_bytes=67000000</code> 和 <code>hbm_capacity_bytes=17200000000</code> 是 JAX 中写死的芯片总量估计（<code>134_000_000</code> 与 <code>34_400_000_000</code>）除以 TC 数，不是硬件的划分，CMEM 的估计也与实测不符。TC VMEM 和 SMEM 的容量取 <code>get_tpu_info()</code> 报告的值。</p>
+<h2 id="sec-c-2">C.2 原生 XLA 的一处编译器缺陷和它的修复</h2>
+<p>行宽 256、<span class="math inline"><em>k</em> = 8</span> 与行宽 1024、<span class="math inline"><em>k</em> = 32</span> 两个形状上，原生 XLA 在 <a href="#sec-3-4">3.4 节</a>的外壳下编译失败：</p>
+<pre class="text"><code>Fused computation shape ((f32[8,8]{1,0:T(8,128)}, s32[8,8]{1,0:T(8,128)}))
+is not equal to the fusion shape ((f32[8,8]{1,0:T(8,128)S(1)}, s32[8,8]{1,0:T(8,128)S(1)}))</code></pre>
+<p>XLA 在这两个形状上把排序和取前 <span class="math inline"><em>k</em></span> 列融合成一条 <code>sort_prefixfusion</code>。逐个 pass 保存 HLO 可以看到，<code>pin-precoloring</code> 这一遍给 fusion 的外层加上了 <code>S(1)</code>，fusion 内部的根节点却没有跟着改，随后的一致性检查失败。绕过它的两种办法都改变了被测的东西：关掉这个融合，XLA 改走普通的排序，量到的就不是它默认的实现；关掉预着色，三个端点落到了 CMEM。所以本文采用的是修复：libtpu 中本来就有一个沿 fusion 的参数和根节点传播内存空间的 pass（<code>MemorySpacePropagation</code>，与开源 XLA 中的同名 pass [<a href="#ref-9">9</a>] 对应），<code>pin_propagation.py</code> 在 <code>PinPrecoloring</code> 成功改色之后调用它一次，只替换进程内的一个虚表指针，退出时恢复。修复只在原版编译器报这个错时才装上；这两个形状在修复后保留了 XLA 原本的融合实现，表中标 ‡。</p>
+<h2 id="sec-c-3">C.3 官方 Pallas 的错误按输入类别的分布</h2>
+<p>各类输入的错误统计见<a href="#tbl-22">表 22</a>。</p>
+<div id="tbl-22" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>输入类别</th>
+<th style="text-align: right;">条数</th>
+<th style="text-align: right;">下标越界</th>
+<th style="text-align: right;">下标重复</th>
+<th style="text-align: right;">值与下标不配对</th>
+<th style="text-align: right;">值的位型序列不同</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>正态随机数</td>
+<td style="text-align: right;">23760</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>小整数并列</td>
+<td style="text-align: right;">23760</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>非负元素个数的定向构造</td>
+<td style="text-align: right;">37212</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>原始 32 位位型</td>
+<td style="text-align: right;">23760</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">186</td>
+<td style="text-align: right;">4685</td>
+<td style="text-align: right;">4685</td>
+</tr>
+<tr class="odd">
+<td>特殊位型的随机混合</td>
+<td style="text-align: right;">23760</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">12190</td>
+<td style="text-align: right;">22612</td>
+<td style="text-align: right;">22475</td>
+</tr>
+<tr class="even">
+<td>恒定位型</td>
+<td style="text-align: right;">62370</td>
+<td style="text-align: right;">1164</td>
+<td style="text-align: right;">22538</td>
+<td style="text-align: right;">38506</td>
+<td style="text-align: right;">38506</td>
+</tr>
+<tr class="odd">
+<td>有限值位于最后一个位置</td>
+<td style="text-align: right;">2970</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1930</td>
+<td style="text-align: right;">1890</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p>表 22：官方 Pallas 的错误按输入类别的分布。</p>
+</div>
+<h2 id="sec-c-4">C.4 成对提取</h2>
+<p><a href="#sec-6-7">6.7 节</a>的成对提取试图一趟 XLU 往返选出两名。对下标的每一个二进制位 <span class="math inline"><em>b</em></span>，把 128 个位置分成该位为 0 和为 1 的两半，各求最大值 <span class="math inline"><em>A</em><sub><em>b</em></sub></span>、<span class="math inline"><em>B</em><sub><em>b</em></sub></span>，一共十四次互不依赖的归约。第一名是 <span class="math inline">max(<em>A</em><sub>0</sub>,<em>B</em><sub>0</sub>)</span>，第二名是 <span class="math inline">max<sub><em>b</em></sub> min(<em>A</em><sub><em>b</em></sub>,<em>B</em><sub><em>b</em></sub>)</span>：任何一次二分的两半互不相交，较小的那个半集最大值不超过第二名；第一名和第二名的下标至少有一位不同，在那一位上两半的最大值恰好是这两名。于是一趟 XLU 往返可以得到两名，三趟得到前六名，最后两名用普通的链。</p>
+<p>值的公式对并列成立，由它恢复下标的公式却要求两名都唯一。所以要验证，验证失败时整个 TC VREG 回退到 <code>phased</code>。在计时区间内，验证通过时它是 686 个周期，与官方的 685 个持平：链短了，十四个半集的掩码和每趟十四条归约把省下的周期又花掉了。回退时是 1362 个周期，是官方的两倍，每行只有三个有限值的输入就会触发。这条路没有收益，还带着依赖输入的最坏情况，本文不采用。</p>
+<h2 id="sec-c-5">C.5 行数从 8 到 128 的逐行结果</h2>
+<p><a href="#tbl-23">表 23</a> 给出<a href="#fig-5">图 5</a> 左图的 <span class="math inline"><em>k</em> = 8</span> 结果。</p>
+<div id="tbl-23" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>行数</th>
+<th style="text-align: right;">转置加败者树</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">比官方少</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8</td>
+<td style="text-align: right;">677</td>
+<td style="text-align: right;">685</td>
+<td style="text-align: right;">1.2%</td>
+</tr>
+<tr class="even">
+<td>9–16</td>
+<td style="text-align: right;">685</td>
+<td style="text-align: right;">704–713</td>
+<td style="text-align: right;">2.7%–3.9%</td>
+</tr>
+<tr class="odd">
+<td>17–24</td>
+<td style="text-align: right;">693</td>
+<td style="text-align: right;">718–740</td>
+<td style="text-align: right;">3.5%–6.4%</td>
+</tr>
+<tr class="even">
+<td>25–32</td>
+<td style="text-align: right;">701</td>
+<td style="text-align: right;">733–744</td>
+<td style="text-align: right;">4.4%–5.8%</td>
+</tr>
+<tr class="odd">
+<td>33–40</td>
+<td style="text-align: right;">712</td>
+<td style="text-align: right;">744–753</td>
+<td style="text-align: right;">4.3%–5.4%</td>
+</tr>
+<tr class="even">
+<td>41–48</td>
+<td style="text-align: right;">725</td>
+<td style="text-align: right;">750–757</td>
+<td style="text-align: right;">3.3%–4.2%</td>
+</tr>
+<tr class="odd">
+<td>49–56</td>
+<td style="text-align: right;">733</td>
+<td style="text-align: right;">757–765</td>
+<td style="text-align: right;">3.2%–4.2%</td>
+</tr>
+<tr class="even">
+<td>57–64</td>
+<td style="text-align: right;">741</td>
+<td style="text-align: right;">766–771</td>
+<td style="text-align: right;">3.3%–3.9%</td>
+</tr>
+<tr class="odd">
+<td>65–72</td>
+<td style="text-align: right;">749</td>
+<td style="text-align: right;">774–783</td>
+<td style="text-align: right;">3.2%–4.3%</td>
+</tr>
+<tr class="even">
+<td>73–80</td>
+<td style="text-align: right;">757</td>
+<td style="text-align: right;">790–806</td>
+<td style="text-align: right;">4.2%–6.1%</td>
+</tr>
+<tr class="odd">
+<td>81–88</td>
+<td style="text-align: right;">765</td>
+<td style="text-align: right;">860–861</td>
+<td style="text-align: right;">11.0%–11.1%</td>
+</tr>
+<tr class="even">
+<td>89–96</td>
+<td style="text-align: right;">773</td>
+<td style="text-align: right;">924–925</td>
+<td style="text-align: right;">16.3%–16.4%</td>
+</tr>
+<tr class="odd">
+<td>97–104</td>
+<td style="text-align: right;">781</td>
+<td style="text-align: right;">998–1000</td>
+<td style="text-align: right;">21.7%–21.9%</td>
+</tr>
+<tr class="even">
+<td>105–112</td>
+<td style="text-align: right;">789</td>
+<td style="text-align: right;">1073–1077</td>
+<td style="text-align: right;">26.5%–26.7%</td>
+</tr>
+<tr class="odd">
+<td>113–120</td>
+<td style="text-align: right;">797</td>
+<td style="text-align: right;">1150–1156</td>
+<td style="text-align: right;">30.7%–31.1%</td>
+</tr>
+<tr class="even">
+<td>121–128</td>
+<td style="text-align: right;">802–805</td>
+<td style="text-align: right;">1235–1237</td>
+<td style="text-align: right;">34.8%–35.1%</td>
+</tr>
+</tbody>
+</table>
+<p>表 23：行宽 128、<span class="math inline"><em>k</em> = 8</span>，行数从 8 到 128 的全部整数值，按 TC VREG 数分组。</p>
+</div>
+<p><a href="#tbl-24">表 24</a> 给出右图的 <span class="math inline"><em>k</em> = 16</span> 结果。</p>
+<div id="tbl-24" class="tbl">
+<table>
+<thead>
+<tr class="header">
+<th>行数</th>
+<th style="text-align: right;">官方 Pallas</th>
+<th style="text-align: right;">转置加败者树</th>
+<th style="text-align: right;">相对官方 Pallas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8</td>
+<td style="text-align: right;">1341</td>
+<td style="text-align: right;">856</td>
+<td style="text-align: right;">−36.2%</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td style="text-align: right;">1360</td>
+<td style="text-align: right;">864</td>
+<td style="text-align: right;">−36.5%</td>
+</tr>
+<tr class="odd">
+<td>24</td>
+<td style="text-align: right;">1375</td>
+<td style="text-align: right;">872</td>
+<td style="text-align: right;">−36.6%</td>
+</tr>
+<tr class="even">
+<td>32</td>
+<td style="text-align: right;">1393</td>
+<td style="text-align: right;">880</td>
+<td style="text-align: right;">−36.8%</td>
+</tr>
+<tr class="odd">
+<td>40</td>
+<td style="text-align: right;">1409</td>
+<td style="text-align: right;">891</td>
+<td style="text-align: right;">−36.8%</td>
+</tr>
+<tr class="even">
+<td>48</td>
+<td style="text-align: right;">1430</td>
+<td style="text-align: right;">904</td>
+<td style="text-align: right;">−36.8%</td>
+</tr>
+<tr class="odd">
+<td>56</td>
+<td style="text-align: right;">1449</td>
+<td style="text-align: right;">912</td>
+<td style="text-align: right;">−37.1%</td>
+</tr>
+<tr class="even">
+<td>64</td>
+<td style="text-align: right;">1475</td>
+<td style="text-align: right;">920</td>
+<td style="text-align: right;">−37.6%</td>
+</tr>
+<tr class="odd">
+<td>72</td>
+<td style="text-align: right;">1521</td>
+<td style="text-align: right;">928</td>
+<td style="text-align: right;">−39.0%</td>
+</tr>
+<tr class="even">
+<td>80</td>
+<td style="text-align: right;">1538</td>
+<td style="text-align: right;">936</td>
+<td style="text-align: right;">−39.1%</td>
+</tr>
+<tr class="odd">
+<td>88</td>
+<td style="text-align: right;">1681</td>
+<td style="text-align: right;">944</td>
+<td style="text-align: right;">−43.8%</td>
+</tr>
+<tr class="even">
+<td>96</td>
+<td style="text-align: right;">1829</td>
+<td style="text-align: right;">952</td>
+<td style="text-align: right;">−47.9%</td>
+</tr>
+<tr class="odd">
+<td>104</td>
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">960</td>
+<td style="text-align: right;">−52.0%</td>
+</tr>
+<tr class="even">
+<td>112</td>
+<td style="text-align: right;">2174</td>
+<td style="text-align: right;">968</td>
+<td style="text-align: right;">−55.5%</td>
+</tr>
+<tr class="odd">
+<td>120</td>
+<td style="text-align: right;">2342</td>
+<td style="text-align: right;">976</td>
+<td style="text-align: right;">−58.3%</td>
+</tr>
+<tr class="even">
+<td>128</td>
+<td style="text-align: right;">2510</td>
+<td style="text-align: right;">980</td>
+<td style="text-align: right;">−61.0%</td>
+</tr>
+</tbody>
+</table>
+<p>表 24：行宽 128、<span class="math inline"><em>k</em> = 16</span>，沿最后一维：整体转置加败者树与官方 Pallas。</p>
+</div>
+</body>
+</html>
