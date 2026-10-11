@@ -84,6 +84,7 @@
   <link rel="stylesheet" href="/pandoc.css" />
   <link rel="stylesheet" href="/sans.css" />
   <meta property="og:image" content="https://ayaka.shn.hk/tpu-v4-top-k/cover.png"/>
+  <link rel="alternate" hreflang="zh-CN" href="https://ayaka.shn.hk/tpu-v4-top-k/"/> <link rel="alternate" hreflang="en" href="https://ayaka.shn.hk/tpu-v4-top-k/en-US/"/>
   <meta name="dcterms.identifier" content="https://doi.org/10.5281/zenodo.23287738"/>
   <style>
   figure img { max-width: 100%; }
@@ -117,7 +118,7 @@
   <meta property="og:site_name" content="綾香的 Blog" />
   <meta property="og:description" content="在 TPU v4 的单个 TensorCore 上逐行求 top-k：Pallas 的官方实现在含 -inf 或 NaN 的输入上会出错，本文按 IEEE 754 totalOrder 给出逐位正确的写法，在 25 个对照形状中的 24 个上快于官方 Pallas，并且全部快于原生 XLA。" />
   <meta name="twitter:card" content="summary_large_image" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "TPU v4 上逐位正确且更快的 top-k", "url": "https://ayaka.shn.hk/tpu-v4-top-k/", "inLanguage": "zh-CN", "author": {"@type": "Person", "name": "三日月綾香", "url": "https://ayaka.shn.hk/"}, "description": "在 TPU v4 的单个 TensorCore 上逐行求 top-k：Pallas 的官方实现在含 -inf 或 NaN 的输入上会出错，本文按 IEEE 754 totalOrder 给出逐位正确的写法，在 25 个对照形状中的 24 个上快于官方 Pallas，并且全部快于原生 XLA。", "image": "https://ayaka.shn.hk/tpu-v4-top-k/cover.png", "datePublished": "2026-10-11", "dateModified": "2026-10-11T16:22:03Z", "sameAs": "https://doi.org/10.5281/zenodo.23287738"}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "TPU v4 上逐位正确且更快的 top-k", "url": "https://ayaka.shn.hk/tpu-v4-top-k/", "inLanguage": "zh-CN", "author": {"@type": "Person", "name": "三日月綾香", "url": "https://ayaka.shn.hk/"}, "description": "在 TPU v4 的单个 TensorCore 上逐行求 top-k：Pallas 的官方实现在含 -inf 或 NaN 的输入上会出错，本文按 IEEE 754 totalOrder 给出逐位正确的写法，在 25 个对照形状中的 24 个上快于官方 Pallas，并且全部快于原生 XLA。", "image": "https://ayaka.shn.hk/tpu-v4-top-k/cover.png", "datePublished": "2026-10-11", "dateModified": "2026-10-11T16:35:19Z", "sameAs": "https://doi.org/10.5281/zenodo.23287738"}</script>
 </head>
 <body>
 <header id="title-block-header">
@@ -220,6 +221,7 @@
 </ul>
 </nav>
 <blockquote>
+<p><a href="en-US/" lang="en" hreflang="en">English version</a></p>
 <p>GitHub 链接：<a href="https://github.com/ayaka14732/tpu-v4-top-k">ayaka14732/tpu-v4-top-k</a></p>
 <p>论文 PDF：<a href="https://doi.org/10.5281/zenodo.23287738" class="uri">https://doi.org/10.5281/zenodo.23287738</a></p>
 </blockquote>

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="360" viewBox="0 0 1160 360" font-family="'Roboto', 'Helvetica Neue', 'Arial', sans-serif">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker></defs>
+<rect x="0" y="0" width="1160" height="360" fill="#ffffff"/>
+<line x1="70.0" y1="290.0" x2="390.0" y2="290.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="294.0" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">0</text>
+<line x1="70.0" y1="255.7" x2="390.0" y2="255.7" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="259.7" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">200</text>
+<line x1="70.0" y1="221.4" x2="390.0" y2="221.4" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="225.4" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">400</text>
+<line x1="70.0" y1="187.1" x2="390.0" y2="187.1" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="191.1" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">600</text>
+<line x1="70.0" y1="152.9" x2="390.0" y2="152.9" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="156.9" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">800</text>
+<line x1="70.0" y1="118.6" x2="390.0" y2="118.6" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="122.6" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">1000</text>
+<line x1="70.0" y1="84.3" x2="390.0" y2="84.3" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="88.3" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">1200</text>
+<line x1="70.0" y1="50.0" x2="390.0" y2="50.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="62.0" y="54.0" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">1400</text>
+<line x1="70.0" y1="290.0" x2="70.0" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="70.0" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">8</text>
+<line x1="134.0" y1="290.0" x2="134.0" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="134.0" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">32</text>
+<line x1="219.3" y1="290.0" x2="219.3" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="219.3" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">64</text>
+<line x1="304.7" y1="290.0" x2="304.7" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="304.7" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">96</text>
+<line x1="390.0" y1="290.0" x2="390.0" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="390.0" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">128</text>
+<line x1="70.0" y1="290.0" x2="390.0" y2="290.0" stroke="#52514e" stroke-width="1"/>
+<text x="62.0" y="40.0" font-size="15.63" text-anchor="start" fill="#52514e" font-weight="normal">Cycles</text>
+<text x="230.0" y="328.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">Rows</text>
+<text x="230.0" y="24.0" font-size="18.23" text-anchor="middle" fill="#0b0b0b" font-weight="bold"><tspan font-style="italic">k</tspan> = 8</text>
+<path d="M70.0,172.6 L72.7,167.8 L75.3,167.9 L78.0,167.9 L80.7,167.9 L83.3,167.9 L86.0,167.9 L88.7,167.9 L91.3,169.3 L94.0,163.1 L96.7,163.3 L99.3,163.3 L102.0,163.3 L104.7,163.3 L107.3,163.3 L110.0,163.3 L112.7,166.9 L115.3,162.5 L118.0,162.6 L120.7,162.6 L123.3,162.6 L126.0,162.6 L128.7,162.6 L131.3,162.6 L134.0,164.3 L136.7,160.9 L139.3,160.9 L142.0,160.9 L144.7,160.9 L147.3,160.9 L150.0,160.9 L152.7,160.9 L155.3,162.5 L158.0,160.2 L160.7,160.2 L163.3,160.2 L166.0,160.2 L168.7,160.2 L171.3,160.2 L174.0,160.2 L176.7,161.4 L179.3,158.9 L182.0,158.9 L184.7,158.9 L187.3,158.9 L190.0,158.9 L192.7,158.9 L195.3,158.9 L198.0,160.2 L200.7,157.8 L203.3,157.8 L206.0,157.8 L208.7,157.8 L211.3,157.8 L214.0,157.8 L216.7,157.8 L219.3,158.7 L222.0,155.8 L224.7,155.8 L227.3,155.8 L230.0,155.8 L232.7,155.8 L235.3,155.8 L238.0,155.8 L240.7,157.3 L243.3,151.8 L246.0,152.0 L248.7,152.0 L251.3,152.0 L254.0,152.0 L256.7,152.0 L259.3,152.0 L262.0,154.6 L264.7,142.4 L267.3,142.6 L270.0,142.6 L272.7,142.6 L275.3,142.6 L278.0,142.6 L280.7,142.6 L283.3,142.6 L286.0,131.4 L288.7,131.6 L291.3,131.6 L294.0,131.6 L296.7,131.6 L299.3,131.6 L302.0,131.6 L304.7,131.4 L307.3,118.6 L310.0,118.7 L312.7,118.7 L315.3,118.7 L318.0,118.7 L320.7,118.7 L323.3,118.7 L326.0,118.9 L328.7,105.4 L331.3,105.5 L334.0,105.5 L336.7,105.5 L339.3,105.5 L342.0,105.5 L344.7,105.5 L347.3,106.1 L350.0,91.8 L352.7,91.8 L355.3,91.8 L358.0,91.8 L360.7,91.8 L363.3,91.8 L366.0,91.8 L368.7,92.9 L371.3,77.9 L374.0,78.3 L376.7,78.3 L379.3,78.3 L382.0,78.3 L384.7,78.3 L387.3,78.3 L390.0,78.3" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M70.0,173.9 L72.7,172.6 L75.3,172.6 L78.0,172.6 L80.7,172.6 L83.3,172.6 L86.0,172.6 L88.7,172.6 L91.3,172.6 L94.0,171.2 L96.7,171.2 L99.3,171.2 L102.0,171.2 L104.7,171.2 L107.3,171.2 L110.0,171.2 L112.7,171.2 L115.3,169.8 L118.0,169.8 L120.7,169.8 L123.3,169.8 L126.0,169.8 L128.7,169.8 L131.3,169.8 L134.0,169.8 L136.7,167.9 L139.3,167.9 L142.0,167.9 L144.7,167.9 L147.3,167.9 L150.0,167.9 L152.7,167.9 L155.3,167.9 L158.0,165.7 L160.7,165.7 L163.3,165.7 L166.0,165.7 L168.7,165.7 L171.3,165.7 L174.0,165.7 L176.7,165.7 L179.3,164.3 L182.0,164.3 L184.7,164.3 L187.3,164.3 L190.0,164.3 L192.7,164.3 L195.3,164.3 L198.0,164.3 L200.7,163.0 L203.3,163.0 L206.0,163.0 L208.7,163.0 L211.3,163.0 L214.0,163.0 L216.7,163.0 L219.3,163.0 L222.0,161.6 L224.7,161.6 L227.3,161.6 L230.0,161.6 L232.7,161.6 L235.3,161.6 L238.0,161.6 L240.7,161.6 L243.3,160.2 L246.0,160.2 L248.7,160.2 L251.3,160.2 L254.0,160.2 L256.7,160.2 L259.3,160.2 L262.0,160.2 L264.7,158.9 L267.3,158.9 L270.0,158.9 L272.7,158.9 L275.3,158.9 L278.0,158.9 L280.7,158.9 L283.3,158.9 L286.0,157.5 L288.7,157.5 L291.3,157.5 L294.0,157.5 L296.7,157.5 L299.3,157.5 L302.0,157.5 L304.7,157.5 L307.3,156.1 L310.0,156.1 L312.7,156.1 L315.3,156.1 L318.0,156.1 L320.7,156.1 L323.3,156.1 L326.0,156.1 L328.7,154.7 L331.3,154.7 L334.0,154.7 L336.7,154.7 L339.3,154.7 L342.0,154.7 L344.7,154.7 L347.3,154.7 L350.0,153.4 L352.7,153.4 L355.3,153.4 L358.0,153.4 L360.7,153.4 L363.3,153.4 L366.0,153.4 L368.7,153.4 L371.3,152.0 L374.0,152.0 L376.7,152.0 L379.3,152.0 L382.0,152.0 L384.7,152.0 L387.3,152.0 L390.0,152.5" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round"/>
+<text x="396.0" y="82.3" font-size="15.63" text-anchor="start" fill="#0b0b0b" font-weight="normal">Official Pallas</text>
+<text x="396.0" y="166.5" font-size="15.63" text-anchor="start" fill="#0b0b0b" font-weight="normal">Transpose + loser tree</text>
+<circle cx="91.3" cy="154.9" r="4" fill="#ffffff" stroke="#2a78d6" stroke-width="2"/>
+<circle cx="134.0" cy="152.2" r="4" fill="#ffffff" stroke="#2a78d6" stroke-width="2"/>
+<circle cx="219.3" cy="146.7" r="4" fill="#ffffff" stroke="#2a78d6" stroke-width="2"/>
+<circle cx="304.7" cy="141.0" r="4" fill="#ffffff" stroke="#2a78d6" stroke-width="2"/>
+<circle cx="390.0" cy="129.4" r="4" fill="#ffffff" stroke="#2a78d6" stroke-width="2"/>
+<text x="396.0" y="123.4" font-size="15.63" text-anchor="start" fill="#0b0b0b" font-weight="normal"><tspan font-family="'DejaVu Sans Mono', 'Menlo', 'Consolas', monospace" font-weight="normal">transposed</tspan></text>
+<line x1="630.0" y1="290.0" x2="950.0" y2="290.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="622.0" y="294.0" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">0</text>
+<line x1="630.0" y1="247.1" x2="950.0" y2="247.1" stroke="#e4e3df" stroke-width="1"/>
+<text x="622.0" y="251.1" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">500</text>
+<line x1="630.0" y1="204.3" x2="950.0" y2="204.3" stroke="#e4e3df" stroke-width="1"/>
+<text x="622.0" y="208.3" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">1000</text>
+<line x1="630.0" y1="161.4" x2="950.0" y2="161.4" stroke="#e4e3df" stroke-width="1"/>
+<text x="622.0" y="165.4" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">1500</text>
+<line x1="630.0" y1="118.6" x2="950.0" y2="118.6" stroke="#e4e3df" stroke-width="1"/>
+<text x="622.0" y="122.6" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">2000</text>
+<line x1="630.0" y1="75.7" x2="950.0" y2="75.7" stroke="#e4e3df" stroke-width="1"/>
+<text x="622.0" y="79.7" font-size="15.63" text-anchor="end" fill="#52514e" font-weight="normal">2500</text>
+<line x1="630.0" y1="290.0" x2="630.0" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="630.0" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">8</text>
+<line x1="694.0" y1="290.0" x2="694.0" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="694.0" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">32</text>
+<line x1="779.3" y1="290.0" x2="779.3" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="779.3" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">64</text>
+<line x1="864.7" y1="290.0" x2="864.7" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="864.7" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">96</text>
+<line x1="950.0" y1="290.0" x2="950.0" y2="294.0" stroke="#52514e" stroke-width="1"/>
+<text x="950.0" y="308.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">128</text>
+<line x1="630.0" y1="290.0" x2="950.0" y2="290.0" stroke="#52514e" stroke-width="1"/>
+<text x="622.0" y="40.0" font-size="15.63" text-anchor="start" fill="#52514e" font-weight="normal">Cycles</text>
+<text x="790.0" y="328.0" font-size="15.63" text-anchor="middle" fill="#52514e" font-weight="normal">Rows</text>
+<text x="790.0" y="24.0" font-size="18.23" text-anchor="middle" fill="#0b0b0b" font-weight="bold"><tspan font-style="italic">k</tspan> = 16</text>
+<path d="M630.0,175.1 L651.3,173.4 L672.7,172.1 L694.0,170.6 L715.3,169.2 L736.7,167.4 L758.0,165.8 L779.3,163.6 L800.7,159.6 L822.0,158.2 L843.3,145.9 L864.7,133.2 L886.0,118.5 L907.3,103.7 L928.7,89.3 L950.0,74.9" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M630.0,216.6 L651.3,215.9 L672.7,215.3 L694.0,214.6 L715.3,213.6 L736.7,212.5 L758.0,211.8 L779.3,211.1 L800.7,210.5 L822.0,209.8 L843.3,209.1 L864.7,208.4 L886.0,207.7 L907.3,207.0 L928.7,206.3 L950.0,206.0" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round"/>
+<text x="956.0" y="78.9" font-size="15.63" text-anchor="start" fill="#0b0b0b" font-weight="normal">Official Pallas</text>
+<text x="956.0" y="220.0" font-size="15.63" text-anchor="start" fill="#0b0b0b" font-weight="normal">Transpose + loser tree</text>
+</svg>
